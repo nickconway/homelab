@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euo pipefail
+
+export GUM_CHOOSE_HEIGHT=20
+export GUM_CHOOSE_CURSOR_FOREGROUND=10
+export GUM_CHOOSE_HEADER_FOREGROUND=9
+export GUM_CHOOSE_SELECTED_FOREGROUND=11
+
+DIR="$(dirname "$(realpath "$0")")"
+
+cd "$DIR/docker/compose"
+
+APPS="$(
+    for APP in *; do
+        if [[ ! -e "$HOME/Docker/$APP" ]]; then
+            echo "$APP"
+        fi
+    done
+)"
+
+SELECTED_APPS="$(
+    gum choose $APPS \
+        --header 'Which docker applications would you like to import? (Press escape to quit. Submitting without selecting anything will run the rest of the script)' \
+        --no-limit
+)"
+
+for APP in $SELECTED_APPS; do
+    echo "Linking $APP..."
+    ln -s "$DIR/docker/compose/$APP" "$HOME/Docker/$APP"
+done
+
+start-containers

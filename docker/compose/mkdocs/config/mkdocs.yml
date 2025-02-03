@@ -1,9 +1,59 @@
-site_name: "Homelab Documentation"
+site_name: "Nick Conway's Homelab"
+site_url: https://homelab.conway.dev
+
+repo_url: https://github.com/nickconway/homelab
+extra:
+  homepage: https://homelab.conway.dev
+  social:
+    - icon: fontawesome/brands/github 
+      link: https://github.com/nickconway
+    - icon: fontawesome/brands/mastodon 
+      link: https://mastodon.social/@nickconway
+
 theme:
   name: "material"
+  logo: https://conway.dev/favicon.png
+  favicon: https://conway.dev/favicon.png
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      primary: black
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: black
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    - header.autohide
+    - navigation.expand
+    - navigation.footer
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.preview
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - toc.integrate
+
 nav:
   - Home: index.md
+
 plugins:
-  - mkdocs-material-extensions
   - search
-  - markdownextradata
+  - meta
+  - offline
+  - privacy
+  - social
+  - tags

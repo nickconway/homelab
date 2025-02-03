@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   dnsNames:
-    - "*.conway.dev"
+    - ${CERTIFICATE_DNS_NAME}
   secretName: letsencrypt-production-cert-tls
   issuerRef:
     kind: ClusterIssuer

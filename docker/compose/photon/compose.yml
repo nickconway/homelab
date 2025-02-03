@@ -15,7 +15,7 @@ services:
       - LOG_LEVEL=DEBUG
       - COUNTRY_CODE=us
     build:
-      context: ../../dockerfiles/photon
+      context: ${HOME}/Git/homelab/docker/dockerfiles/photon
       dockerfile: Dockerfile
       args:
         - PHOTON_VERSION=0.6.2

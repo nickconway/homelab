@@ -1,5 +1,5 @@
-[submodule "docker/compose/traefik/data/plugins/src/github.com/MarkusJx/traefik-wol"]
-	path = docker/compose/traefik/data/plugins/src/github.com/MarkusJx/traefik-wol
+[submodule "docker/compose/traefik/config/plugins/src/github.com/MarkusJx/traefik-wol"]
+	path = docker/compose/traefik/config/plugins/src/github.com/MarkusJx/traefik-wol
 	url = https://github.com/dominiqueroux/traefik-wol
 	branch = f/addBroadcastAddress
 [submodule "docker/compose/hugo/src"]

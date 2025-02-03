@@ -5,9 +5,11 @@
 [submodule "docker/compose/hugo/src"]
 	path = docker/compose/hugo/src
 	url = https://github.com/nickconway/blog
+	branch = main
 [submodule "docker/compose/mailcow/source"]
 	path = docker/compose/mailcow/source
 	url = https://github.com/mailcow/mailcow-dockerized
+	branch = master
 [submodule "docker/compose/reactive-resume/source"]
 	path = docker/compose/reactive-resume/source
 	url = https://github.com/nickconway/Reactive-Resume

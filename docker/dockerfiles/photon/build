@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+PHOTON_VERSION="$(cat source/.last_release)"
+
+docker build source --build-arg PHOTON_VERSION="$PHOTON_VERSION" --tag git.conway.dev/nick/photon:"$PHOTON_VERSION"
+
+docker tag git.conway.dev/nick/photon:"$PHOTON_VERSION" git.conway.dev/nick/photon:latest
+
+docker push git.conway.dev/nick/photon:"$PHOTON_VERSION"
+docker push git.conway.dev/nick/photon:latest

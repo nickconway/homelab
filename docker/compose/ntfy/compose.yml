@@ -1,0 +1,39 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    command:
+      - serve
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York # optional: set desired timezone
+    # user: UID:GID # optional: replace with your own user/group or uid/gid
+    volumes:
+      - ./data/cache:/var/cache/ntfy
+      - ./data/server.yml:/etc/ntfy/server.yml
+      - ./data/user.db:/var/lib/ntfy/user.db
+    healthcheck: # optional: remember to adapt the host:port to your environment
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --tries=1 http://localhost:80/v1/health -O - | grep -Eo '\"healthy\"\\s*:\\s*true' || exit 1",
+        ]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ntfy.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.ntfy.rule=Host(`ntfy.conway.dev`)"
+      - "traefik.http.routers.ntfy.tls=true"
+      - "traefik.http.routers.ntfy.tls.certresolver=prod"
+      - "traefik.http.services.ntfy.loadbalancer.server.port=80"
+    restart: unless-stopped
+    networks:
+      - proxy

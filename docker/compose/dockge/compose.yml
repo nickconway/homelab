@@ -1,0 +1,30 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  dockge:
+    image: louislam/dockge:latest
+    container_name: dockge
+    restart: unless-stopped
+    # ports:
+    #   - 5004:5001
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/app/data
+      # Stacks Directory
+      - ${PWD}/..:/stacks
+    networks:
+      - proxy
+    environment:
+      # Tell Dockge where to find the stacks
+      - DOCKGE_STACKS_DIR=/stacks
+      - PUID=1000
+      - PGID=1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dockge.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.dockge.rule=Host(`containers.conway.dev`)"
+      - "traefik.http.routers.dockge.tls=true"
+      - "traefik.http.routers.dockge.tls.certresolver=prod"
+      - "traefik.http.services.dockge.loadbalancer.server.port=5001"

@@ -1,0 +1,122 @@
+# There is a built-in micro proxy that will host the webui and REST API all on
+# one port (this is called the "Single HTTP Frontend") and means you just need
+# one open port in the container/firewalls/etc.
+#
+# Listen on all addresses available, port 1337
+listenAddressSingleHTTPFrontend: 0.0.0.0:1337
+
+# insecureAllowDumpSos: true
+
+# Choose from INFO (default), WARN and DEBUG
+logLevel: "DEBUG"
+
+# Actions are commands that are executed by OliveTin, and normally show up as
+# buttons on the WebUI.
+#
+# Docs: https://docs.olivetin.app/create-your-first-action.html
+actions:
+  - title: Update Containers
+    id: updateContainers
+    icon: restart
+    shell: ssh {{ hostname }} '.local/bin/update-containers &> /tmp/update-containers.log'
+    timeout: 600
+    popupOnStart: execution-dialog
+    maxConcurrent: 5
+    arguments:
+      - name: hostname
+        title: Hostname
+        type: ascii_identifier
+
+  # Lastly, you can hide actions from the web UI, this is useful for creating
+  # background helpers that execute only on startup or a cron, for updating
+  # entity files.
+
+  # - title: Update container entity file
+  #   shell: 'docker ps -a --format json > /etc/OliveTin/entities/containers.json'
+  #   hidden: true
+  #   execOnStartup: true
+  #   execOnCron: '*/1 * * * *'
+# An entity is something that exists - a "thing", like a VM, or a Container
+# is an entity. OliveTin allows you to then dynamically generate actions based
+# around these entities.
+#
+# This is really useful if you want to generate wake on lan or poweroff actions
+# for `server` entities, for example.
+#
+# A very popular use case that entities were designed for was for `container`
+# entities - in a similar way you could generate `start`, `stop`, and `restart`
+# container actions.
+#
+# Entities are just loaded fome files on disk, OliveTin will also watch these
+# files for updates while OliveTin is running, and update entities.
+#
+# Entities can have properties defined in those files, and those can be used
+# in your configuration as variables. For example; `container.status`,
+# or `vm.hostname`.
+#
+# Docs: http://docs.olivetin.app/entities.html
+# entities:
+#   # YAML files are the default expected format, so you can use .yml or .yaml,
+#   # or even .txt, as long as the file contains valid a valid yaml LIST, then it
+#   # will load properly.
+#   #
+#   # Docs: https://docs.olivetin.app/entities.html
+#   - file: entities/servers.yaml
+#     name: server
+#
+#   - file: entities/containers.json
+#     name: container
+#
+# # Dashboards are a way of taking actions from the default "actions" view, and
+# # organizing them into groups - either into folders, or fieldsets.
+# #
+# # The only way to properly use entities, are to use them with a `fieldset` on
+# # a dashboard.
+# dashboards:
+#   # Top level items are dashboards.
+#   - title: My Servers
+#     contents:
+#       # The contents of a dashboard will try to look for an action with a
+#       # matching title IF the `contents: ` property is empty.
+#       - title: Ping All Servers
+#
+#       # If you create an item with some "contents:", OliveTin will show that as
+#       # directory.
+#       - title: Hypervisors
+#         contents:
+#           - title: Ping hypervisor1
+#           - title: Ping hypervisor2
+#
+#       # If you specify `type: fieldset` and some `contents`, it will show your
+#       # actions grouped together without a folder.
+#       - type: fieldset
+#         entity: server
+#         title: 'Server: {{ server.hostname }}'
+#         contents:
+#           # By default OliveTin will look for an action with a matching title
+#           # and put it on the dashboard.
+#           #
+#           # Fieldsets  also support `type: display`, which can display arbitary
+#           # text. This is useful for displaying things like a container's state.
+#           - type: display
+#             title: |
+#               Hostname: <strong>{{ server.name }}</strong>
+#               IP Address: <strong>{{ server.ip }}</strong>
+#
+#           # These are the actions (defined above) that we want on the dashboard.
+#           - title: '{{ server.name }} Wake on Lan'
+#           - title: '{{ server.name }} Power Off'
+#
+#   # This is the second dashboard.
+#   - title: My Containers
+#     contents:
+#       - title: 'Container {{ container.Names }} ({{ container.Image }})'
+#         entity: container
+#         type: fieldset
+#         contents:
+#           - type: display
+#             title: |
+#               {{ container.RunningFor }} <br /><br /><strong>{{ container.State }}</strong>
+#
+#           - title: 'Start {{ container.Names }}'
+#           - title: 'Stop {{ container.Names }}'

@@ -1,0 +1,57 @@
+networks:
+  proxy:
+    external: true
+  bookstack:
+    name: bookstack
+
+services:
+  bookstack:
+    container_name: bookstack
+    image: lscr.io/linuxserver/bookstack
+    environment:
+      PUID: 1000
+      PGID: 1000
+      APP_URL: https://notes.conway.dev
+      DB_HOST: bookstack-mysql
+      DB_PORT: 3306
+      DB_DATABASE: bookstack
+      DB_USER: bookstack
+      DB_PASS: ${MYSQL_PASSWORD}
+      MAIL_DRIVER: smtp
+      MAIL_HOST: mail.smtp2go.com
+      MAIL_PORT: 587
+      MAIL_ENCRYPTION: tls
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_FROM: notes@conway.dev
+      MAIL_FROM_NAME: Notes
+    networks:
+      - proxy
+      - bookstack
+    volumes:
+      - ./data/config:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bookstack.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.bookstack.rule=Host(`notes.conway.dev`)"
+      - "traefik.http.routers.bookstack.tls=true"
+      - "traefik.http.routers.bookstack.tls.certresolver=prod"
+      - "traefik.http.services.bookstack.loadbalancer.server.port=80"
+    restart: unless-stopped
+
+  bookstack-mysql:
+    image: lscr.io/linuxserver/mariadb
+    container_name: bookstack-mysql
+    restart: unless-stopped
+    networks:
+      - bookstack
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/New_York
+      MYSQL_DATABASE: bookstack
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: bookstack
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./data/db:/config

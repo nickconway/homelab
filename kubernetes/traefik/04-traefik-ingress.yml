@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: traefik-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - whoami.k8s.conway.dev
+      secretName: whoami-certificate
+    - hosts:
+        - proxy.k8s.conway.dev
+      secretName: proxy-certificate
+    - hosts:
+        - nginx.k8s.conway.dev
+      secretName: nginx-certificate
+  rules:
+    - host: whoami.k8s.conway.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami
+                port:
+                  name: web
+
+    - host: proxy.k8s.conway.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: dashboard
+
+    - host: nginx.k8s.conway.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  name: web

@@ -1,0 +1,34 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  vaultwarden:
+    container_name: vaultwarden
+    image: vaultwarden/server:latest
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+      - DOMAIN=https://vault.conway.dev
+      - WEBSOCKET_ENABLED=true
+      - SIGNUPS_ALLOWED=false
+      - EXPERIMENTAL_CLIENT_FEATURE_FLAGS=ssh-key-vault-item,ssh-agent
+      - SMTP_HOST=mail.smtp2go.com
+      - SMTP_FROM=vault@conway.dev
+      - SMTP_PORT=587
+      - SMTP_SSL=true
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    volumes:
+      - ./data/:/data/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vaultwarden.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.vaultwarden.rule=Host(`vault.conway.dev`)"
+      - "traefik.http.routers.vaultwarden.tls=true"
+      - "traefik.http.routers.vaultwarden.tls.certresolver=prod"
+      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
+    restart: unless-stopped

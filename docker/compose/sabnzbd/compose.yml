@@ -1,0 +1,27 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./data/config:/config
+      - /mnt/nas/content/usenet:/data/usenet
+    # ports:
+    #   - 8080:8080
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sabnzbd.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.sabnzbd.rule=Host(`use.conway.dev`)"
+      - "traefik.http.routers.sabnzbd.tls=true"
+      - "traefik.http.routers.sabnzbd.tls.certresolver=prod"
+      - "traefik.http.services.sabnzbd.loadbalancer.server.port=8080"

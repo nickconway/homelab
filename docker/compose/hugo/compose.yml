@@ -1,0 +1,60 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  hugo-init:
+    container_name: hugo-init
+    image: busybox
+    command: ['sh', '-c', 'chown -R 1000:1000 /src /tmp']
+    volumes:
+      - ${HOME}/Git/blog:/src
+      - ./data/cache:/tmp/hugo_cache
+  hugo:
+    container_name: hugo
+    image: klakegg/hugo:ext
+    networks:
+      - proxy
+    user: 1000:1000
+    environment:
+      PUID: 1000
+      PGID: 1000
+      HUGO_ENV: production
+    depends_on:
+      - hugo-staging
+    volumes:
+      - ${HOME}/Git/blog:/src
+      - /src/public
+      - ./data/cache:/tmp/hugo_cache
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hugo.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.hugo.rule=Host(`blog2.conway.dev`)"
+      - "traefik.http.routers.hugo.tls=true"
+      - "traefik.http.routers.hugo.tls.certresolver=prod"
+      - "traefik.http.services.hugo.loadbalancer.server.port=1313"
+    restart: unless-stopped
+    command: server --disableLiveReload
+
+  hugo-staging:
+    container_name: hugo-staging
+    image: klakegg/hugo:ext
+    networks:
+      - proxy
+    user: 1000:1000
+    environment:
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - ${HOME}/Git/blog:/src
+      - /src/public
+      - ./data/cache:/tmp/hugo_cache
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hugo-staging.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.hugo-staging.rule=Host(`staging.blog.conway.dev`)"
+      - "traefik.http.routers.hugo-staging.tls=true"
+      - "traefik.http.routers.hugo-staging.tls.certresolver=prod"
+      - "traefik.http.services.hugo-staging.loadbalancer.server.port=1313"
+    restart: unless-stopped
+    command: server -D -E -F --navigateToChanged

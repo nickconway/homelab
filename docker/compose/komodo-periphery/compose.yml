@@ -1,0 +1,21 @@
+services:
+  periphery:
+    container_name: komodo-periphery
+    image: ghcr.io/mbecker20/periphery:latest
+    restart: unless-stopped
+    # image: ghcr.io/mbecker20/periphery:latest-aarch64 # Use for arm support
+    logging:
+      driver: local
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/Git:/etc/komodo/repos # manage repos in a docker volume, or change it to an accessible host directory.
+      - ..:/etc/komodo/stacks:ro # manage stack files in a docker volume, or change it to an accessible host directory.
+    ports:
+      - 8120:8120
+    environment:
+      # If the disk size is overreporting, can use one of these to
+      # whitelist / blacklist the disks to filter them, whichever is easier.
+      # Accepts comma separated list of paths.
+      # Usually whitelisting just /etc/hostname gives correct size.
+      PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
+      # PERIPHERY_EXCLUDE_DISK_MOUNTS: /snap,/etc/repos

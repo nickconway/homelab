@@ -1,0 +1,76 @@
+networks:
+  proxy:
+    external: true
+  teslamate:
+    name: teslamate
+
+services:
+  teslamate:
+    image: teslamate/teslamate:latest
+    container_name: teslamate
+    networks:
+      - teslamate
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - DATABASE_USER=teslamate
+      - DATABASE_PASS=${POSTGRES_PASSWORD}
+      - DATABASE_NAME=teslamate
+      - DATABASE_HOST=teslamate-postgres
+      - MQTT_HOST=10.0.107.2
+      - MQTT_USERNAME=mqtt
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+    volumes:
+      - ./data/import:/opt/app/import
+    cap_drop:
+      - all
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.teslamate.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.teslamate.rule=Host(`teslamate.conway.dev`)"
+      - "traefik.http.routers.teslamate.tls=true"
+      - "traefik.http.routers.teslamate.tls.certresolver=prod"
+      - "traefik.http.services.teslamate.loadbalancer.server.port=4000"
+    restart: unless-stopped
+
+  teslamate-postgres:
+    image: postgres:17
+    container_name: teslamate-postgres
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - POSTGRES_USER=teslamate
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=teslamate
+    networks:
+      - teslamate
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
+  teslamate-grafana:
+    image: teslamate/grafana:latest
+    container_name: teslamate-grafana
+    restart: unless-stopped
+    user: 1000:1000
+    networks:
+      - teslamate
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - DATABASE_USER=teslamate
+      - DATABASE_PASS=${POSTGRES_PASSWORD}
+      - DATABASE_NAME=teslamate
+      - DATABASE_HOST=teslamate-postgres
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.teslamate-grafana.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.teslamate-grafana.rule=Host(`data.tesla.conway.dev`)"
+      - "traefik.http.routers.teslamate-grafana.tls=true"
+      - "traefik.http.routers.teslamate-grafana.tls.certresolver=prod"
+      - "traefik.http.services.teslamate-grafana.loadbalancer.server.port=3000"

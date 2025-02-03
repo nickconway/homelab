@@ -1,0 +1,33 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  netboot:
+    container_name: netboot
+    image: lscr.io/linuxserver/netbootxyz:latest
+    networks:
+      - proxy
+    environment:
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - ./data/config:/config
+      - ./data/assets:/assets
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.netboot.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.netboot.rule=Host(`boot.conway.dev`)"
+      - "traefik.http.routers.netboot.service=netboot"
+      - "traefik.http.routers.netboot.tls=true"
+      - "traefik.http.routers.netboot.tls.certresolver=prod"
+      - "traefik.http.services.netboot.loadbalancer.server.port=3000"
+      - "traefik.http.routers.netboot-endpoint.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.netboot-endpoint.rule=Host(`local.boot.conway.dev`)"
+      - "traefik.http.routers.netboot-endpoint.service=netboot-endpoint"
+      - "traefik.http.routers.netboot-endpoint.tls=true"
+      - "traefik.http.routers.netboot-endpoint.tls.certresolver=prod"
+      - "traefik.http.services.netboot-endpoint.loadbalancer.server.port=80"
+    restart: unless-stopped
+    ports:
+      - 69:69/udp

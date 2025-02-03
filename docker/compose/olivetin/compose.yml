@@ -1,0 +1,21 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  olivetin:
+    container_name: olivetin
+    image: jamesread/olivetin:latest
+    networks:
+      - proxy
+    volumes:
+      - ./config/:/config/ # replace host path or volume as needed
+      - ./data/ssh/:/home/olivetin/.ssh
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.olivetin.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.olivetin.rule=Host(`run.conway.dev`)"
+      - "traefik.http.routers.olivetin.tls=true"
+      - "traefik.http.routers.olivetin.tls.certresolver=prod"
+      - "traefik.http.services.olivetin.loadbalancer.server.port=1337"
+    restart: unless-stopped

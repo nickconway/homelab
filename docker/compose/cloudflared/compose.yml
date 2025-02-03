@@ -1,0 +1,16 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared:latest
+    networks:
+      - proxy
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run

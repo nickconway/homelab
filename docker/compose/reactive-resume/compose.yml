@@ -1,0 +1,143 @@
+networks:
+  proxy:
+    external: true
+  reactive-resume:
+    name: reactive-resume
+
+services:
+  reactive-resume-postgres:
+    container_name: reactive-resume-postgres
+    image: postgres:15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: reactive
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: reactive
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reactive -d reactive"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - reactive-resume
+
+  # Storage (for image uploads)
+  reactive-resume-minio:
+    image: minio/minio
+    container_name: reactive-resume-minio
+    restart: unless-stopped
+    command: server /data
+    volumes:
+      - ./data/minio:/data
+    environment:
+      MINIO_ROOT_USER: reactive
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.reactive-resume-minio.middlewares=crowdsec-traefik-bouncer
+      - traefik.http.routers.reactive-resume-minio.rule=Host(`resume-storage.conway.dev`)
+      - traefik.http.routers.reactive-resume-minio.tls=true
+      - traefik.http.routers.reactive-resume-minio.tls.certresolver=prod
+      - traefik.http.services.reactive-resume-minio.loadbalancer.server.port=9000
+    networks:
+      - proxy
+      - reactive-resume
+
+  # Chrome Browser (for printing and previews)
+  reactive-resume-chrome:
+    container_name: reactive-resume-chrome
+    image: ghcr.io/browserless/chromium:v2.18.0
+    restart: unless-stopped
+    environment:
+      TIMEOUT: 10000
+      CONCURRENT: 10
+      TOKEN: ${CHROME_TOKEN}
+      EXIT_ON_HEALTH_FAILURE: true
+      PRE_REQUEST_HEALTH_CHECK: true
+    networks:
+      - reactive-resume
+
+  reactive-resume:
+    container_name: reactive-resume
+    # build:
+    #   context: ./source
+    image: amruthpillai/reactive-resume:latest
+    restart: unless-stopped
+    depends_on:
+      - reactive-resume-postgres
+      - reactive-resume-minio
+      - reactive-resume-chrome
+    environment:
+      # -- Environment Variables --
+      PORT: 3000
+      NODE_ENV: production
+
+      # -- URLs --
+      INTERNAL_URL: http://reactive-resume:3000
+      PUBLIC_URL: https://resume.conway.dev
+      STORAGE_URL: https://resume-storage.conway.dev/default
+
+      # -- Printer (Chrome) --
+      CHROME_TOKEN: ${CHROME_TOKEN}
+      CHROME_URL: ws://reactive-resume-chrome:3000
+
+      # -- Database (Postgres) --
+      DATABASE_URL: postgresql://reactive:${POSTGRES_PASSWORD}@reactive-resume-postgres:5432/reactive
+
+      # -- Auth --
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+
+      # -- Emails --
+      MAIL_FROM: resume@conway.dev
+      SMTP_URL: smtp://${SMTP_USERNAME}:${SMTP_PASSWORD}@mail.smtp2go.com:587
+
+      # -- Storage (Minio) --
+      STORAGE_ENDPOINT: reactive-resume-minio
+      STORAGE_PORT: 9000
+      STORAGE_REGION: us-east-1 # Optional
+      STORAGE_BUCKET: default
+      STORAGE_ACCESS_KEY: reactive
+      STORAGE_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      STORAGE_USE_SSL: false
+      STORAGE_SKIP_BUCKET_CHECK: false
+
+      # -- Sentry --
+      # VITE_SENTRY_DSN: https://id.sentry.io # Optional
+
+      # -- Crowdin (Optional) --
+      # CROWDIN_PROJECT_ID:
+      # CROWDIN_PERSONAL_TOKEN:
+
+      # -- Email (Optional) --
+      DISABLE_EMAIL_AUTH: false
+      DISABLE_SIGNUPS: true
+
+      # -- GitHub (Optional) --
+      # GITHUB_CLIENT_ID: github_client_id
+      # GITHUB_CLIENT_SECRET: github_client_secret
+      # GITHUB_CALLBACK_URL: https://example.com/api/auth/github/callback
+
+      # -- Google (Optional) --
+      # GOOGLE_CLIENT_ID: google_client_id
+      # GOOGLE_CLIENT_SECRET: google_client_secret
+      # GOOGLE_CALLBACK_URL: https://example.com/api/auth/google/callback
+
+      OPENID_AUTHORIZATION_URL: ${OPENID_AUTHORIZATION_URL}
+      OPENID_CALLBACK_URL: ${OPENID_CALLBACK_URL}
+      OPENID_CLIENT_ID: ${OPENID_CLIENT_ID}
+      OPENID_CLIENT_SECRET: ${OPENID_CLIENT_SECRET}
+      OPENID_ISSUER: ${OPENID_ISSUER}
+      OPENID_TOKEN_URL: ${OPENID_TOKEN_URL}
+      OPENID_USER_INFO_URL: ${OPENID_USER_INFO_URL}
+    networks:
+      - proxy
+      - reactive-resume
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.reactive-resume.middlewares=crowdsec-traefik-bouncer
+      - traefik.http.routers.reactive-resume.rule=Host(`resume.conway.dev`)
+      - traefik.http.routers.reactive-resume.tls.certresolver=prod
+      - traefik.http.services.reactive-resume.loadbalancer.server.port=3000

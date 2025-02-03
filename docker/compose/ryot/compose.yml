@@ -1,0 +1,39 @@
+networks:
+  proxy:
+    external: true
+  ryot:
+    name: ryot
+
+services:
+  ryot-postgres:
+    image: postgres:16-alpine # atleast version 15 is required
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=ryot
+      - POSTGRES_DB=ryot
+    container_name: ryot-postgres
+    networks:
+      - ryot
+
+  ryot:
+    image: ghcr.io/ignisda/ryot:latest
+    environment:
+      - DATABASE_URL=postgres://ryot:${POSTGRES_PASSWORD}@ryot-postgres:5432/postgres
+      - TZ=America/New_York
+    restart: unless-stopped
+    container_name: ryot
+    networks:
+      - ryot
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ryot.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.ryot.rule=Host(`statistics.conway.dev`)"
+      - "traefik.http.routers.ryot.tls=true"
+      - "traefik.http.routers.ryot.tls.certresolver=prod"
+      - "traefik.http.services.ryot.loadbalancer.server.port=8000"

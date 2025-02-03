@@ -1,0 +1,23 @@
+services:
+  whisper:
+    container_name: whisper
+    restart: unless-stopped
+    build:
+      context: source
+      dockerfile: Dockerfile.gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - ASR_MODEL=base
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./source/app:/app/app:ro
+      - ./data/cache/pip:/root/.cache/pip
+      - ./data/cache/poetry:/root/.cache/poetry
+      - ./data/cache/whisper:/root/.cache/whisper

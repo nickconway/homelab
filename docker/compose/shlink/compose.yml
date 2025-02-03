@@ -1,0 +1,65 @@
+networks:
+  proxy:
+    external: true
+  shlink:
+    name: shlink
+
+services:
+  shlink:
+    container_name: shlink
+    image: shlinkio/shlink:stable
+    networks:
+      - proxy
+      - shlink
+    environment:
+      PUID: 1000
+      PGID: 1000
+      DEFAULT_DOMAIN: l.conway.dev
+      IS_HTTPS_ENABLED: true
+      GEOLITE_LICENSE_KEY: ${GEOLITE_LICENSE_KEY}
+      DB_DRIVER: postgres
+      DB_USER: shlink
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOST: shlink-postgres
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.shlink.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.shlink.rule=Host(`l.conway.dev`)"
+      - "traefik.http.routers.shlink.tls=true"
+      - "traefik.http.routers.shlink.tls.certresolver=prod"
+      - "traefik.http.services.shlink.loadbalancer.server.port=8080"
+    restart: unless-stopped
+
+  shlink-postgres:
+    container_name: shlink-postgres
+    image: postgres:15
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      PUID: 1000
+      PGID: 1000
+      POSTGRES_USER: shlink
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - shlink
+
+  shlink-web-client:
+    image: shlinkio/shlink-web-client
+    container_name: shlink-web-client
+    restart: unless-stopped
+    environment:
+      PUID: 1000
+      PGID: 1000
+      SHLINK_SERVER_URL: https://l.conway.dev
+      SHLINK_SERVER_API_KEY: ${SHLINK_SERVER_API_KEY}
+    networks:
+      - shlink
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.shlink-web-client.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.shlink-web-client.rule=Host(`links.conway.dev`)"
+      - "traefik.http.routers.shlink-web-client.tls=true"
+      - "traefik.http.routers.shlink-web-client.tls.certresolver=prod"
+      - "traefik.http.services.shlink-web-client.loadbalancer.server.port=8080"

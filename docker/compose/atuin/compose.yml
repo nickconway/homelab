@@ -1,0 +1,45 @@
+networks:
+  proxy:
+    external: true
+  atuin:
+    name: atuin
+
+services:
+  atuin:
+    container_name: atuin
+    image: ghcr.io/atuinsh/atuin:latest
+    command: server start
+    networks:
+      - atuin
+      - proxy
+    volumes:
+      - ./config:/config
+    restart: unless-stopped
+    environment:
+      PUID: 1000
+      PGID: 1000
+      ATUIN_HOST: "0.0.0.0"
+      ATUIN_PORT: 8888
+      ATUIN_OPEN_REGISTRATION: "true"
+      ATUIN_DB_URI: postgres://atuin:${POSTGRES_PASSWORD}@atuin-postgres/atuin
+      RUST_LOG: info,atuin_server=debug
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.atuin.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.atuin.rule=Host(`commands.conway.dev`)"
+      - "traefik.http.routers.atuin.tls=true"
+      - "traefik.http.routers.atuin.tls.certresolver=prod"
+      - "traefik.http.services.atuin.loadbalancer.server.port=8888"
+
+  atuin-postgres:
+    container_name: atuin-postgres
+    image: postgres:14
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/var/lib/postgresql/data/
+    networks:
+      - atuin
+    environment:
+      POSTGRES_USER: atuin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: atuin

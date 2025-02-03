@@ -1,0 +1,28 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  syncthing:
+    image: syncthing/syncthing
+    container_name: syncthing
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./data:/var/syncthing
+      - /mnt/nas/home:/mnt/nas/home
+    networks:
+      - proxy
+    restart: unless-stopped
+    ports:
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.syncthing.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.syncthing.rule=Host(`sync.conway.dev`)"
+      - "traefik.http.routers.syncthing.tls=true"
+      - "traefik.http.routers.syncthing.tls.certresolver=prod"
+      - "traefik.http.services.syncthing.loadbalancer.server.port=8384"

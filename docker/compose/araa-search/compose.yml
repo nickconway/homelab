@@ -1,0 +1,24 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  araa:
+    container_name: araa
+    image: docker.io/temthelem/araa-search:latest
+    networks:
+      - proxy
+    env_file:
+      - .env
+    environment:
+      PUID: 1000
+      PGID: 1000
+      DOMAIN: ${DOMAIN}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.araa.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.araa.rule=Host(`search.conway.dev`)"
+      - "traefik.http.routers.araa.tls=true"
+      - "traefik.http.routers.araa.tls.certresolver=prod"
+      - "traefik.http.services.araa.loadbalancer.server.port=${PORT}"
+    restart: unless-stopped

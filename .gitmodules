@@ -1,0 +1,14 @@
+[submodule "docker/compose/traefik/data/plugins/src/github.com/MarkusJx/traefik-wol"]
+	path = docker/compose/traefik/data/plugins/src/github.com/MarkusJx/traefik-wol
+	url = https://github.com/dominiqueroux/traefik-wol
+	branch = f/addBroadcastAddress
+[submodule "docker/compose/hugo/src"]
+	path = docker/compose/hugo/src
+	url = https://github.com/nickconway/blog
+[submodule "docker/compose/mailcow/source"]
+	path = docker/compose/mailcow/source
+	url = https://github.com/mailcow/mailcow-dockerized
+[submodule "docker/compose/reactive-resume/source"]
+	path = docker/compose/reactive-resume/source
+	url = https://github.com/nickconway/Reactive-Resume
+	branch = dev

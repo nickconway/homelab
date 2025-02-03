@@ -5,7 +5,7 @@ networks:
 services:
   photon:
     container_name: photon
-    image: photon:latest
+    image: git.conway.dev/nick/photon:latest
     restart: unless-stopped
     volumes:
       - ./data:/photon/photon_data
@@ -14,11 +14,6 @@ services:
       - UPDATE_INTERVAL=1d
       - LOG_LEVEL=DEBUG
       - COUNTRY_CODE=us
-    build:
-      context: ${HOME}/Git/homelab/docker/dockerfiles/photon
-      dockerfile: Dockerfile
-      args:
-        - PHOTON_VERSION=0.6.2
     networks:
       - proxy
     labels:

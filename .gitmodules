@@ -14,3 +14,7 @@
 	path = docker/compose/reactive-resume/source
 	url = https://github.com/nickconway/Reactive-Resume
 	branch = dev
+[submodule "docker/dockerfiles/photon/source"]
+	path = docker/dockerfiles/photon/source
+	url = https://github.com/rtuszik/photon-docker
+	branch = main

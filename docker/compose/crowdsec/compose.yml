@@ -40,7 +40,7 @@ services:
 
   crowdsec-dashboard:
     container_name: crowdsec-dashboard
-    build: ${HOME}/Git/homelab/docker/dockerfiles/crowdsec-dashboard
+    image: git.conway.dev/nick/crowdsec-dashboard:latest
     restart: unless-stopped
     environment:
       PUID: 1000

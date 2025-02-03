@@ -10,16 +10,13 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - whoami.k8s.conway.dev
+        - ${WHOAMI_SUB_DOMAIN}.${BASE_DOMAIN}
       secretName: whoami-certificate
     - hosts:
-        - proxy.k8s.conway.dev
+        - ${PROXY_SUB_DOMAIN}.${BASE_DOMAIN}
       secretName: proxy-certificate
-    - hosts:
-        - nginx.k8s.conway.dev
-      secretName: nginx-certificate
   rules:
-    - host: whoami.k8s.conway.dev
+    - host: ${WHOAMI_SUB_DOMAIN}.${BASE_DOMAIN}
       http:
         paths:
           - path: /
@@ -30,7 +27,7 @@ spec:
                 port:
                   name: web
 
-    - host: proxy.k8s.conway.dev
+    - host: ${PROXY_SUB_DOMAIN}.${BASE_DOMAIN}
       http:
         paths:
           - path: /
@@ -40,14 +37,3 @@ spec:
                 name: traefik
                 port:
                   name: dashboard
-
-    - host: nginx.k8s.conway.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: nginx
-                port:
-                  name: web

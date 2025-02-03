@@ -1,0 +1,25 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  maloja:
+    container_name: maloja
+    image: krateng/maloja:latest
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MALOJA_DATA_DIRECTORY=/mljdata
+      - MALOJA_SKIP_SETUP=true
+    volumes:
+      - ./data:/mljdata
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.maloja.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.maloja.rule=Host(`scrobble.conway.dev`)"
+      - "traefik.http.routers.maloja.tls=true"
+      - "traefik.http.routers.maloja.tls.certresolver=prod"
+      - "traefik.http.services.maloja.loadbalancer.server.port=42010"
+    restart: unless-stopped

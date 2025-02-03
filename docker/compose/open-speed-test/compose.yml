@@ -1,0 +1,21 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  open-speed-test:
+    container_name: open-speed-test
+    image: openspeedtest/latest
+    networks:
+      - proxy
+    environment:
+      PUID: 1000
+      PGID: 1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.open-speed-test.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.open-speed-test.rule=Host(`speed.conway.dev`)"
+      - "traefik.http.routers.open-speed-test.tls=true"
+      - "traefik.http.routers.open-speed-test.tls.certresolver=prod"
+      - "traefik.http.services.open-speed-test.loadbalancer.server.port=3000"
+    restart: unless-stopped

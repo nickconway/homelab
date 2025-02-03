@@ -1,0 +1,73 @@
+networks:
+  proxy:
+    external: true
+  guacamole:
+    name: guacamole
+
+services:
+  guacamole-postgres:
+    image: postgres:16
+    container_name: guacamole-postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+      - ./config/postgres-init:/docker-entrypoint-initdb.d
+    environment:
+      PUID: 1000
+      PGID: 1000
+      POSTGRES_DB: guacamole
+      POSTGRES_USER: guac
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - guacamole
+
+  guacd:
+    container_name: guacd
+    image: guacamole/guacd
+    user: 1000:1000
+    networks:
+      - guacamole
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/hack-nerd-font/:/usr/share/fonts/truetype/hack-nerd-font/
+    restart: unless-stopped
+
+  guacamole:
+    container_name: guacamole
+    image: guacamole/guacamole
+    # user: 1000:1000
+    networks:
+      - guacamole
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/hack-nerd-font/:/usr/share/fonts/truetype/hack-nerd-font/
+    depends_on:
+      - guacd
+    links:
+      - guacd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - REMOTE_IP_VALUE_ENABLED=true
+      - GUACD_HOSTNAME=guacd
+      - GUACD_PORT=4822
+      - POSTGRESQL_HOSTNAME=guacamole-postgres
+      - POSTGRESQL_DATABASE=guacamole
+      - POSTGRESQL_USER=guac
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD}
+      - OPENID_AUTHORIZATION_ENDPOINT=https://auth.conway.dev/application/o/authorize/
+      - OPENID_CLIENT_ID=${OPENID_CLIENT_ID}
+      - OPENID_ISSUER=https://auth.conway.dev/application/o/guacamole/
+      - OPENID_JWKS_ENDPOINT=https://auth.conway.dev/application/o/guacamole/jwks/
+      - OPENID_REDIRECT_URI=https://remote.conway.dev
+      - OPENID_USERNAME_CLAIM_TYPE=preferred_username
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.guacamole.addprefix.prefix=/guacamole"
+      - "traefik.http.routers.guacamole.middlewares=crowdsec-traefik-bouncer,auth,guacamole"
+      - "traefik.http.routers.guacamole.rule=Host(`remote.conway.dev`)"
+      - "traefik.http.routers.guacamole.tls=true"
+      - "traefik.http.routers.guacamole.tls.certresolver=prod"
+      - "traefik.http.services.guacamole.loadbalancer.server.port=8080"
+    restart: unless-stopped

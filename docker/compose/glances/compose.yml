@@ -1,0 +1,16 @@
+services:
+  glances:
+    container_name: glances
+    image: nicolargo/glances:latest-full
+    restart: unless-stopped
+    pid: host
+    privileged: true
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/glances.conf:/glances/conf/glances.conf
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=AMerica/New_York
+      - "GLANCES_OPT=-C /glances/conf/glances.conf -w --disable-webui"

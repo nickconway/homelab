@@ -1,0 +1,31 @@
+services:
+  stable-diffusion-download:
+    container_name: stable-diffusion-download
+    build: ./source/services/download/
+    volumes:
+      - ./data/data:/data
+
+  stable-diffusion:
+    container_name: stable-diffusion
+    depends_on:
+      stable-diffusion-download:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    build: ./source/services/AUTOMATIC1111
+    image: sd-auto:78
+    environment:
+      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
+    ports:
+      - "${WEBUI_PORT:-7860}:7860"
+    volumes:
+      - ./data/data:/data
+      - ./data/output:/output
+    stop_signal: SIGKILL
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+              - driver: nvidia
+                device_ids: ['0']
+                capabilities: [compute, utility]

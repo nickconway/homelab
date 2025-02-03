@@ -1,0 +1,40 @@
+networks:
+  proxy:
+    external: true
+
+volumes:
+  nextcloud_aio_mastercontainer:
+    name: nextcloud_aio_mastercontainer
+
+services:
+  nextcloud-aio-mastercontainer:
+    container_name: nextcloud-aio-mastercontainer
+    image: nextcloud/all-in-one:latest
+    init: true
+    networks:
+      - proxy
+    volumes:
+      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/mnt/ncdata
+    ports:
+      - 9080:8080
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - APACHE_PORT=11000
+      - APACHE_IP_BINDING=0.0.0.0
+      - NEXTCLOUD_DATADIR=${PWD}/data
+      - NEXTCLOUD_MOUNT=/mnt/nas
+      - WATCHTOWER_DOCKER_SOCKET_PATH=/var/run/docker.sock
+      - SKIP_DOMAIN_VALIDATION=true
+      - NEXTCLOUD_ENABLE_DRI_DEVICE=true
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cloud-aio.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.cloud-aio.rule=Host(`aio.cloud.conway.dev`)"
+      - "traefik.http.routers.cloud-aio.tls=true"
+      - "traefik.http.routers.cloud-aio.entrypoints=websecure"
+      - "traefik.http.routers.cloud-aio.tls.certresolver=prod"
+      - "traefik.http.services.cloud-aio.loadbalancer.server.port=8443"

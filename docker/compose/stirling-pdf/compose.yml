@@ -1,0 +1,28 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  stirling-pdf:
+    container_name: stirling-pdf
+    image: frooodle/s-pdf:latest-fat
+    networks:
+      - proxy
+    environment:
+      PUID: 1000
+      PGID: 1000
+      INSTALL_BOOK_AND_ADVANCED_HTML_OPS: true
+      LANGS: en_US
+    volumes:
+      - ./data/tesseract:/usr/share/tessdata
+      - ./data/configs:/configs
+      - ./data/custom-files:/customFiles/
+      - ./data/logs:/logs/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.stirling-pdf.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.stirling-pdf.rule=Host(`pdfs.conway.dev`)"
+      - "traefik.http.routers.stirling-pdf.tls=true"
+      - "traefik.http.routers.stirling-pdf.tls.certresolver=prod"
+      - "traefik.http.services.stirling-pdf.loadbalancer.server.port=8080"
+    restart: unless-stopped

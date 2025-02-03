@@ -1,0 +1,118 @@
+networks:
+  proxy:
+    external: true
+  dawarich:
+    name: dawarich
+
+services:
+  dawarich-redis:
+    image: redis:7.4-alpine
+    container_name: dawarich-redis
+    restart: unless-stopped
+    command: redis-server
+    networks:
+      - dawarich
+    volumes:
+      - ./data/shared:/var/shared/redis
+
+  dawarich-postgres:
+    image: postgres:17-alpine
+    container_name: dawarich-postgres
+    restart: unless-stopped
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+      - ./data/shared:/var/shared
+      - ./config/postgresql.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - dawarich
+    environment:
+      POSTGRES_USER: dawarich
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: dawarich
+
+  dawarich:
+    image: freikin/dawarich:latest
+    container_name: dawarich
+    volumes:
+      - ./data/public:/var/app/public
+      - ./data/watched:/var/app/tmp/imports/watched
+    networks:
+      - proxy
+      - dawarich
+    stdin_open: true
+    tty: true
+    entrypoint: web-entrypoint.sh
+    command: ["bin/rails", "server", "-p", "3000", "-b", "::"]
+    restart: unless-stopped
+    environment:
+      RAILS_ENV: production
+      REDIS_URL: redis://dawarich-redis:6379/0
+      DATABASE_HOST: dawarich-postgres
+      DATABASE_USERNAME: dawarich
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_NAME: dawarich
+      MIN_MINUTES_SPENT_IN_CITY: 60
+      APPLICATION_HOST: localhost
+      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.conway.dev
+      DISABLE_TELEMETRY: true
+      ENABLE_TELEMETRY: false
+      TIME_ZONE: America/New_York
+      REVERSE_GEOCODING_ENABLED: true
+      PHOTON_API_USE_HTTPS: false
+      PHOTON_API_HOST: photon:2322
+      DISTANCE_UNIT: mi
+      SECRET_KEY_BASE: 1234567890
+      RAILS_LOG_TO_STDOUT: "true"
+    depends_on:
+      - dawarich-postgres
+      - dawarich-redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dawarich.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.dawarich.rule=Host(`location.conway.dev`)"
+      - "traefik.http.routers.dawarich.tls=true"
+      - "traefik.http.routers.dawarich.tls.certresolver=prod"
+      - "traefik.http.services.dawarich.loadbalancer.server.port=3000"
+
+  dawarich-sidekiq:
+    image: freikin/dawarich:latest
+    container_name: dawarich-sidekiq
+    volumes:
+      - ./data/public:/var/app/public
+    networks:
+      - proxy
+      - dawarich
+    stdin_open: true
+    tty: true
+    entrypoint: sidekiq-entrypoint.sh
+    command: ['bundle', 'exec', 'sidekiq']
+    restart: unless-stopped
+    environment:
+      RAILS_ENV: production
+      REDIS_URL: redis://dawarich-redis:6379/0
+      DATABASE_HOST: dawarich-postgres
+      DATABASE_USERNAME: dawarich
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_NAME: dawarich
+      MIN_MINUTES_SPENT_IN_CITY: 60
+      APPLICATION_HOST: localhost
+      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.conway.dev
+      DISABLE_TELEMETRY: true
+      ENABLE_TELEMETRY: false
+      TIME_ZONE: America/New_York
+      REVERSE_GEOCODING_ENABLED: true
+      PHOTON_API_USE_HTTPS: false
+      PHOTON_API_HOST: photon:2322
+      DISTANCE_UNIT: mi
+      SECRET_KEY_BASE: 1234567890
+      RAILS_LOG_TO_STDOUT: "true"
+    depends_on:
+      - dawarich-postgres
+      - dawarich-redis
+      - dawarich
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: '2G'

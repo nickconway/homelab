@@ -1,0 +1,66 @@
+networks:
+  proxy:
+    external: true
+  invoice-ninja:
+    name: invoice-ninja
+
+services:
+  invoice-ninja-server:
+    image: nginx
+    container_name: invoice-ninja-server
+    restart: unless-stopped
+    env_file: data/env
+    volumes:
+      - ./data/config/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
+      - ./data/app/public:/var/www/app/public:ro
+    depends_on:
+      - invoice-ninja
+    environment:
+      - PUID=1000
+      - PGID=1000
+    networks:
+      - proxy
+      - invoice-ninja
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.invoice-ninja.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.invoice-ninja.rule=Host(`invoices.conway.dev`)"
+      - "traefik.http.routers.invoice-ninja.tls=true"
+      - "traefik.http.routers.invoice-ninja.entrypoints=websecure"
+      - "traefik.http.routers.invoice-ninja.tls.certresolver=prod"
+      - "traefik.http.services.invoice-ninja.loadbalancer.server.port=80"
+
+  invoice-ninja:
+    image: invoiceninja/invoiceninja:latest
+    container_name: invoice-ninja
+    env_file: data/env
+    restart: unless-stopped
+    volumes:
+      - ./data/app/public:/var/www/app/public:rw,delegated
+      - ./data/app/storage:/var/www/app/storage:rw,delegated
+      - ./data/config/php.ini:/usr/local/etc/php/php.ini
+      - ./data/config/php-cli.ini:/usr/local/etc/php/php-cli.ini
+    environment:
+      - PUID=1000
+      - PGID=1000
+    depends_on:
+      - invoice-ninja-mysql
+    networks:
+      - invoice-ninja
+
+  invoice-ninja-mysql:
+    image: mysql:8
+    container_name: invoice-ninja-mysql
+    restart: unless-stopped
+    env_file: data/env
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./data/db:/var/lib/mysql:rw,delegated
+      # - ./mysql/backups:/backups:rw
+      # - ./mysql/backup-script:/etc/cron.daily/daily:ro
+      # - ./mysql/backup-script:/etc/cron.weekly/weekly:ro
+      # - ./mysql/backup-script:/etc/cron.monthly/monthly:ro
+    networks:
+      - invoice-ninja

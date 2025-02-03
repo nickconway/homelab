@@ -1,0 +1,55 @@
+networks:
+  proxy:
+    external: true
+  romm:
+    name: romm
+
+services:
+  romm:
+    image: rommapp/romm:latest
+    container_name: romm
+    restart: unless-stopped
+    networks:
+      - proxy
+      - romm
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - DB_HOST=romm-mariadb
+      - DB_NAME=romm # Should match MYSQL_DATABASE in mariadb
+      - DB_USER=romm-user # Should match MYSQL_USER in mariadb
+      - DB_PASSWD=${MARIADB_PASSWORD}
+      - ROMM_AUTH_SECRET_KEY
+      - IGDB_CLIENT_ID
+      - IGDB_CLIENT_SECRET
+      - MOBYGAMES_API_KEY= # https://www.mobygames.com/info/api/
+      - STEAMGRIDDB_API_KEY
+    volumes:
+      - ./data/resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
+      - ./data/cache:/redis-data # Cached data for background tasks
+      - /mnt/nas/home/Documents/Emulation/Games:/romm/library # Your game library
+      - ./data/assets:/romm/assets # Uploaded saves, states, etc.
+      - ./config:/romm/config # Path where config.yml is stored
+    depends_on:
+      - romm-mariadb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.romm.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.romm.rule=Host(`emulation.conway.dev`)"
+      - "traefik.http.routers.romm.tls=true"
+      - "traefik.http.routers.romm.tls.certresolver=prod"
+      - "traefik.http.services.romm.loadbalancer.server.port=8080"
+
+  romm-mariadb:
+    image: mariadb:latest
+    container_name: romm-mariadb
+    restart: unless-stopped
+    networks:
+      - romm
+    environment:
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_DATABASE=romm
+      - MARIADB_USER=romm-user
+      - MARIADB_PASSWORD
+    volumes:
+      - ./data/db:/var/lib/mysql

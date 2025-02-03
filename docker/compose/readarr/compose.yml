@@ -1,0 +1,30 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  readarr:
+    image: linuxserver/readarr:develop
+    container_name: readarr
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York # Specify a timezone to use
+      - UMASK_SET=022 # permissions created
+      - PUID=1000 # User ID to run as
+      - PGID=1000 # Group ID to run as
+    volumes:
+      - /mnt/nas/content:/data # Location of all your media
+      - ./data/config:/config # Contains all relevant configuration files.
+      - ./data/custom-services.d:/custom-services.d
+      - ./data/custom-cont-init.d:/custom-cont-init.d
+    networks:
+      - proxy
+    # ports:
+    #   - 8989:8989/tcp # Web UI
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.readarr.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.readarr.rule=Host(`books.conway.dev`)"
+      - "traefik.http.routers.readarr.tls=true"
+      - "traefik.http.routers.readarr.tls.certresolver=prod"
+      - "traefik.http.services.readarr.loadbalancer.server.port=8787"

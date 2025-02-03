@@ -1,0 +1,56 @@
+networks:
+  proxy:
+    external: true
+  actual:
+    name: actual
+
+services:
+  actual:
+    image: docker.io/actualbudget/actual-server:latest
+    container_name: actual
+    user: 1000:1000
+    # environment:
+    #   - PUID=1000
+    #   - PGID=1000
+    # Uncomment any of the lines below to set configuration options.
+    # - ACTUAL_HTTPS_KEY=/data/selfhost.key
+    # - ACTUAL_HTTPS_CERT=/data/selfhost.crt
+    # - ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB=20
+    # - ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB=50
+    # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=20
+    # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
+    # !! If you are not using any of these options, remove the 'environment:' tag entirely.
+    volumes:
+      - ./data/data:/data
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.actual.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.actual.rule=Host(`finance.conway.dev`)"
+      - "traefik.http.routers.actual.tls=true"
+      - "traefik.http.routers.actual.tls.certresolver=prod"
+      - "traefik.http.services.actual.loadbalancer.server.port=5006"
+    networks:
+      - proxy
+      - actual
+
+  actual-api:
+    container_name: actual-api
+    image: jhonderson/actual-http-api:latest
+    networks:
+      - proxy
+      - actual
+    volumes:
+      - ./data/api:/data
+    restart: unless-stopped
+    environment:
+      ACTUAL_SERVER_URL: http://actual:5006
+      ACTUAL_SERVER_PASSWORD: ${ACTUAL_SERVER_PASSWORD}
+      API_KEY: ${API_KEY}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.actual-api.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.actual-api.rule=Host(`finance-api.conway.dev`)"
+      - "traefik.http.routers.actual-api.tls=true"
+      - "traefik.http.routers.actual-api.tls.certresolver=prod"
+      - "traefik.http.services.actual-api.loadbalancer.server.port=5007"

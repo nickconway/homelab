@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-production-certificate
+  namespace: default
+spec:
+  dnsNames:
+    - "*.conway.dev"
+  secretName: letsencrypt-production-cert-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-production

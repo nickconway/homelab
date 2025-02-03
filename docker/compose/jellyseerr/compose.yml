@@ -1,0 +1,25 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  jellyseerr:
+    container_name: jellyseerr
+    image: ghcr.io/hotio/jellyseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=America/New_York
+    volumes:
+      - ./data/config:/config
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyseerr.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.jellyseerr.rule=Host(`discover.conway.dev`)"
+      - "traefik.http.routers.jellyseerr.tls=true"
+      - "traefik.http.routers.jellyseerr.tls.certresolver=prod"
+      - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
+    restart: unless-stopped

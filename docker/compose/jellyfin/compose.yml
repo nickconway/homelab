@@ -1,0 +1,33 @@
+
+networks:
+  proxy:
+    external: true
+
+services:
+  jellyfin:
+    container_name: jellyfin
+    image: jellyfin/jellyfin:latest
+    user: 0:106
+    networks:
+      - proxy
+    devices:
+      - /dev/dri/:/dev/dri/
+    environment:
+      PUID: 1000
+      PGID: 1000
+      JELLYFIN_PublishedServerUrl: https://watch.conway.dev
+    group_add:
+      - 107
+      - 44
+    volumes:
+      - ./data/config:/config
+      - ./data/cache:/cache
+      - /mnt/nas/content/media:/data/media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.jellyfin.rule=Host(`watch.conway.dev`)"
+      - "traefik.http.routers.jellyfin.tls=true"
+      - "traefik.http.routers.jellyfin.tls.certresolver=prod"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+    restart: unless-stopped

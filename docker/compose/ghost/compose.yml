@@ -1,0 +1,52 @@
+networks:
+  proxy:
+    external: true
+  ghost:
+    name: ghost
+
+services:
+  ghost:
+    container_name: ghost
+    image: ghost:alpine
+    environment:
+      PUID: 1000
+      PGID: 1000
+      # see https://ghost.org/docs/config/#configuration-options
+      database__client: mysql
+      database__connection__host: ghost-mysql
+      database__connection__user: ghost
+      database__connection__password: ${MYSQL_ROOT_PASSWORD}
+      database__connection__database: ghost
+      # this url value is just an example, and is likely wrong for your environment!
+      url: https://blog.conway.dev
+      # contrary to the default mentioned in the linked documentation, this image defaults to NODE_ENV=production (so development mode needs to be explicitly specified if desired)
+      #NODE_ENV: development
+    volumes:
+      - ./data/content:/var/lib/ghost/content
+    networks:
+      - proxy
+      - ghost
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ghost.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.ghost.rule=Host(`blog.conway.dev`)"
+      - "traefik.http.routers.ghost.tls=true"
+      - "traefik.http.routers.ghost.tls.certresolver=prod"
+      - "traefik.http.services.ghost.loadbalancer.server.port=2368"
+    restart: unless-stopped
+
+  ghost-mysql:
+    image: mysql:8.0
+    container_name: ghost-mysql
+    restart: unless-stopped
+    networks:
+      - ghost
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ghost
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ghost
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - ./data/db:/var/lib/mysql

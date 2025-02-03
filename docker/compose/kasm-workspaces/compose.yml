@@ -1,0 +1,45 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  kasm-workspaces:
+    container_name: kasm-workspaces
+    image: lscr.io/linuxserver/kasm:latest
+    networks:
+      - proxy
+    ports:
+      - 3000:3000
+    devices:
+      - /dev/dri/:/dev/dri/
+    environment:
+      PUID: 1000
+      PGID: 1000
+      KASM_PORT: 443
+      DOCKER_HUB_USERNAME: ${DOCKER_HUB_USERNAME}
+      DOCKER_HUB_PASSWORD: ${DOCKER_HUB_PASSWORD}
+      DOCKER_MTU: 1500 #optional
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kasm-workspaces.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.kasm-workspaces.rule=Host(`spaces.conway.dev`)"
+      - "traefik.http.routers.kasm-workspaces.entrypoints=websecure"
+      - "traefik.http.routers.kasm-workspaces.tls=true"
+      - "traefik.http.routers.kasm-workspaces.tls.certresolver=prod"
+      - "traefik.http.routers.kasm-workspaces.service=kasm-workspaces"
+      - "traefik.http.services.kasm-workspaces.loadbalancer.server.port=443"
+      - "traefik.http.services.kasm-workspaces.loadbalancer.serverstransport=ignorecert@file"
+      - "traefik.http.services.kasm-workspaces.loadbalancer.server.scheme=https"
+      - "traefik.http.routers.kasm-workspaces-init.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.kasm-workspaces-init.rule=Host(`init.spaces.conway.dev`)"
+      - "traefik.http.routers.kasm-workspaces-init.tls=true"
+      - "traefik.http.routers.kasm-workspaces-init.tls.certresolver=prod"
+      - "traefik.http.routers.kasm-workspaces-init.service=kasm-workspaces-init"
+      - "traefik.http.services.kasm-workspaces-init.loadbalancer.server.port=3000"
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - ./data/data:/opt
+      - ./data/profiles:/profiles #optional
+      - /dev/input:/dev/input #optional
+      - /run/udev/data:/run/udev/data #optional

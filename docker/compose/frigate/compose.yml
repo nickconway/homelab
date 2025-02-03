@@ -1,0 +1,50 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  frigate:
+    container_name: frigate
+    restart: unless-stopped
+    image: ghcr.io/blakeblackshear/frigate:stable
+    shm_size: "256mb" # update for your cameras based on calculation above
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frigate.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.frigate.rule=Host(`cameras.conway.dev`)"
+      - "traefik.http.routers.frigate.tls=true"
+      - "traefik.http.routers.frigate.tls.certresolver=prod"
+      - "traefik.http.routers.frigate.service=frigate"
+      - "traefik.http.services.frigate.loadbalancer.server.port=8971"
+      - "traefik.http.routers.go2rtc.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.go2rtc.rule=Host(`rtc.conway.dev`)"
+      - "traefik.http.routers.go2rtc.tls=true"
+      - "traefik.http.routers.go2rtc.tls.certresolver=prod"
+      - "traefik.http.routers.go2rtc.service=go2rtc"
+      - "traefik.http.services.go2rtc.loadbalancer.server.port=1984"
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./data/config:/config
+      - /mnt/nas/cameras/Frigate:/media/frigate
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      # - "8971:8971"
+      - "5000:5000" # Internal unauthenticated access. Expose carefully.
+      - "8554:8554" # RTSP feeds
+      - "8555:8555/tcp" # WebRTC over tcp
+      - "8555:8555/udp" # WebRTC over udp
+      - "1984:1984"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      FRIGATE_RTSP_PASSWORD: ${FRIGATE_RTSP_PASSWORD}
+    cap_add:
+      - CAP_PERFMON

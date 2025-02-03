@@ -1,0 +1,24 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York    # optional: set desired timezone
+    volumes:
+      - ./data:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptime-kuma.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.conway.dev`)"
+      - "traefik.http.routers.uptime-kuma.tls=true"
+      - "traefik.http.routers.uptime-kuma.tls.certresolver=prod"
+      - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
+    restart: unless-stopped
+    networks:
+      - proxy

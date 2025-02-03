@@ -25,10 +25,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.yml:/etc/traefik/traefik.yml
+      - ./config/plugins:/plugins-local
       - ./data/config.yml:/etc/traefik/configs/config.yml
       - ./data/acme.json:/acme.json
       - ./data/logs:/var/log/traefik
-      - ./data/plugins:/plugins-local
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.auth.forwardAuth.address=http://authentik:9000/outpost.goauthentik.io/auth/traefik"

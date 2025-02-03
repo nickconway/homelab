@@ -1,0 +1,9 @@
+site_name: "Homelab Documentation"
+theme:
+  name: "material"
+nav:
+  - Home: index.md
+plugins:
+  - mkdocs-material-extensions
+  - search
+  - markdownextradata

@@ -1,0 +1,24 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  mkdocs:
+    container_name: mkdocs
+    image: squidfunk/mkdocs-material:latest
+    networks:
+      - proxy
+    volumes:
+      - ./config/site:/docs
+    environment:
+      PUID: 1000
+      PGID: 1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mkdocs.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.mkdocs.rule=Host(`homelab.conway.dev`)"
+      - "traefik.http.routers.mkdocs.tls=true"
+      - "traefik.http.routers.mkdocs.tls.certresolver=prod"
+      - "traefik.http.services.mkdocs.loadbalancer.server.port=8000"
+    command: mkdocs serve -a 0.0.0.0:8000
+    restart: unless-stopped

@@ -6,6 +6,7 @@ if [[ -e .env ]]; then source .env; fi
 
 if [[ ! -e secrets.encrypted.yaml ]]; then
     if [[ ! -e secrets.yaml ]]; then
+        TALOS_SECRETS_CREATED=true
         talosctl gen secrets
         sops encrypt --pgp "$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')" secrets.yaml >secrets.encrypted.yaml
         rm secrets.yaml
@@ -44,7 +45,9 @@ for c in "${NODES[@]}"; do
 done
 
 IP="$(echo "${NODES[0]}" | awk '{print $1}')"
-talosctl bootstrap -n "$IP" -e "$IP"
+if [[ -n "${TALOS_SECRETS_CREATED:-}" ]]; then talosctl bootstrap -n "$IP" -e "$IP"; fi
 
 talosctl config --talosconfig talosconfig node "$API_SERVER"
-talosctl config --taloscon'fig talosconfig endpoint "$ENDPOINT"
+talosctl config --talosconfig talosconfig endpoint "$ENDPOINT"
+
+talosctl config merge talosconfig

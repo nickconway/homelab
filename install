@@ -39,7 +39,26 @@ if [[ -z "${NO_REPO_PULL:-}" ]]; then
     gum spin --title "Updating repo..." -- git pull --recurse-submodules
 fi
 
+if [[ -z "${GPG_EMAIL:-}" ]]; then
+    while [[ -z "${GPG_EMAIL:-}" ]]; do
+        GPG_EMAIL="$(gum input --header "What is your GPG email?")"
+    done
+
+    if ! grep -q 'GPG_EMAIL' "$HOME/.$(basename "$SHELL")rc"; then
+        echo >>"$HOME"/."$(basename "$SHELL")"rc
+        echo "export GPG_EMAIL=\"$GPG_EMAIL\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    fi
+
+    export GPG_EMAIL
+fi
+
+if [[ -z "${GPG_KEY:-}" ]]; then
+    GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"
+    export GPG_KEY
+fi
+
 ./scripts/bootstrap-docker-stacks
 ./scripts/bootstrap-talos
 ./scripts/bootstrap-kubernetes
-./scripts/bootstrap-kubernetes-manifests
+
+echo "Homelab setup complete!"

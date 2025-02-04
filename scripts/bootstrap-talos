@@ -6,6 +6,12 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
+cd "$SCRIPT_DIR/kubernetes/talos"
+
+if [[ -e talosconfigggg ]] || [[ -n "${BOOTSTRAP_TALOS_CLUSTER:-}" ]] || gum confirm "A talos cluster has not been configured, would you like to configure it now?"; then
+    exit 0
+fi
+
 if [[ -z "${TALOS_API_SERVER:-}" ]]; then
     while [[ -z "${TALOS_API_SERVER:-}" ]]; do
         TALOS_API_SERVER="$(gum input --header "What is the hostname of the API server (without http(s) or port)?")"

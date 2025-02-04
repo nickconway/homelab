@@ -6,30 +6,77 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
-if ! command -v helm &>/dev/null; then
-    if [[ -n "${INSTALL_DEPENDENCIES:-}" ]] || gum confirm "Helm is not installed, would you like to install it?"; then
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+if [[ -z "${K8S_MANIFEST_DIR:-}" ]]; then
+    K8S_MANIFEST_DIR="$(gum input --header "Where would you like to install the kubernetes manifests?" --placeholder "$HOME/Kubernetes")"
+    K8S_MANIFEST_DIR="${K8S_MANIFEST_DIR:-$HOME/Kubernetes}"
+    echo "Kubernetes manifests will be installed in $K8S_MANIFEST_DIR"
+    mkdir -p "$K8S_MANIFEST_DIR"
+
+    if ! grep -q 'K8S_MANIFEST_DIR' "$HOME/.$(basename "$SHELL")rc"; then
+        echo >>"$HOME"/."$(basename "$SHELL")"rc
+        echo "export K8S_MANIFEST_DIR=\"$K8S_MANIFEST_DIR\"" >>"$HOME"/."$(basename "$SHELL")"rc
     fi
 fi
 
-gum spin --title "Installing jetstack helm chart" -- helm repo add jetstack https://charts.jetstack.io --force-update
-echo "Jetstack helm chart installed"
+cd "$SCRIPT_DIR/kubernetes/manifests"
 
-if ! helm list -n cert-manager | grep cert-manager; then
-    gum spin --title "Installing cert-manager" -- \
-        helm install \
-        cert-manager jetstack/cert-manager \
-        --namespace cert-manager \
-        --create-namespace \
-        --set crds.enabled=true \
-        --set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}'
-    echo "cert-manager installed"
-fi
+K8S_APPS="$(
+    for APP in *; do
+        if [[ ! -e "$HOME/Kubernetes/$APP" ]]; then
+            echo "$APP"
+        fi
+    done
+)"
 
-LATEST_METALLB="$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r '.tag_name')"
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/"$LATEST_METALLB"/config/manifests/metallb-native.yaml
+SELECTED_K8S_APPS="$(
+    gum choose $K8S_APPS \
+        --selected 'cert-manager,metallb,traefik' \
+        --header 'Which kubernetes applications would you like to import? (Press escape to quit. Submitting without selecting anything will run the rest of the script)' \
+        --no-limit
+)"
 
-SECRETS="$(sops decrypt --input-type yaml --output-type yaml cert-manager/secrets.encrypted)"
+for APP in $SELECTED_K8S_APPS; do
+    echo "Linking $APP..."
+    ln -s "$PWD/$APP" "$HOME/Kubernetes/$APP"
+done
 
-kubectl apply -f <(echo "$SECRETS") -f cert-manager
-kubectl -n cert-manager describe deploy cert-manager | grep dns01
+cd "$K8S_MANIFEST_DIR"
+for APP in *; do
+    if [[ "$APP" == "cert-manager" ]]; then
+        if ! command -v helm &>/dev/null; then
+            if [[ -n "${INSTALL_DEPENDENCIES:-}" ]] || gum confirm "Helm is not installed, would you like to install it?"; then
+                curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+            fi
+        fi
+
+        gum spin --title "Installing jetstack helm chart" -- helm repo add jetstack https://charts.jetstack.io --force-update
+        echo "Jetstack helm chart installed"
+
+        if ! helm list -n cert-manager | grep cert-manager; then
+            gum spin --title "Installing cert-manager" -- \
+                helm install \
+                cert-manager jetstack/cert-manager \
+                --namespace cert-manager \
+                --create-namespace \
+                --set crds.enabled=true \
+                --set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}'
+            echo "cert-manager helm chart installed"
+
+        fi
+
+        if kubectl -n cert-manager describe deploy cert-manager | grep -q dns01; then
+            echo "Recursive nameservers were not set up correctly, exiting..."
+            exit 1
+        fi
+    elif [[ "$APP" == "metallb" ]]; then
+        LATEST_METALLB="$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r '.tag_name')"
+        kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/"$LATEST_METALLB"/config/manifests/metallb-native.yaml
+    fi
+
+    if [[ -e "$APP/secrets.encrypted" ]]; then
+        SECRETS="$(sops decrypt --input-type yaml --output-type yaml "$APP/secrets.encrypted")"
+        kubectl apply -f <(echo "$SECRETS") -f "$APP"
+    else
+        kubectl apply -f "$APP"
+    fi
+done

@@ -19,6 +19,8 @@ if ! command -v go &>/dev/null; then
     GO_VERSION="$(curl -s 'https://go.dev/dl/?mode=json' | grep version | head -n 1 | xargs | awk '{print $2}' | tr -d ',')"
     curl -sL "https://go.dev/dl/$GO_VERSION.linux-amd64.tar.gz" -O --output-dir /tmp
     tar xvzf "/tmp/$GO_VERSION.linux-amd64.tar.gz"
+    rm "/tmp/$GO_VERSION.linux-amd64.tar.gz"
+    export PATH="$HOME/.local/go/go/bin:$PATH"
 fi
 
 if ! command -v gum &>/dev/null; then

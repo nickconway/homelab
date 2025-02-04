@@ -7,5 +7,4 @@ docker build source --build-arg PHOTON_VERSION="$PHOTON_VERSION" --tag git.conwa
 
 docker tag git.conway.dev/nick/photon:"$PHOTON_VERSION" git.conway.dev/nick/photon:latest
 
-docker push git.conway.dev/nick/photon:"$PHOTON_VERSION"
-docker push git.conway.dev/nick/photon:latest
+docker push -a git.conway.dev/nick/photon

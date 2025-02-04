@@ -12,11 +12,16 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 export PATH="$SCRIPT_DIR/dotfiles/.local/bin:$PATH"
 cd "$SCRIPT_DIR"
 
+if ! command -v go &>/dev/null; then
+    echo "Installing go..."
+    cd "$HOME/.local"
+
+    GO_VERSION="$(curl -s 'https://go.dev/dl/?mode=json' | grep version | head -n 1 | xargs | awk '{print $2}' | tr -d ',')"
+    curl -sL "https://go.dev/dl/$GO_VERSION.linux-amd64.tar.gz" -O --output-dir /tmp
+    tar xvzf "/tmp/$GO_VERSION.linux-amd64.tar.gz"
+fi
+
 if ! command -v gum &>/dev/null; then
-    if ! command -v go &>/dev/null; then
-        echo "Golang is not installed, exiting"
-        exit 1
-    fi
     echo "Installing gum..."
     go install github.com/charmbracelet/gum@latest &>/dev/null
 fi

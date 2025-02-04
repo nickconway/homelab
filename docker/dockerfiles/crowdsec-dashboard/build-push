@@ -2,4 +2,5 @@
 set -euo pipefail
 
 docker build . --tag git.conway.dev/nick/crowdsec-dashboard:latest
-docker push git.conway.dev/nick/crowdsec-dashboard:latest
+
+docker push -a git.conway.dev/nick/crowdsec-dashboard

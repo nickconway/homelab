@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+cd source
+VERSION="$(git tag | tail -n -1)"
+
+docker build . -f Dockerfile.gpu --tag git.conway.dev/nick/whisper:latest
+
+docker tag git.conway.dev/nick/whisper:"$VERSION" git.conway.dev/nick/whisper:latest
+
+docker push -a git.conway.dev/nick/whisper

@@ -1,0 +1,41 @@
+#!/bin/bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+    export DEBUG_MODE
+fi
+
+if [[ -z "${K8S_MANIFEST_DIR:-}" ]]; then
+    K8S_MANIFEST_DIR="$(gum input --header "Where would you like to install the kubernetes manifests?" --placeholder "$HOME/Kubernetes")"
+    K8S_MANIFEST_DIR="${K8S_MANIFEST_DIR:-$HOME/Kubernetes}"
+    echo "Kubernetes manifests will be installed in $K8S_MANIFEST_DIR"
+    mkdir -p "$K8S_MANIFEST_DIR"
+
+    if ! grep -q 'K8S_MANIFEST_DIR' "$HOME/.$(basename "$SHELL")rc"; then
+        echo >>"$HOME"/."$(basename "$SHELL")"rc
+        echo "export K8S_MANIFEST_DIR=\"$K8S_MANIFEST_DIR\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    fi
+fi
+
+cd "$SCRIPT_DIR/kubernetes/manifests"
+
+K8S_APPS="$(
+    for APP in *; do
+        if [[ ! -e "$HOME/Kubernetes/$APP" ]]; then
+            echo "$APP"
+        fi
+    done
+)"
+
+SELECTED_K8S_APPS="$(
+    gum choose $K8S_APPS \
+        --selected 'cert-manager,metallb,traefik' \
+        --header 'Which kubernetes applications would you like to import? (Press escape to quit. Submitting without selecting anything will run the rest of the script)' \
+        --no-limit
+)"
+
+for APP in $SELECTED_K8S_APPS; do
+    echo "Linking $APP..."
+    ln -s "$PWD/$APP" "$HOME/Kubernetes/$APP"
+done

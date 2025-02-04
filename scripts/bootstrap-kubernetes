@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+    export DEBUG_MODE
+fi
+
+if ! command -v helm &>/dev/null; then
+    if [[ -n "${INSTALL_DEPENDENCIES:-}" ]] || gum confirm "Helm is not installed, would you like to install it?"; then
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    fi
+fi
+
+gum spin --title "Installing jetstack helm chart" -- helm repo add jetstack https://charts.jetstack.io --force-update
+echo "Jetstack helm chart installed"
+
+if ! helm list -n cert-manager | grep cert-manager; then
+    gum spin --title "Installing cert-manager" -- \
+        helm install \
+        cert-manager jetstack/cert-manager \
+        --namespace cert-manager \
+        --create-namespace \
+        --set crds.enabled=true \
+        --set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}'
+    echo "cert-manager installed"
+fi
+
+LATEST_METALLB="$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r '.tag_name')"
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/"$LATEST_METALLB"/config/manifests/metallb-native.yaml
+
+SECRETS="$(sops decrypt --input-type yaml --output-type yaml cert-manager/secrets.encrypted)"
+
+kubectl apply -f <(echo "$SECRETS") -f cert-manager
+kubectl -n cert-manager describe deploy cert-manager | grep dns01

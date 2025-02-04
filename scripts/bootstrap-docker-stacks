@@ -1,0 +1,49 @@
+#!/bin/bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+    export DEBUG_MODE
+fi
+
+if ! command -v docker &>/dev/null; then
+    if [[ -n "${INSTALL_DEPENDENCIES:-}" ]] || gum confirm "Docker is not installed, would you like to install it?"; then
+        curl -fsSL https://get.docker.com | sh
+    fi
+fi
+
+cd "$SCRIPT_DIR/docker/compose"
+
+if [[ -z "${DOCKER_STACK_DIR:-}" ]]; then
+    DOCKER_STACK_DIR="$(gum input --header "Where would you like to install the docker compose stacks?" --placeholder "$HOME/Docker")"
+    export DOCKER_STACK_DIR="${DOCKER_STACK_DIR:-$HOME/Docker}"
+    echo "Docker stacks will be installed in $DOCKER_STACK_DIR"
+    mkdir -p "$DOCKER_STACK_DIR"
+
+    if ! grep -q 'DOCKER_STACK_DIR' "$HOME/.$(basename "$SHELL")rc"; then
+        echo >>"$HOME/.$(basename "$SHELL")rc"
+        echo "export DOCKER_STACK_DIR=\"$DOCKER_STACK_DIR\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    fi
+fi
+
+DOCKER_APPS="$(
+    for APP in *; do
+        if [[ ! -e "$HOME/Docker/$APP" ]]; then
+            echo "$APP"
+        fi
+    done
+)"
+
+SELECTED_DOCKER_APPS="$(
+    gum choose $DOCKER_APPS \
+        --header 'Which docker applications would you like to import? (Press escape to quit. Submitting without selecting anything will run the rest of the script)' \
+        --no-limit
+)"
+
+for APP in $SELECTED_DOCKER_APPS; do
+    echo "Linking $APP..."
+    ln -s "$PWD/$APP" "$HOME/Docker/$APP"
+done
+
+gum spin --title "Starting containers..." -- start-containers
+echo "Containers started"

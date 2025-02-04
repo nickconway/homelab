@@ -18,3 +18,7 @@
 	path = docker/dockerfiles/photon/source
 	url = https://github.com/rtuszik/photon-docker
 	branch = main
+[submodule "dotfiles"]
+	path = dotfiles
+	url = https://github.com/nickconway/dotfiles
+	branch = main

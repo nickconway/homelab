@@ -5,9 +5,9 @@ repo_url: https://github.com/nickconway/homelab
 extra:
   homepage: https://homelab.conway.dev
   social:
-    - icon: fontawesome/brands/github 
+    - icon: fontawesome/brands/github
       link: https://github.com/nickconway
-    - icon: fontawesome/brands/mastodon 
+    - icon: fontawesome/brands/mastodon
       link: https://mastodon.social/@nickconway
 
 theme:
@@ -19,7 +19,7 @@ theme:
       media: "(prefers-color-scheme: light)"
       primary: black
       toggle:
-        icon: material/brightness-7 
+        icon: material/brightness-7
         name: Switch to dark mode
 
     - scheme: slate

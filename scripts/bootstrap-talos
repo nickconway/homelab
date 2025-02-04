@@ -8,7 +8,7 @@ fi
 
 cd "$SCRIPT_DIR/kubernetes/talos"
 
-if [[ -e talosconfigggg ]] || [[ -n "${BOOTSTRAP_TALOS_CLUSTER:-}" ]] || gum confirm "A talos cluster has not been configured, would you like to configure it now?"; then
+if [[ -e talosconfig ]] || [[ -n "${BOOTSTRAP_TALOS_CLUSTER:-}" ]] || gum confirm "A talos cluster has not been configured, would you like to configure it now?"; then
     exit 0
 fi
 
@@ -34,17 +34,6 @@ if [[ -z "${TALOS_ENDPOINT:-}" ]]; then
     fi
 fi
 
-if [[ -z "${GPG_EMAIL:-}" ]]; then
-    while [[ -z "${GPG_EMAIL:-}" ]]; do
-        GPG_EMAIL="$(gum input --header "What is your GPG email?")"
-    done
-
-    if ! grep -q 'GPG_EMAIL' "$HOME/.$(basename "$SHELL")rc"; then
-        echo >>"$HOME"/."$(basename "$SHELL")"rc
-        echo "export GPG_EMAIL=\"$GPG_EMAIL\"" >>"$HOME"/."$(basename "$SHELL")"rc
-    fi
-fi
-
 cd "$SCRIPT_DIR/kubernetes/talos"
 
 if [[ -e secrets.encrypted.yaml ]] || [[ -e secrets.yaml ]]; then
@@ -52,7 +41,7 @@ if [[ -e secrets.encrypted.yaml ]] || [[ -e secrets.yaml ]]; then
 fi
 
 talosctl gen secrets
-sops encrypt --pgp "$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')" secrets.yaml >secrets.encrypted.yaml
+sops encrypt --pgp "$GPG_KEY" secrets.yaml >secrets.encrypted.yaml
 rm secrets.yaml
 
 SECRETS="$(sops decrypt secrets.encrypted.yaml)"

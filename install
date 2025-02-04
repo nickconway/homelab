@@ -17,7 +17,8 @@ if ! command -v gum &>/dev/null; then
         echo "Golang is not installed, exiting"
         exit 1
     fi
-    go install github.com/charmbracelet/gum@latest
+    echo "Installing gum..."
+    go install github.com/charmbracelet/gum@latest &>/dev/null
 fi
 
 export GUM_SPIN_SHOW_ERROR=true

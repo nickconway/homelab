@@ -40,7 +40,7 @@ services:
 
   crowdsec-dashboard:
     container_name: crowdsec-dashboard
-    image: git.${SERVICES_BASE_DOMAIN}/nick/crowdsec-dashboard:latest
+    image: git.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/crowdsec-dashboard:latest
     restart: unless-stopped
     environment:
       PUID: 1000

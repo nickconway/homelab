@@ -11,17 +11,17 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
-      OLLAMA_BASE_URL: https://ollama.conway.dev
+      OLLAMA_BASE_URL: https://ollama.${SERVICES_BASE_DOMAIN}
       OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
       OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
-      OPENID_PROVIDER_URL: https://auth.conway.dev/application/o/open-web-ui/.well-known/openid-configuration
+      OPENID_PROVIDER_URL: https://auth.${SERVICES_BASE_DOMAIN}/application/o/open-web-ui/.well-known/openid-configuration
       ENABLE_SIGNUP: false
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.open-webui.middlewares=crowdsec-traefik-bouncer,auth,wakeonlan@file"
       - "traefik.http.routers.open-webui.entrypoints=websecure"
-      - "traefik.http.routers.open-webui.rule=Host(`ai.conway.dev`)"
+      - "traefik.http.routers.open-webui.rule=Host(`ai.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.open-webui.tls=true"
       - "traefik.http.routers.open-webui.tls.certresolver=prod"
       - "traefik.http.services.open-webui.loadbalancer.server.port=8080"

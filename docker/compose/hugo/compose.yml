@@ -29,7 +29,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hugo.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.hugo.rule=Host(`blog2.conway.dev`)"
+      - "traefik.http.routers.hugo.rule=Host(`blog2.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.hugo.tls=true"
       - "traefik.http.routers.hugo.tls.certresolver=prod"
       - "traefik.http.services.hugo.loadbalancer.server.port=1313"
@@ -52,7 +52,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hugo-staging.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.hugo-staging.rule=Host(`staging.blog.conway.dev`)"
+      - "traefik.http.routers.hugo-staging.rule=Host(`staging.blog.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.hugo-staging.tls=true"
       - "traefik.http.routers.hugo-staging.tls.certresolver=prod"
       - "traefik.http.services.hugo-staging.loadbalancer.server.port=1313"

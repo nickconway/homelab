@@ -50,7 +50,7 @@ services:
       ## Set for SSL via overleaf-proxy
       #VIRTUAL_HOST: 103.112.212.22
 
-      OVERLEAF_SITE_URL: https://latex.conway.dev
+      OVERLEAF_SITE_URL: https://latex.${SERVICES_BASE_DOMAIN}
       OVERLEAF_NAV_TITLE: Overleaf
       # OVERLEAF_HEADER_IMAGE_URL: http://example.com/mylogo.png
       # OVERLEAF_ADMIN_EMAIL: support@it.com
@@ -105,7 +105,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.overleaf.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.overleaf.rule=Host(`latex.conway.dev`)"
+      - "traefik.http.routers.overleaf.rule=Host(`latex.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.overleaf.tls=true"
       - "traefik.http.routers.overleaf.tls.certresolver=prod"
       - "traefik.http.services.overleaf.loadbalancer.server.port=80"

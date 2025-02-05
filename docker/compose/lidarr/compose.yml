@@ -24,7 +24,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lidarr.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.lidarr.rule=Host(`music.conway.dev`)"
+      - "traefik.http.routers.lidarr.rule=Host(`music.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.lidarr.tls=true"
       - "traefik.http.routers.lidarr.tls.certresolver=prod"
       - "traefik.http.services.lidarr.loadbalancer.server.port=8686"

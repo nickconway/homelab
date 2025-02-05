@@ -37,7 +37,7 @@ services:
       - "traefik.http.middlewares.crowdsec-traefik-bouncer.forwardAuth.address=http://crowdsec-traefik-bouncer:8080/api/v1/forwardAuth"
       - "traefik.http.middlewares.crowdsec-traefik-bouncer.forwardAuth.trustForwardHeader=true"
       - "traefik.http.routers.traefik.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.traefik.rule=Host(`proxy.conway.dev`)"
+      - "traefik.http.routers.traefik.rule=Host(`proxy.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=prod"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
@@ -59,7 +59,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.conway.dev`)"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.whoami.tls=true"
       - "traefik.http.routers.whoami.tls.certresolver=prod"
       - "traefik.http.services.whoami.loadbalancer.server.port=80"

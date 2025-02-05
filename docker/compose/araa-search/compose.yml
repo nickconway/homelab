@@ -17,7 +17,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.araa.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.araa.rule=Host(`search.conway.dev`)"
+      - "traefik.http.routers.araa.rule=Host(`search.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.araa.tls=true"
       - "traefik.http.routers.araa.tls.certresolver=prod"
       - "traefik.http.services.araa.loadbalancer.server.port=${PORT}"

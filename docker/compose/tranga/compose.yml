@@ -22,7 +22,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.middlewares.tranga-api.stripprefix.prefixes=/api/"
         - "traefik.http.routers.tranga-api.middlewares=crowdsec-traefik-bouncer,auth,tranga-api"
-        - "traefik.http.routers.tranga-api.rule=Host(`tranga.conway.dev`) && PathPrefix(`/api/`)"
+        - "traefik.http.routers.tranga-api.rule=Host(`tranga.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/api/`)"
         - "traefik.http.routers.tranga-api.tls=true"
         - "traefik.http.routers.tranga-api.tls.certresolver=prod"
         - "traefik.http.services.tranga-api.loadbalancer.server.port=6531"
@@ -41,7 +41,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.tranga.middlewares=crowdsec-traefik-bouncer,auth"
-        - "traefik.http.routers.tranga.rule=Host(`tranga.conway.dev`)"
+        - "traefik.http.routers.tranga.rule=Host(`tranga.${SERVICES_BASE_DOMAIN}`)"
         - "traefik.http.routers.tranga.tls=true"
         - "traefik.http.routers.tranga.tls.certresolver=prod"
         - "traefik.http.services.tranga.loadbalancer.server.port=80"

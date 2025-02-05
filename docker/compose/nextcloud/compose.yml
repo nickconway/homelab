@@ -33,7 +33,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.cloud-aio.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.cloud-aio.rule=Host(`aio.cloud.conway.dev`)"
+      - "traefik.http.routers.cloud-aio.rule=Host(`aio.cloud.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.cloud-aio.tls=true"
       - "traefik.http.routers.cloud-aio.entrypoints=websecure"
       - "traefik.http.routers.cloud-aio.tls.certresolver=prod"

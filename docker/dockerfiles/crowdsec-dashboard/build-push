@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-docker build . --tag git.conway.dev/nick/crowdsec-dashboard:latest
+docker build . --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/crowdsec-dashboard:latest
 
-docker push -a git.conway.dev/nick/crowdsec-dashboard
+docker push -a git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/crowdsec-dashboard

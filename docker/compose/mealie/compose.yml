@@ -19,7 +19,7 @@ services:
       - TZ=America/New_York
       - MAX_WORKERS=1
       - WEB_CONCURRENCY=1
-      - BASE_URL=https://meals.conway.dev
+      - BASE_URL=https://meals.${SERVICES_BASE_DOMAIN}
 
       - DB_ENGINE=postgres
       - POSTGRES_USER=mealie
@@ -30,12 +30,12 @@ services:
 
       - SMTP_HOST=mail.smtp2go.com
       - SMTP_FROM_NAME=Mealie
-      - SMTP_FROM_EMAIL=meals@conway.dev
+      - SMTP_FROM_EMAIL=meals@${SERVICES_BASE_DOMAIN}
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
 
       - OIDC_AUTH_ENABLED=True
-      - OIDC_CONFIGURATION_URL=https://auth.conway.dev/application/o/mealie/.well-known/openid-configuration
+      - OIDC_CONFIGURATION_URL=https://auth.${SERVICES_BASE_DOMAIN}/application/o/mealie/.well-known/openid-configuration
       - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}
       - OIDC_AUTO_REDIRECT=True
       - OIDC_PROVIDER_NAME=Authentik
@@ -46,7 +46,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mealie.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.mealie.rule=Host(`meals.conway.dev`)"
+      - "traefik.http.routers.mealie.rule=Host(`meals.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.mealie.tls=true"
       - "traefik.http.routers.mealie.tls.certresolver=prod"
       - "traefik.http.services.mealie.loadbalancer.server.port=9000"

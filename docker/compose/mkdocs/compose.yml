@@ -14,17 +14,17 @@ services:
       PUID: 1000
       PGID: 1000
       SITE_NAME: "Nick Conway's Homelab"
-      SITE_URL: https://homelab.conway.dev
+      SITE_URL: https://homelab.${SERVICES_BASE_DOMAIN}
       REPO_URL: https://github.com/nickconway/homelab
-      HOMEPAGE: https://homelab.conway.dev
-      LOGO: https://conway.dev/favicon.png
+      HOMEPAGE: https://homelab.${SERVICES_BASE_DOMAIN}
+      LOGO: https://${SERVICES_BASE_DOMAIN}/favicon.png
       FAVICON: https://conway.dev/favicon.png
       GITHUB_LINK: https://github.com/nickconway
       MASTODON_LINK: https://mastodon.social/@nickconway
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mkdocs.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.mkdocs.rule=Host(`homelab.conway.dev`)"
+      - "traefik.http.routers.mkdocs.rule=Host(`homelab.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.mkdocs.tls=true"
       - "traefik.http.routers.mkdocs.tls.certresolver=prod"
       - "traefik.http.services.mkdocs.loadbalancer.server.port=8000"

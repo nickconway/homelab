@@ -32,6 +32,11 @@ entryPoints:
 
   websecure:
     address: :443
+    transport:
+      # This helps when pushing large docker images to the container registry
+      respondingTimeouts:
+        readTimeout: 5m
+        idleTimeout: 5m
     forwardedHeaders:
       trustedIPs:
         - "127.0.0.1/32"

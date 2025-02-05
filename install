@@ -48,7 +48,7 @@ fi
 
 if [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; then
     while [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; do
-        SERVICES_BASE_DOMAIN="$(gum input --header "What is the base domain you'll be using (e.g. example.com)?")"
+        SERVICES_BASE_DOMAIN="$(gum input --header "What is the base domain you'll be using?" --placeholder 'example.com')"
     done
 
     if ! grep -q 'SERVICES_BASE_DOMAIN' "$HOME/.$(basename "$SHELL")rc"; then
@@ -61,7 +61,7 @@ fi
 
 if [[ -z "${GPG_EMAIL:-}" ]]; then
     while [[ -z "${GPG_EMAIL:-}" ]]; do
-        GPG_EMAIL="$(gum input --header "What is your GPG email?")"
+        GPG_EMAIL="$(gum input --header "What is your GPG email?" --placeholder 'name@example.com')"
     done
 
     if ! grep -q 'GPG_EMAIL' "$HOME/.$(basename "$SHELL")rc"; then

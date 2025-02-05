@@ -59,6 +59,19 @@ if [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; then
     export SERVICES_BASE_DOMAIN
 fi
 
+if [[ -z "${GITEA_USER:-}" ]]; then
+    while [[ -z "${GITEA_USER:-}" ]]; do
+        GITEA_USER="$(gum input --header "What is your gitea username?" --placeholder 'nick')"
+    done
+
+    if ! grep -q 'GITEA_USER' "$HOME/.$(basename "$SHELL")rc"; then
+        echo >>"$HOME"/."$(basename "$SHELL")"rc
+        echo "export GITEA_USER=\"$GITEA_USER\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    fi
+
+    export GITEA_USER
+fi
+
 if [[ -z "${GPG_EMAIL:-}" ]]; then
     while [[ -z "${GPG_EMAIL:-}" ]]; do
         GPG_EMAIL="$(gum input --header "What is your GPG email?" --placeholder 'name@example.com')"

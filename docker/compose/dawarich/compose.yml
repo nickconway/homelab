@@ -54,7 +54,7 @@ services:
       DATABASE_NAME: dawarich
       MIN_MINUTES_SPENT_IN_CITY: 60
       APPLICATION_HOST: localhost
-      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.conway.dev
+      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.${SERVICES_BASE_DOMAIN}
       DISABLE_TELEMETRY: true
       ENABLE_TELEMETRY: false
       TIME_ZONE: America/New_York
@@ -70,7 +70,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dawarich.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.dawarich.rule=Host(`location.conway.dev`)"
+      - "traefik.http.routers.dawarich.rule=Host(`location.${SERVICES_BASE_DOMAIN}`)
       - "traefik.http.routers.dawarich.tls=true"
       - "traefik.http.routers.dawarich.tls.certresolver=prod"
       - "traefik.http.services.dawarich.loadbalancer.server.port=3000"
@@ -97,7 +97,7 @@ services:
       DATABASE_NAME: dawarich
       MIN_MINUTES_SPENT_IN_CITY: 60
       APPLICATION_HOST: localhost
-      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.conway.dev
+      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.${SERVICES_BASE_DOMAIN}
       DISABLE_TELEMETRY: true
       ENABLE_TELEMETRY: false
       TIME_ZONE: America/New_York

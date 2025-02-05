@@ -21,7 +21,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prowlarr.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.prowlarr.rule=Host(`indexers.conway.dev`)"
+      - "traefik.http.routers.prowlarr.rule=Host(`indexers.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.prowlarr.tls=true"
       - "traefik.http.routers.prowlarr.tls.certresolver=prod"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"

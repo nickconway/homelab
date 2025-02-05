@@ -46,6 +46,19 @@ if [[ -z "${NO_REPO_PULL:-}" ]]; then
     gum spin --title "Updating repo..." -- git pull --recurse-submodules
 fi
 
+if [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; then
+    while [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; do
+        SERVICES_BASE_DOMAIN="$(gum input --header "What is the base domain you'll be using (e.g. example.com)?")"
+    done
+
+    if ! grep -q 'SERVICES_BASE_DOMAIN' "$HOME/.$(basename "$SHELL")rc"; then
+        echo >>"$HOME"/."$(basename "$SHELL")"rc
+        echo "export SERVICES_BASE_DOMAIN=\"$SERVICES_BASE_DOMAIN\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    fi
+
+    export SERVICES_BASE_DOMAIN
+fi
+
 if [[ -z "${GPG_EMAIL:-}" ]]; then
     while [[ -z "${GPG_EMAIL:-}" ]]; do
         GPG_EMAIL="$(gum input --header "What is your GPG email?")"

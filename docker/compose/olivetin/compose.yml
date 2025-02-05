@@ -14,7 +14,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.olivetin.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.olivetin.rule=Host(`run.conway.dev`)"
+      - "traefik.http.routers.olivetin.rule=Host(`run.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.olivetin.tls=true"
       - "traefik.http.routers.olivetin.tls.certresolver=prod"
       - "traefik.http.services.olivetin.loadbalancer.server.port=1337"

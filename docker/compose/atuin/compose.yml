@@ -26,7 +26,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.atuin.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.atuin.rule=Host(`commands.conway.dev`)"
+      - "traefik.http.routers.atuin.rule=Host(`commands.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.atuin.tls=true"
       - "traefik.http.routers.atuin.tls.certresolver=prod"
       - "traefik.http.services.atuin.loadbalancer.server.port=8888"

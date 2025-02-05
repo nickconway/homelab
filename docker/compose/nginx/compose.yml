@@ -14,7 +14,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.nginx.rule=Host(`nginx.conway.dev`)"
+      - "traefik.http.routers.nginx.rule=Host(`nginx.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.nginx.tls=true"
       - "traefik.http.routers.nginx.tls.certresolver=prod"
       - "traefik.http.services.nginx.loadbalancer.server.port=80"

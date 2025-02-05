@@ -3,8 +3,8 @@ set -euo pipefail
 
 PHOTON_VERSION="$(cat source/.last_release)"
 
-docker build source --build-arg PHOTON_VERSION="$PHOTON_VERSION" --tag git.conway.dev/nick/photon:"$PHOTON_VERSION"
+docker build source --build-arg PHOTON_VERSION="$PHOTON_VERSION" --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/photon:"$PHOTON_VERSION"
 
-docker tag git.conway.dev/nick/photon:"$PHOTON_VERSION" git.conway.dev/nick/photon:latest
+docker tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/photon:"$PHOTON_VERSION" git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/photon:latest
 
-docker push -a git.conway.dev/nick/photon
+docker push -a git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/photon

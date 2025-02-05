@@ -409,7 +409,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.mailcow.middlewares=crowdsec-traefik-bouncer"
-        - "traefik.http.routers.mailcow.rule=Host(`mail.conway.dev`)"
+        - "traefik.http.routers.mailcow.rule=Host(`mail.${SERVICES_BASE_DOMAIN}`)"
         - "traefik.http.routers.mailcow.tls=true"
         - "traefik.http.routers.mailcow.tls.certresolver=prod"
         - "traefik.http.services.mailcow.loadbalancer.server.port=80"

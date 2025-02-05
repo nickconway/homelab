@@ -11,7 +11,7 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
-      APP_URL: https://notes.conway.dev
+      APP_URL: https://notes.${SERVICES_BASE_DOMAIN}
       DB_HOST: bookstack-mysql
       DB_PORT: 3306
       DB_DATABASE: bookstack
@@ -23,7 +23,7 @@ services:
       MAIL_ENCRYPTION: tls
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
-      MAIL_FROM: notes@conway.dev
+      MAIL_FROM: notes@${SERVICES_BASE_DOMAIN}
       MAIL_FROM_NAME: Notes
     networks:
       - proxy
@@ -33,7 +33,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.bookstack.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.bookstack.rule=Host(`notes.conway.dev`)"
+      - "traefik.http.routers.bookstack.rule=Host(`notes.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.bookstack.tls=true"
       - "traefik.http.routers.bookstack.tls.certresolver=prod"
       - "traefik.http.services.bookstack.loadbalancer.server.port=80"

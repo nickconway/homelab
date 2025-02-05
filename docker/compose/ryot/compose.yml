@@ -33,7 +33,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ryot.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.ryot.rule=Host(`statistics.conway.dev`)"
+      - "traefik.http.routers.ryot.rule=Host(`statistics.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.ryot.tls=true"
       - "traefik.http.routers.ryot.tls.certresolver=prod"
       - "traefik.http.services.ryot.loadbalancer.server.port=8000"

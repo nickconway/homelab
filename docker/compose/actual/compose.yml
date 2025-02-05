@@ -26,7 +26,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.actual.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.actual.rule=Host(`finance.conway.dev`)"
+      - "traefik.http.routers.actual.rule=Host(`finance.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.actual.tls=true"
       - "traefik.http.routers.actual.tls.certresolver=prod"
       - "traefik.http.services.actual.loadbalancer.server.port=5006"
@@ -50,7 +50,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.actual-api.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.actual-api.rule=Host(`finance-api.conway.dev`)"
+      - "traefik.http.routers.actual-api.rule=Host(`finance-api.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.actual-api.tls=true"
       - "traefik.http.routers.actual-api.tls.certresolver=prod"
       - "traefik.http.services.actual-api.loadbalancer.server.port=5007"

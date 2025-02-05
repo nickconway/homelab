@@ -22,7 +22,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.headscale.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.headscale.rule=Host(`vpn.conway.dev`)"
+      - "traefik.http.routers.headscale.rule=Host(`vpn.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.headscale.tls=true"
       - "traefik.http.routers.headscale.tls.certresolver=prod"
       - "traefik.http.services.headscale.loadbalancer.server.port=8080"
@@ -41,7 +41,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.headscale-ui.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.headscale-ui.rule=Host(`vpn.conway.dev`) && PathPrefix(`/web`)"
+      - "traefik.http.routers.headscale-ui.rule=Host(`vpn.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/web`)"
       - "traefik.http.routers.headscale-ui.tls=true"
       - "traefik.http.routers.headscale-ui.tls.certresolver=prod"
       - "traefik.http.services.headscale-ui.loadbalancer.server.port=8080"

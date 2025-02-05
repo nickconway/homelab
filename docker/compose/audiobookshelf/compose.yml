@@ -21,7 +21,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.audiobookshelf.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.audiobookshelf.rule=Host(`audio.conway.dev`)"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`audio.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.audiobookshelf.tls=true"
       - "traefik.http.routers.audiobookshelf.tls.certresolver=prod"
       - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"

@@ -18,7 +18,7 @@ services:
       database__connection__password: ${MYSQL_ROOT_PASSWORD}
       database__connection__database: ghost
       # this url value is just an example, and is likely wrong for your environment!
-      url: https://blog.conway.dev
+      url: https://blog.${SERVICES_BASE_DOMAIN}
       # contrary to the default mentioned in the linked documentation, this image defaults to NODE_ENV=production (so development mode needs to be explicitly specified if desired)
       #NODE_ENV: development
     volumes:
@@ -29,7 +29,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ghost.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.ghost.rule=Host(`blog.conway.dev`)"
+      - "traefik.http.routers.ghost.rule=Host(`blog.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.ghost.tls=true"
       - "traefik.http.routers.ghost.tls.certresolver=prod"
       - "traefik.http.services.ghost.loadbalancer.server.port=2368"

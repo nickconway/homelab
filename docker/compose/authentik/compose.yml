@@ -75,7 +75,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.authentik.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.authentik.rule=Host(`auth.conway.dev`)"
+      - "traefik.http.routers.authentik.rule=Host(`auth.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.authentik.tls=true"
       - "traefik.http.routers.authentik.tls.certresolver=prod"
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"

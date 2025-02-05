@@ -19,7 +19,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.homepage.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.homepage.rule=Host(`dash.conway.dev`)"
+      - "traefik.http.routers.homepage.rule=Host(`dash.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.homepage.tls=true"
       - "traefik.http.routers.homepage.tls.certresolver=prod"
       - "traefik.http.services.homepage.loadbalancer.server.port=3000"

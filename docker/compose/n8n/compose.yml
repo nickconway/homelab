@@ -25,7 +25,7 @@ services:
       N8N_SMTP_PORT: 465
       N8N_SMTP_USER: ${N8N_SMTP_USER}
       N8N_SMTP_PASS: ${N8N_SMTP_PASS}
-      N8N_SMTP_SENDER: automation@conway.dev
+      N8N_SMTP_SENDER: automation@${SERVICES_BASE_DOMAIN}
       N8N_PROXY_HOPS: 1
       N8N_DIAGNOSTICS_ENABLED: false
       N8N_VERSION_NOTIFICATIONS_ENABLED: false
@@ -33,14 +33,14 @@ services:
       EXTERNAL_FRONTEND_HOOKS_URLS:
       N8N_DIAGNOSTICS_CONFIG_FRONTEND:
       N8N_DIAGNOSTICS_CONFIG_BACKEND:
-      WEBHOOK_URL: https://automation.conway.dev
+      WEBHOOK_URL: https://automation.${SERVICES_BASE_DOMAIN}
     volumes:
       - ./data/config:/home/node/.n8n
       - ./data/files:/files
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.n8n.middlewares=crowdsec-traefik-bouncer,auth,n8n"
-      - "traefik.http.routers.n8n.rule=Host(`automation.conway.dev`)"
+      - "traefik.http.routers.n8n.rule=Host(`automation.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.n8n.tls=true"
       - "traefik.http.routers.n8n.tls.certresolver=prod"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
@@ -49,7 +49,7 @@ services:
       - traefik.http.middlewares.n8n.headers.browserXSSFilter=true
       - traefik.http.middlewares.n8n.headers.contentTypeNosniff=true
       - traefik.http.middlewares.n8n.headers.forceSTSHeader=true
-      - traefik.http.middlewares.n8n.headers.SSLHost=conway.dev
+      - traefik.http.middlewares.n8n.headers.SSLHost=${SERVICES_BASE_DOMAIN}
       - traefik.http.middlewares.n8n.headers.STSIncludeSubdomains=true
       - traefik.http.middlewares.n8n.headers.STSPreload=true
     restart: unless-stopped

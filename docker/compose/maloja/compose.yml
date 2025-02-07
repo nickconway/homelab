@@ -13,8 +13,10 @@ services:
       - PGID=1000
       - MALOJA_DATA_DIRECTORY=/mljdata
       - MALOJA_SKIP_SETUP=true
+      - MALOJA_FORCE_PASSWORD=$MALOJA_FORCE_PASSWORD
     volumes:
-      - ./data:/mljdata
+      - ./data/data:/mljdata
+      - ./data/backups:/usr/src/app
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.maloja.middlewares=crowdsec-traefik-bouncer"

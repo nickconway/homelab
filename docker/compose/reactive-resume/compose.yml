@@ -61,9 +61,7 @@ services:
 
   reactive-resume:
     container_name: reactive-resume
-    # build:
-    #   context: ./source
-    image: amruthpillai/reactive-resume:latest
+    image: git.conway.dev/nick/reactive-resume:latest
     restart: unless-stopped
     depends_on:
       - reactive-resume-postgres

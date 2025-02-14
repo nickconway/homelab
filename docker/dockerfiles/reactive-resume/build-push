@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+VERSION="$(cat source/package.json | jq -r '.version')"
+
+docker build source --build-arg VERSION="$VERSION" --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/reactive-resume:"$VERSION"
+
+docker tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/reactive-resume:"$VERSION" git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/reactive-resume:latest
+
+docker push -a git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/reactive-resume

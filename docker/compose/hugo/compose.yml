@@ -23,7 +23,7 @@ services:
     depends_on:
       - hugo-staging
     volumes:
-      - ${HOME}/Git/blog:/src
+      - ./src/:/src
       - /src/public
       - ./data/cache:/tmp/hugo_cache
     labels:
@@ -46,7 +46,7 @@ services:
       PUID: 1000
       PGID: 1000
     volumes:
-      - ${HOME}/Git/blog:/src
+      - ./src/:/src
       - /src/public
       - ./data/cache:/tmp/hugo_cache
     labels:

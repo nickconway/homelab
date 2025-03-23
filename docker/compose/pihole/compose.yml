@@ -26,7 +26,7 @@ services:
       - TZ=${TZ:-America/New_York}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pihole.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.pihole.middlewares=crowdsec-traefik-bouncer,pihole-redirect@file"
       - "traefik.http.routers.pihole.rule=Host(`dns2.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.pihole.tls=true"
       - "traefik.http.routers.pihole.tls.certresolver=prod"

@@ -1,0 +1,30 @@
+networks:
+  mc:
+    name: mc
+    ipam:
+      config:
+        - subnet: 172.3.0.0/16
+services:
+  playit:
+    image: ghcr.io/playit-cloud/playit-agent:latest
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+    restart: unless-stopped
+    networks:
+      mc:
+        ipv4_address: 172.3.0.20
+
+  mc:
+    image: itzg/minecraft-server
+    environment:
+      EULA: "true"
+    ports:
+      - "25565:25565"
+    volumes:
+      - ./data:/data
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    networks:
+      mc:
+        ipv4_address: 172.3.0.10

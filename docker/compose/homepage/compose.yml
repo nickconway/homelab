@@ -12,6 +12,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York    # optional: set desired timezone
+      - HOMEPAGE_ALLOWED_HOSTS=dash.${SERVICES_BASE_DOMAIN}
     volumes:
       - ./data/config:/app/config
       - ./data/images:/app/public/images

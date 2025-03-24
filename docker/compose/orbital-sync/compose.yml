@@ -1,0 +1,7 @@
+services:
+  orbital-sync:
+    image: mattwebbio/orbital-sync
+    container_name: orbital-sync
+    env_file:
+      - .env
+    restart: unless-stopped

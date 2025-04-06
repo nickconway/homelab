@@ -33,10 +33,19 @@ DOCKER_APPS="$(
     done
 )"
 
+PRESELECTED_DOCKER_APPS="$(
+    for APP in *; do
+        if [[ -e "$DOCKER_STACK_DIR/$APP" ]]; then
+            echo "$APP"
+        fi
+    done | xargs | sed "s/ /,/g"
+)"
+
 SELECTED_DOCKER_APPS="$(
     gum choose $DOCKER_APPS \
         --header 'Which docker applications would you like to import? (Press escape to quit. Submitting without selecting anything will run the rest of the script)' \
-        --no-limit
+        --no-limit \
+        --selected "$PRESELECTED_DOCKER_APPS"
 )"
 
 for APP in $SELECTED_DOCKER_APPS; do

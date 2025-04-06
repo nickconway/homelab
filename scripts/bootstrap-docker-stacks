@@ -29,9 +29,7 @@ fi
 
 DOCKER_APPS="$(
     for APP in *; do
-        if [[ ! -e "$HOME/Docker/$APP" ]]; then
-            echo "$APP"
-        fi
+        echo "$APP"
     done
 )"
 
@@ -42,8 +40,7 @@ SELECTED_DOCKER_APPS="$(
 )"
 
 for APP in $SELECTED_DOCKER_APPS; do
-    echo "Linking $APP..."
-    ln -s "$PWD/$APP" "$DOCKER_STACK_DIR/$APP"
+    gum spin --title "Copying $APP config..." -- rsync -auvhz --progress --stats "$APP/" "$DOCKER_STACK_DIR/$APP"
 done
 
 gum spin --title "Starting containers..." -- start-containers

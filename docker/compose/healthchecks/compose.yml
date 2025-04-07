@@ -1,0 +1,36 @@
+networks:
+  proxy:
+    external: true
+  healthchecks:
+    name: healthchecks
+
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+    networks:
+      - healthchecks
+    restart: unless-stopped
+
+  web:
+    image: healthchecks/healthchecks:latest
+    env_file:
+        - .env
+    networks:
+      - proxy
+      - healthchecks
+    depends_on:
+        - db
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uwsgi /opt/healthchecks/docker/uwsgi.ini'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.healthchecks.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.healthchecks.rule=Host(`health.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.healthchecks.tls=true"
+      - "traefik.http.routers.healthchecks.tls.certresolver=prod"
+      - "traefik.http.services.healthchecks.loadbalancer.server.port=8000"
+    restart: unless-stopped

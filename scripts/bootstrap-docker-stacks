@@ -52,5 +52,7 @@ for APP in $SELECTED_DOCKER_APPS; do
     gum spin --title "Copying $APP config..." -- rsync -hruvz --progress --stats "$APP/" "$DOCKER_STACK_DIR/$APP"
 done
 
-gum spin --title "Starting containers..." -- start-containers
-echo "Docker containers started"
+if [[ -n "$SELECTED_DOCKER_APPS" ]]; then
+    gum spin --title "Starting containers..." -- start-containers
+    echo "Docker containers started"
+fi

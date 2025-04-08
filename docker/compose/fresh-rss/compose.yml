@@ -5,7 +5,6 @@ networks:
 services:
   fresh-rss:
     image: freshrss/freshrss:latest
-    container_name: fresh-rss
     networks:
       - proxy
     restart: unless-stopped

@@ -5,7 +5,6 @@ networks:
 services:
   uptime-kuma:
     image: louislam/uptime-kuma:latest
-    container_name: uptime-kuma
     environment:
       - PUID=1000
       - PGID=1000

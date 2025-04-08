@@ -4,7 +4,6 @@ networks:
 
 services:
   mkdocs:
-    container_name: mkdocs
     image: squidfunk/mkdocs-material:latest
     networks:
       - proxy

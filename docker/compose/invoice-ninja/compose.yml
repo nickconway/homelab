@@ -7,7 +7,6 @@ networks:
 services:
   invoice-ninja-server:
     image: nginx
-    container_name: invoice-ninja-server
     restart: unless-stopped
     env_file: data/env
     volumes:
@@ -32,7 +31,6 @@ services:
 
   invoice-ninja:
     image: invoiceninja/invoiceninja:latest
-    container_name: invoice-ninja
     env_file: data/env
     restart: unless-stopped
     volumes:
@@ -50,7 +48,6 @@ services:
 
   invoice-ninja-mysql:
     image: mysql:8
-    container_name: invoice-ninja-mysql
     restart: unless-stopped
     env_file: data/env
     environment:

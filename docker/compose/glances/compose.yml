@@ -1,6 +1,5 @@
 services:
   glances:
-    container_name: glances
     image: nicolargo/glances:latest-full
     restart: unless-stopped
     pid: host

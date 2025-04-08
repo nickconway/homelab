@@ -6,7 +6,6 @@ networks:
 
 services:
   bookstack:
-    container_name: bookstack
     image: lscr.io/linuxserver/bookstack
     environment:
       PUID: 1000
@@ -41,7 +40,6 @@ services:
 
   bookstack-mysql:
     image: lscr.io/linuxserver/mariadb
-    container_name: bookstack-mysql
     restart: unless-stopped
     networks:
       - bookstack

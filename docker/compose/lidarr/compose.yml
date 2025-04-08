@@ -5,7 +5,6 @@ networks:
 services:
   lidarr:
     image: linuxserver/lidarr:latest
-    container_name: lidarr
     restart: unless-stopped
     ports:
       - 8686:8686

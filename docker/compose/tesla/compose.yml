@@ -4,7 +4,6 @@ networks:
 
 services:
   tesla:
-    container_name: tesla
     image: nginx:latest
     networks:
       - proxy

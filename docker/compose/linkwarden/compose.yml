@@ -7,7 +7,6 @@ networks:
 services:
   linkwarden-postgres:
     image: postgres:16-alpine
-    container_name: linkwarden-postgres
     env_file: .env
     networks:
       - linkwarden
@@ -17,7 +16,6 @@ services:
 
   linkwarden:
     env_file: .env
-    container_name: linkwarden
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@linkwarden-postgres:5432/${POSTGRES_DB}
     restart: unless-stopped

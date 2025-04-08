@@ -1,6 +1,5 @@
 services:
   periphery:
-    container_name: komodo-periphery
     image: ghcr.io/mbecker20/periphery:latest
     restart: unless-stopped
     # image: ghcr.io/mbecker20/periphery:latest-aarch64 # Use for arm support

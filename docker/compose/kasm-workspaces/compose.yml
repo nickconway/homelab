@@ -4,7 +4,6 @@ networks:
 
 services:
   kasm-workspaces:
-    container_name: kasm-workspaces
     image: lscr.io/linuxserver/kasm:latest
     networks:
       - proxy

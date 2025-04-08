@@ -5,7 +5,6 @@ networks:
 
 services:
   jellyfin:
-    container_name: jellyfin
     image: jellyfin/jellyfin:latest
     user: 0:106
     networks:

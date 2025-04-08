@@ -6,7 +6,6 @@ networks:
 
 services:
   reactive-resume-postgres:
-    container_name: reactive-resume-postgres
     image: postgres:15-alpine
     restart: unless-stopped
     volumes:
@@ -26,7 +25,6 @@ services:
   # Storage (for image uploads)
   reactive-resume-minio:
     image: minio/minio
-    container_name: reactive-resume-minio
     restart: unless-stopped
     command: server /data
     volumes:
@@ -47,7 +45,6 @@ services:
 
   # Chrome Browser (for printing and previews)
   reactive-resume-chrome:
-    container_name: reactive-resume-chrome
     image: ghcr.io/browserless/chromium:v2.18.0
     restart: unless-stopped
     environment:
@@ -60,7 +57,6 @@ services:
       - reactive-resume
 
   reactive-resume:
-    container_name: reactive-resume
     image: git.conway.dev/nick/reactive-resume:latest
     restart: unless-stopped
     depends_on:

@@ -4,7 +4,6 @@ networks:
 
 services:
   stirling-pdf:
-    container_name: stirling-pdf
     image: frooodle/s-pdf:latest-fat
     networks:
       - proxy

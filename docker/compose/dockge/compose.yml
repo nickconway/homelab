@@ -5,7 +5,6 @@ networks:
 services:
   dockge:
     image: louislam/dockge:latest
-    container_name: dockge
     restart: unless-stopped
     # ports:
     #   - 5004:5001

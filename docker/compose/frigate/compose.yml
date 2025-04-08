@@ -4,7 +4,6 @@ networks:
 
 services:
   frigate:
-    container_name: frigate
     restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
     shm_size: "256mb" # update for your cameras based on calculation above

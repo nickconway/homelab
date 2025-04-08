@@ -4,7 +4,6 @@ networks:
 
 services:
   prometheus:
-    container_name: prometheus
     image: prom/prometheus:latest
     networks:
       - proxy

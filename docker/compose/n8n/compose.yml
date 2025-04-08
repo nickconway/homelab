@@ -4,7 +4,6 @@ networks:
 
 services:
   n8n-init:
-    container_name: n8n-init
     image: busybox
     command: ['sh', '-c', 'chown -R 1000:1000 /home/node/.n8n && chown -R 1000:1000 /files']
     volumes:
@@ -12,7 +11,6 @@ services:
       - ./data/files:/files
 
   n8n:
-    container_name: n8n
     image: docker.n8n.io/n8nio/n8n:latest
     networks:
       - proxy

@@ -7,7 +7,6 @@ networks:
 services:
   mealie:
     image: ghcr.io/mealie-recipes/mealie:latest
-    container_name: mealie
     depends_on:
       - mealie-postgres
     volumes:
@@ -52,7 +51,6 @@ services:
       - "traefik.http.services.mealie.loadbalancer.server.port=9000"
 
   mealie-postgres:
-    container_name: mealie-postgres
     image: postgres:15
     restart: unless-stopped
     volumes:

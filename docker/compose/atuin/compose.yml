@@ -6,7 +6,6 @@ networks:
 
 services:
   atuin:
-    container_name: atuin
     image: ghcr.io/atuinsh/atuin:latest
     command: server start
     networks:
@@ -32,7 +31,6 @@ services:
       - "traefik.http.services.atuin.loadbalancer.server.port=8888"
 
   atuin-postgres:
-    container_name: atuin-postgres
     image: postgres:14
     restart: unless-stopped
     volumes:

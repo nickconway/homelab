@@ -4,7 +4,6 @@ networks:
 
 services:
   photon:
-    container_name: photon
     image: git.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/photon:latest
     restart: unless-stopped
     volumes:

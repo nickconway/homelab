@@ -4,7 +4,6 @@ networks:
 
 services:
   cyberchef:
-    container_name: cyberchef
     image: ghcr.io/gchq/cyberchef:latest
     networks:
       - proxy

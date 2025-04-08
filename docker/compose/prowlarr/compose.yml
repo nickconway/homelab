@@ -6,7 +6,6 @@ networks:
 services:
   prowlarr:
     image: linuxserver/prowlarr:latest
-    container_name: prowlarr
     restart: unless-stopped
     environment:
       - TZ=America/New_York # Specify a timezone to use

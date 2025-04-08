@@ -4,7 +4,6 @@ networks:
 
 services:
   cloudflared:
-    container_name: cloudflared
     image: cloudflare/cloudflared:latest
     networks:
       - proxy

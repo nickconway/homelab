@@ -7,7 +7,6 @@ networks:
 services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
-    container_name: homepage
     environment:
       - PUID=1000
       - PGID=1000
@@ -31,7 +30,6 @@ services:
 
   homepage-docker-proxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
-    container_name: homepage-docker-proxy
     environment:
       - CONTAINERS=1 # Allow access to viewing containers
       - SERVICES=1 # Allow access to viewing services (necessary when using Docker Swarm)

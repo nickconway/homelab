@@ -4,7 +4,6 @@ networks:
 
 services:
   traefik:
-    container_name: traefik
     image: traefik:latest
     networks:
       - proxy
@@ -52,7 +51,6 @@ services:
 
   whoami:
     image: "traefik/whoami"
-    container_name: "whoami"
     environment:
       PUID: 1000
       PGID: 1000

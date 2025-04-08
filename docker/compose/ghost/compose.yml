@@ -6,7 +6,6 @@ networks:
 
 services:
   ghost:
-    container_name: ghost
     image: ghost:alpine
     environment:
       PUID: 1000
@@ -37,7 +36,6 @@ services:
 
   ghost-mysql:
     image: mysql:8.0
-    container_name: ghost-mysql
     restart: unless-stopped
     networks:
       - ghost

@@ -6,7 +6,6 @@ networks:
 
 services:
   shlink:
-    container_name: shlink
     image: shlinkio/shlink:stable
     networks:
       - proxy
@@ -31,7 +30,6 @@ services:
     restart: unless-stopped
 
   shlink-postgres:
-    container_name: shlink-postgres
     image: postgres:15
     restart: unless-stopped
     volumes:
@@ -46,7 +44,6 @@ services:
 
   shlink-web-client:
     image: shlinkio/shlink-web-client
-    container_name: shlink-web-client
     restart: unless-stopped
     environment:
       PUID: 1000

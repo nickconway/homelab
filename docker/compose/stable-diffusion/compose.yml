@@ -1,12 +1,10 @@
 services:
   stable-diffusion-download:
-    container_name: stable-diffusion-download
     build: ./source/services/download/
     volumes:
       - ./data/data:/data
 
   stable-diffusion:
-    container_name: stable-diffusion
     depends_on:
       stable-diffusion-download:
         condition: service_completed_successfully

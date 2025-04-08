@@ -5,7 +5,6 @@ networks:
 services:
   readarr:
     image: linuxserver/readarr:develop
-    container_name: readarr
     restart: unless-stopped
     environment:
       - TZ=America/New_York # Specify a timezone to use

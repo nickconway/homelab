@@ -1,6 +1,5 @@
 services:
   postgres:
-    container_name: komodo-postgres
     image: postgres
     restart: unless-stopped
     logging:
@@ -17,7 +16,6 @@ services:
       - POSTGRES_DB=komodo
 
   ferretdb:
-    container_name: komodo-ferretdb
     image: ghcr.io/ferretdb/ferretdb:1
     restart: unless-stopped
     depends_on:
@@ -33,7 +31,6 @@ services:
       - FERRETDB_POSTGRESQL_URL=postgres://postgres:5432/komodo
 
   core:
-    container_name: komodo
     image: ghcr.io/mbecker20/komodo:latest
     # image: ghcr.io/mbecker20/komodo:latest-aarch64 ## Use for arm support
     restart: unless-stopped
@@ -96,7 +93,6 @@ services:
   ## Deploy Periphery container using this block,
   ## or deploy the Periphery binary with systemd using https://github.com/mbecker20/komodo/tree/main/scripts
   periphery:
-    container_name: komodo-periphery
     image: ghcr.io/mbecker20/periphery:latest
     restart: unless-stopped
     # image: ghcr.io/mbecker20/periphery:latest-aarch64 # Use for arm support

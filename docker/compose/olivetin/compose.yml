@@ -4,7 +4,6 @@ networks:
 
 services:
   olivetin:
-    container_name: olivetin
     image: jamesread/olivetin:latest
     networks:
       - proxy

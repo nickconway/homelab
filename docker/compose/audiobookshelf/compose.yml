@@ -5,7 +5,6 @@ networks:
 services:
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:latest
-    container_name: audiobookshelf
     volumes:
       - /mnt/nas/content/media/books:/audiobooks
       - /mnt/nas/content/media/podcasts:/podcasts

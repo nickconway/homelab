@@ -8,7 +8,6 @@ volumes:
 
 services:
   nextcloud-aio-mastercontainer:
-    container_name: nextcloud-aio-mastercontainer
     image: nextcloud/all-in-one:latest
     init: true
     networks:

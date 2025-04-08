@@ -4,7 +4,6 @@ networks:
 
 services:
   jellyseerr:
-    container_name: jellyseerr
     image: ghcr.io/hotio/jellyseerr
     environment:
       - PUID=1000

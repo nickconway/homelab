@@ -4,7 +4,6 @@ networks:
 
 services:
   open-speed-test:
-    container_name: open-speed-test
     image: openspeedtest/latest
     networks:
       - proxy

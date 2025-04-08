@@ -7,7 +7,6 @@ networks:
 services:
   dawarich-redis:
     image: redis:7.4-alpine
-    container_name: dawarich-redis
     restart: unless-stopped
     command: redis-server
     networks:
@@ -17,7 +16,6 @@ services:
 
   dawarich-postgres:
     image: postgis/postgis:17-3.5-alpine
-    container_name: dawarich-postgres
     restart: unless-stopped
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
@@ -33,7 +31,6 @@ services:
 
   dawarich:
     image: freikin/dawarich:latest
-    container_name: dawarich
     volumes:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched
@@ -79,7 +76,6 @@ services:
 
   dawarich-sidekiq:
     image: freikin/dawarich:latest
-    container_name: dawarich-sidekiq
     volumes:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched

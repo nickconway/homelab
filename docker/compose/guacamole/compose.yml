@@ -7,7 +7,6 @@ networks:
 services:
   guacamole-postgres:
     image: postgres:16
-    container_name: guacamole-postgres
     volumes:
       - ./data/db:/var/lib/postgresql/data
       - ./config/postgres-init:/docker-entrypoint-initdb.d
@@ -22,7 +21,6 @@ services:
       - guacamole
 
   guacd:
-    container_name: guacd
     image: guacamole/guacd
     user: 1000:1000
     networks:
@@ -33,7 +31,6 @@ services:
     restart: unless-stopped
 
   guacamole:
-    container_name: guacamole
     image: guacamole/guacamole
     # user: 1000:1000
     networks:

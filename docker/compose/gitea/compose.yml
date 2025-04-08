@@ -7,7 +7,6 @@ networks:
 services:
   opengist:
     image: ghcr.io/thomiceli/opengist
-    container_name: opengist
     restart: unless-stopped
     networks:
       - proxy
@@ -30,7 +29,6 @@ services:
 
   gitea:
     image: gitea/gitea:latest
-    container_name: gitea
     ports:
       - 222:22
     environment:
@@ -61,7 +59,6 @@ services:
 
   gitea-runner:
     image: gitea/act_runner:latest
-    container_name: gitea-runner
     restart: unless-stopped
     volumes:
       - ./data/runner/config.yaml:/config.yaml
@@ -79,7 +76,6 @@ services:
   gitea-postgres:
     image: postgres:14
     restart: unless-stopped
-    container_name: gitea-postgres
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:

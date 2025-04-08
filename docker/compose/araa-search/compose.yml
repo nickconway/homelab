@@ -4,7 +4,6 @@ networks:
 
 services:
   araa:
-    container_name: araa
     image: docker.io/temthelem/araa-search:latest
     networks:
       - proxy

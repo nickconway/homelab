@@ -4,7 +4,6 @@ networks:
 
 services:
   netboot:
-    container_name: netboot
     image: lscr.io/linuxserver/netbootxyz:latest
     networks:
       - proxy

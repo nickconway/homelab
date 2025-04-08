@@ -4,7 +4,6 @@ networks:
 
 services:
   maloja:
-    container_name: maloja
     image: krateng/maloja:latest
     networks:
       - proxy

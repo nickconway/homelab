@@ -7,7 +7,6 @@ networks:
 services:
   romm:
     image: rommapp/romm:latest
-    container_name: romm
     restart: unless-stopped
     networks:
       - proxy
@@ -42,7 +41,6 @@ services:
 
   romm-mariadb:
     image: mariadb:latest
-    container_name: romm-mariadb
     restart: unless-stopped
     networks:
       - romm

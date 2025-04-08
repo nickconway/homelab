@@ -5,7 +5,6 @@ networks:
 services:
   syncthing:
     image: syncthing/syncthing
-    container_name: syncthing
     environment:
       - PUID=1000
       - PGID=1000

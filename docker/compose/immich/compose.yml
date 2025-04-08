@@ -6,7 +6,6 @@ networks:
 
 services:
   immich:
-    container_name: immich
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     volumes:
       - ./data/uploads:/usr/src/app/upload
@@ -39,7 +38,6 @@ services:
       - "traefik.http.services.immich.loadbalancer.server.port=2283"
 
   immich-machine-learning:
-    container_name: immich-machine-learning
     # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
     # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
@@ -56,14 +54,12 @@ services:
     restart: unless-stopped
 
   immich-redis:
-    container_name: immich-redis
     image: registry.hub.docker.com/library/redis:6.2-alpine@sha256:84882e87b54734154586e5f8abd4dce69fe7311315e2fc6d67c29614c8de2672
     restart: unless-stopped
     networks:
       - immich
 
   immich-postgres:
-    container_name: immich-postgres
     image: registry.hub.docker.com/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
     networks:
       - immich
@@ -78,7 +74,6 @@ services:
     restart: unless-stopped
 
   immich-power-tools:
-    container_name: immich-power-tools
     image: ghcr.io/varun-raj/immich-power-tools:latest
     restart: unless-stopped
     env_file:

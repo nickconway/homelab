@@ -4,14 +4,12 @@ networks:
 
 services:
   hugo-init:
-    container_name: hugo-init
     image: busybox
     command: ['sh', '-c', 'chown -R 1000:1000 /src /tmp']
     volumes:
       - ${HOME}/Git/blog:/src
       - ./data/cache:/tmp/hugo_cache
   hugo:
-    container_name: hugo
     image: klakegg/hugo:ext
     networks:
       - proxy
@@ -37,7 +35,6 @@ services:
     command: server --disableLiveReload
 
   hugo-staging:
-    container_name: hugo-staging
     image: klakegg/hugo:ext
     networks:
       - proxy

@@ -1,6 +1,5 @@
 services:
   whisper:
-    container_name: whisper
     restart: unless-stopped
     build:
       context: source

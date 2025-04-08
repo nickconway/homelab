@@ -5,7 +5,6 @@ networks:
 services:
     komga:
       image: gotson/komga
-      container_name: komga
       volumes:
         - ./data/config:/config
         - ./data/data:/data

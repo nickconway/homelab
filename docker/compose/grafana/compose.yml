@@ -4,7 +4,6 @@ networks:
 
 services:
   grafana:
-    container_name: grafana
     image: grafana/grafana-enterprise:latest
     networks:
       - proxy

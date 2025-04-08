@@ -7,7 +7,6 @@ networks:
 services:
     tranga-api:
       image: glax/tranga-api:cuttingedge
-      container_name: tranga-api
       volumes:
         - /mnt/nas/content/media/manga:/Manga
         - ./data:/usr/share/tranga-api
@@ -28,7 +27,6 @@ services:
         - "traefik.http.services.tranga-api.loadbalancer.server.port=6531"
     tranga:
       image: glax/tranga-website:cuttingedge
-      container_name: tranga
       depends_on:
         - tranga-api
       restart: unless-stopped

@@ -7,7 +7,6 @@ networks:
 services:
   crowdsec:
     image: crowdsecurity/crowdsec:latest
-    container_name: crowdsec
     environment:
       PUID: 1000
       PGID: 1000
@@ -24,7 +23,6 @@ services:
 
   crowdsec-traefik-bouncer:
     image: fbonalair/traefik-crowdsec-bouncer:latest
-    container_name: crowdsec-traefik-bouncer
     environment:
       PUID: 1000
       PGID: 1000
@@ -39,7 +37,6 @@ services:
     restart: unless-stopped
 
   crowdsec-dashboard:
-    container_name: crowdsec-dashboard
     image: git.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/crowdsec-dashboard:latest
     restart: unless-stopped
     environment:

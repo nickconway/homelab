@@ -5,7 +5,6 @@ networks:
 services:
   sonarr:
     image: linuxserver/sonarr:latest
-    container_name: sonarr
     restart: unless-stopped
     environment:
       - TZ=America/New_York # Specify a timezone to use

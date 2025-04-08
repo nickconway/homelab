@@ -6,7 +6,6 @@ networks:
 
 services:
   matrix-postgres:
-    container_name: matrix-postgres
     image: postgres:15-alpine
     restart: unless-stopped
     volumes:
@@ -24,7 +23,6 @@ services:
       - matrix
 
   matrix:
-    container_name: matrix
     hostname: monolith
     image: matrixdotorg/dendrite-monolith:latest
     volumes:
@@ -42,7 +40,6 @@ services:
 
   matrix-nginx:
     image: nginx:latest
-    container_name: matrix-nginx
     restart: "unless-stopped"
     networks:
       - matrix

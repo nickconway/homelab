@@ -23,7 +23,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.sonarr.rule=Host(`tv.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.sonarr.rule=Host(`tv.download.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.sonarr.tls=true"
       - "traefik.http.routers.sonarr.tls.certresolver=prod"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"

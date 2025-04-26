@@ -1,0 +1,20 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  omni-tools:
+    image: iib0011/omni-tools:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+    environment:
+      PUID: 1000
+      PGID: 1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.onmi-tools.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.onmi-tools.rule=Host(`tools.media.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.onmi-tools.tls=true"
+      - "traefik.http.routers.onmi-tools.tls.certresolver=prod"
+      - "traefik.http.services.onmi-tools.loadbalancer.server.port=80"

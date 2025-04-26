@@ -26,7 +26,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.navidrome.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.navidrome.rule=Host(`navidrome.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.navidrome.rule=Host(`music.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.navidrome.tls=true"
       - "traefik.http.routers.navidrome.tls.certresolver=prod"
       - "traefik.http.services.navidrome.loadbalancer.server.port=4533"

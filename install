@@ -99,7 +99,7 @@ if [[ -z "${GPG_EMAIL:-}" ]]; then
     export GPG_EMAIL
 fi
 
-if [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL"; then
+if [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &> /dev/null; then
     GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}' || true)"
     export GPG_KEY
 fi

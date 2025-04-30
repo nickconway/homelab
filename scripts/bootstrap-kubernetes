@@ -46,7 +46,7 @@ SELECTED_K8S_APPS="$(
 )"
 
 for APP in $SELECTED_K8S_APPS; do
-    gum spin --title "Copying $APP config..." -- rsync -hruvz --progress --stats "$APP/" "$K8S_MANIFEST_DIR/$APP"
+    gum spin --title "Copying $APP config..." -- rsync -bhruvz --progress --stats "$APP/" "$K8S_MANIFEST_DIR/$APP"
 done
 
 if [[ -n "$SELECTED_K8S_APPS" ]]; then

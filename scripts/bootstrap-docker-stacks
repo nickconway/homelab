@@ -49,7 +49,7 @@ SELECTED_DOCKER_APPS="$(
 )"
 
 for APP in $SELECTED_DOCKER_APPS; do
-    gum spin --title "Copying $APP config..." -- rsync -hruvz --progress --stats "$APP/" "$DOCKER_STACK_DIR/$APP"
+    gum spin --title "Copying $APP config..." -- rsync -bhruvz --progress --stats "$APP/" "$DOCKER_STACK_DIR/$APP"
 done
 
 if [[ -n "$SELECTED_DOCKER_APPS" ]]; then

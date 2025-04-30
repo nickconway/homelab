@@ -56,10 +56,6 @@ export GUM_INPUT_CURSOR_FOREGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
 export GUM_CONFIRM_PROMPT_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
 export GUM_CONFIRM_SELECTED_BACKGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
 
-if [[ -z "${NO_REPO_PULL:-}" ]]; then
-    gum spin --title "Updating repo..." -- git pull --recurse-submodules
-fi
-
 if [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; then
     while [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; do
         SERVICES_BASE_DOMAIN="$(gum input --header "What is the base domain you'll be using?" --placeholder 'example.com')"

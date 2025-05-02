@@ -1,0 +1,30 @@
+#!/bin/bash
+
+function get_env_vars() {
+    if [[ ! -e env.example ]]; then
+        return 0
+    fi
+
+    if [[ ! -e .env ]]; then
+        touch .env
+    fi
+
+    while read -r LINE; do
+        VAR="$(echo "$LINE" | cut -d '=' -f 1)"
+        PLACEHOLDER="$(echo "$LINE" | cut -d '=' -f 2-)"
+
+        while ! grep -q "^$VAR" .env; do
+            if env | grep -q "^$VAR"; then
+                INPUT="$(env | grep "^$VAR" | cut -d '=' -f 2-)"
+            else
+                INPUT=
+                while [[ -z "${INPUT:-}" ]]; do
+                    INPUT="$(gum input --header "Enter a value for $VAR" --placeholder "$PLACEHOLDER" < /dev/tty)"
+                    export INPUT="${INPUT:-"$PLACEHOLDER"}"
+                done
+            fi
+            echo "$VAR='$INPUT'" >> .env
+            eval "export $VAR='$INPUT'"
+        done
+    done < env.example
+}

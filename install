@@ -6,17 +6,33 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
-export SCRIPT_DIR
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+export SCRIPT_DIR
+cd "$SCRIPT_DIR"
+
+source "$SCRIPT_DIR/utils"
 
 export PATH="$SCRIPT_DIR/dotfiles/.local/bin:$PATH"
-cd "$SCRIPT_DIR"
 
 export GOROOT=~/.local/go/go
 export GOPATH=~/.local/go/packages
 export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
 
-if ! command -v go &>/dev/null; then
+export GUM_SPIN_SHOW_ERROR=true
+
+export GUM_CHOOSE_CURSOR_FOREGROUND=10
+export GUM_CHOOSE_HEADER_FOREGROUND=9
+export GUM_CHOOSE_SELECTED_FOREGROUND=11
+
+export GUM_SPIN_SPINNER_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
+
+export GUM_INPUT_HEADER_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
+export GUM_INPUT_CURSOR_FOREGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
+
+export GUM_CONFIRM_PROMPT_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
+export GUM_CONFIRM_SELECTED_BACKGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
+
+if ! command -v go &> /dev/null; then
     echo "Installing go..."
     cd "$HOME/.local"
     mkdir -p go
@@ -42,61 +58,10 @@ if ! command -v gum &>/dev/null; then
     go install github.com/charmbracelet/gum@latest
 fi
 
-export GUM_SPIN_SHOW_ERROR=true
+get_env_vars
 
-export GUM_CHOOSE_CURSOR_FOREGROUND=10
-export GUM_CHOOSE_HEADER_FOREGROUND=9
-export GUM_CHOOSE_SELECTED_FOREGROUND=11
-
-export GUM_SPIN_SPINNER_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
-
-export GUM_INPUT_HEADER_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
-export GUM_INPUT_CURSOR_FOREGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
-
-export GUM_CONFIRM_PROMPT_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
-export GUM_CONFIRM_SELECTED_BACKGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
-
-if [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; then
-    while [[ -z "${SERVICES_BASE_DOMAIN:-}" ]]; do
-        SERVICES_BASE_DOMAIN="$(gum input --header "What is the base domain you'll be using?" --placeholder 'example.com')"
-    done
-
-    if ! grep -q 'SERVICES_BASE_DOMAIN' "$HOME/.$(basename "$SHELL")rc"; then
-        echo >>"$HOME"/."$(basename "$SHELL")"rc
-        echo "export SERVICES_BASE_DOMAIN=\"$SERVICES_BASE_DOMAIN\"" >>"$HOME"/."$(basename "$SHELL")"rc
-    fi
-
-    export SERVICES_BASE_DOMAIN
-fi
-
-if [[ -z "${GITEA_USER:-}" ]]; then
-    while [[ -z "${GITEA_USER:-}" ]]; do
-        GITEA_USER="$(gum input --header "What is your gitea username?" --placeholder 'nick')"
-    done
-
-    if ! grep -q 'GITEA_USER' "$HOME/.$(basename "$SHELL")rc"; then
-        echo >>"$HOME"/."$(basename "$SHELL")"rc
-        echo "export GITEA_USER=\"$GITEA_USER\"" >>"$HOME"/."$(basename "$SHELL")"rc
-    fi
-
-    export GITEA_USER
-fi
-
-if [[ -z "${GPG_EMAIL:-}" ]]; then
-    while [[ -z "${GPG_EMAIL:-}" ]]; do
-        GPG_EMAIL="$(gum input --header "What is your GPG email?" --placeholder 'name@example.com')"
-    done
-
-    if ! grep -q 'GPG_EMAIL' "$HOME/.$(basename "$SHELL")rc"; then
-        echo >>"$HOME"/."$(basename "$SHELL")"rc
-        echo "export GPG_EMAIL=\"$GPG_EMAIL\"" >>"$HOME"/."$(basename "$SHELL")"rc
-    fi
-
-    export GPG_EMAIL
-fi
-
-if [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &> /dev/null; then
-    GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}' || true)"
+if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &> /dev/null; then
+    GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"
     export GPG_KEY
 fi
 

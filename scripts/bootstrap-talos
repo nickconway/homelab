@@ -17,9 +17,8 @@ if [[ -z "${TALOS_API_SERVER:-}" ]]; then
         TALOS_API_SERVER="$(gum input --header "What is the hostname of the API server (without http(s) or port)?")"
     done
 
-    if ! grep -q 'TALOS_API_SERVER' "$HOME/.$(basename "$SHELL")rc"; then
-        echo >>"$HOME"/."$(basename "$SHELL")"rc
-        echo "export TALOS_API_SERVER=\"$TALOS_API_SERVER\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    if ! grep -q 'TALOS_API_SERVER' "$EXPORT_FILE"; then
+        echo "export TALOS_API_SERVER=\"$TALOS_API_SERVER\"" >>"$EXPORT_FILE"
     fi
 fi
 
@@ -28,9 +27,8 @@ if [[ -z "${TALOS_ENDPOINT:-}" ]]; then
         TALOS_ENDPOINT="$(gum input --header "What is the hostname of the talos API endpoint (NOT the api server endpoint)?")"
     done
 
-    if ! grep -q 'TALOS_ENDPOINT' "$HOME/.$(basename "$SHELL")rc"; then
-        echo >>"$HOME"/."$(basename "$SHELL")"rc
-        echo "export TALOS_ENDPOINT=\"$TALOS_ENDPOINT\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    if ! grep -q 'TALOS_ENDPOINT' "$EXPORT_FILE"; then
+        echo "export TALOS_ENDPOINT=\"$TALOS_ENDPOINT\"" >>"$EXPORT_FILE"
     fi
 fi
 

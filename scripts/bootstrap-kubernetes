@@ -6,20 +6,19 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
+cd "$SCRIPT_DIR/kubernetes/manifests"
+
 if [[ -z "${K8S_MANIFEST_DIR:-}" ]]; then
     K8S_MANIFEST_DIR="$(gum input --header "Where would you like to install the kubernetes manifests?" --placeholder "$HOME/Kubernetes")"
     export K8S_MANIFEST_DIR="${K8S_MANIFEST_DIR:-$HOME/Kubernetes}"
 
-    echo "Kubernetes manifests will be installed in $K8S_MANIFEST_DIR"
-    mkdir -p "$K8S_MANIFEST_DIR"
-
-    if ! grep -q 'K8S_MANIFEST_DIR' "$HOME/.$(basename "$SHELL")rc"; then
-        echo >>"$HOME"/."$(basename "$SHELL")"rc
-        echo "export K8S_MANIFEST_DIR=\"$K8S_MANIFEST_DIR\"" >>"$HOME"/."$(basename "$SHELL")"rc
+    if ! grep -q 'K8S_MANIFEST_DIR' "$EXPORT_FILE"; then
+        echo "export K8S_MANIFEST_DIR=\"$K8S_MANIFEST_DIR\"" >> "$EXPORT_FILE"
     fi
 fi
 
-cd "$SCRIPT_DIR/kubernetes/manifests"
+echo "Kubernetes manifests will be installed in $K8S_MANIFEST_DIR"
+mkdir -p "$K8S_MANIFEST_DIR"
 
 K8S_APPS="$(
     for APP in *; do
@@ -37,7 +36,6 @@ PRESELECTED_K8S_APPS="$(
     done | xargs | sed "s/ /,/g"
 )"
 
-echo $PRESELECTED_K8S_APPS
 SELECTED_K8S_APPS="$(
     gum choose $K8S_APPS \
         --selected "$PRESELECTED_K8S_APPS" \

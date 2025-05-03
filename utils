@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function get_env_vars() {
+function get-env-vars() {
     if [[ ! -e env.example ]]; then
         return 0
     fi

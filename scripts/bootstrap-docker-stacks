@@ -54,7 +54,7 @@ for APP in $SELECTED_DOCKER_APPS; do
 
     (
         cd "$DOCKER_STACK_DIR/$APP"
-        get_env_vars
+        get-env-vars
     )
 done
 

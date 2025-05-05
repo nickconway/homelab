@@ -7,17 +7,20 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 cd "$SCRIPT_DIR/infrastructure/talos"
-tofu init
-tofu apply -auto-approve
+
+if [[ ! -e terraform.tfstate ]]; then
+    tofu init
+    tofu apply -auto-approve
+fi
 
 CP_NODES="$(tofu output -json cp-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"
 WORKER_NODES="$(tofu output -json worker-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"
 
 cd "$SCRIPT_DIR/kubernetes/talos"
 
-# if [[ -e talosconfig ]] || [[ -z "${BOOTSTRAP_TALOS_CLUSTER:-}" ]] || ! gum confirm "A talos cluster has not been configured, would you like to configure it now?"; then
-#     exit 0
-# fi
+if ([[ -e talosconfig ]] || ! gum confirm "A talos cluster has not been configured, would you like to configure it now?") && [[ -z "${BOOTSTRAP_TALOS:-}" ]]; then
+    exit 0
+fi
 
 if [[ ! -e secrets.yaml ]]; then
     talosctl gen secrets
@@ -62,5 +65,10 @@ while read -r c; do
         --config-patch '[{ "op": "add", "path": "/machine/network/hostname", "value": "'"$NAME"'"}]'
 done < <(echo "$WORKER_NODES")
 
+echo "Waiting 1 minute for reboots..."
+sleep 60
+
 IP="$(echo "$CP_NODES" | xargs | awk '{print $2}')"
-talosctl bootstrap -n "$IP" -e "$IP"
+talosctl bootstrap -n "$IP" -e "$IP" --talosconfig=./talosconfig
+
+talosctl kubeconfig -n "$IP" -e "$IP"

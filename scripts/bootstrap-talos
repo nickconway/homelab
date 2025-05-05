@@ -30,6 +30,7 @@ SECRETS="$(sops decrypt secrets.encrypted.yaml)"
 
 talosctl gen config proxmox "https://$TALOS_API_SERVER:6443" \
     --install-image factory.talos.dev/metal-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.10.0 \
+    --install-disk '/dev/vda' \
     --with-secrets <(echo "$SECRETS") \
     --force \
     --config-patch-control-plane @patches/vip.yaml \

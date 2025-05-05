@@ -31,6 +31,15 @@ resource "proxmox_vm_qemu" "talos-cp" {
   }
 
   disks {
+    virtio {
+      virtio0 {
+        disk {
+          storage = "local-lvm"
+          size = "16G"
+        }
+      }
+    }
+
     ide {
       ide2 {
         cdrom {
@@ -58,6 +67,15 @@ resource "proxmox_vm_qemu" "talos-worker" {
   }
 
   disks {
+    virtio {
+      virtio0 {
+        disk {
+          storage = "local-lvm"
+          size = "16G"
+        }
+      }
+    }
+
     ide {
       ide2 {
         cdrom {

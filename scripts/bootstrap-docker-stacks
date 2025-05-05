@@ -16,15 +16,6 @@ fi
 
 cd "$SCRIPT_DIR/docker/compose"
 
-if [[ -z "${DOCKER_STACK_DIR:-}" ]]; then
-    DOCKER_STACK_DIR="$(gum input --header "Where would you like to install the docker compose stacks?" --placeholder "$HOME/Docker")"
-    export DOCKER_STACK_DIR="${DOCKER_STACK_DIR:-$HOME/Docker}"
-
-    if ! grep -q 'DOCKER_STACK_DIR' "$EXPORT_FILE"; then
-        echo "export DOCKER_STACK_DIR=\"$DOCKER_STACK_DIR\"" >> "$EXPORT_FILE"
-    fi
-fi
-
 echo "Docker stacks will be installed in $DOCKER_STACK_DIR"
 mkdir -p "$DOCKER_STACK_DIR"
 

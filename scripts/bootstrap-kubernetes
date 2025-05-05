@@ -8,15 +8,6 @@ fi
 
 cd "$SCRIPT_DIR/kubernetes/manifests"
 
-if [[ -z "${K8S_MANIFEST_DIR:-}" ]]; then
-    K8S_MANIFEST_DIR="$(gum input --header "Where would you like to install the kubernetes manifests?" --placeholder "$HOME/Kubernetes")"
-    export K8S_MANIFEST_DIR="${K8S_MANIFEST_DIR:-$HOME/Kubernetes}"
-
-    if ! grep -q 'K8S_MANIFEST_DIR' "$EXPORT_FILE"; then
-        echo "export K8S_MANIFEST_DIR=\"$K8S_MANIFEST_DIR\"" >> "$EXPORT_FILE"
-    fi
-fi
-
 echo "Kubernetes manifests will be installed in $K8S_MANIFEST_DIR"
 mkdir -p "$K8S_MANIFEST_DIR"
 

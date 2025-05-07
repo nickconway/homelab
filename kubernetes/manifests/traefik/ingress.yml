@@ -10,13 +10,13 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - ${WHOAMI_SUB_DOMAIN}.${BASE_DOMAIN}
+        - ${WHOAMI_SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
       secretName: whoami-certificate
     - hosts:
-        - ${PROXY_SUB_DOMAIN}.${BASE_DOMAIN}
+        - ${PROXY_SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
       secretName: proxy-certificate
   rules:
-    - host: ${WHOAMI_SUB_DOMAIN}.${BASE_DOMAIN}
+    - host: ${WHOAMI_SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
       http:
         paths:
           - path: /
@@ -27,7 +27,7 @@ spec:
                 port:
                   name: web
 
-    - host: ${PROXY_SUB_DOMAIN}.${BASE_DOMAIN}
+    - host: ${PROXY_SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
       http:
         paths:
           - path: /

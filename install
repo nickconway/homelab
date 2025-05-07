@@ -1,33 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-while getopts 'dh:kt' flag; do
-    case $flag in
-        d) export BOOTSTRAP_DOCKER=true;;
-        h) ssh -t "$OPTARG"; exit;;
-        k) export BOOTSTRAP_KUBERNETES=true;;
-        t) export BOOTSTRAP_TALOS=true;;
-        *) exit 1;;
-    esac
-done
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-    export DEBUG_MODE
-fi
-
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
-export SCRIPT_DIR
-cd "$SCRIPT_DIR"
-
-source "$SCRIPT_DIR/utils"
-
-export PATH="$SCRIPT_DIR/dotfiles/.local/bin:$PATH"
-
-export GOROOT=~/.local/go/go
-export GOPATH=~/.local/go/packages
-export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
-
 export GUM_SPIN_SHOW_ERROR=true
 
 export GUM_CHOOSE_CURSOR_FOREGROUND=10
@@ -41,6 +14,39 @@ export GUM_INPUT_CURSOR_FOREGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
 
 export GUM_CONFIRM_PROMPT_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
 export GUM_CONFIRM_SELECTED_BACKGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+    export DEBUG_MODE
+fi
+
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+export SCRIPT_DIR
+cd "$SCRIPT_DIR"
+
+while getopts 'dh:kt' flag; do
+    case $flag in
+        d) export BOOTSTRAP_DOCKER=true;;
+        h)
+            REMOTE_DIR="$(gum input --header "Where would you like to sync the repository to on the remote host?" --placeholder "Git/homelab" < /dev/tty)"
+            rsync -ahuz "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
+            ssh -t "$OPTARG" "$REMOTE_DIR/install"
+            exit
+            ;;
+        k) export BOOTSTRAP_KUBERNETES=true;;
+        t) export BOOTSTRAP_TALOS=true;;
+        *) exit 1;;
+    esac
+done
+
+source "$SCRIPT_DIR/utils"
+
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$SCRIPT_DIR/dotfiles/.local/bin:$PATH"
+
+export GOROOT=~/.local/go/go
+export GOPATH=~/.local/go/packages
+export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
 
 if ! command -v go &> /dev/null; then
     echo "Installing go..."

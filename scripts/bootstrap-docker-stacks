@@ -50,6 +50,6 @@ for APP in $SELECTED_DOCKER_APPS; do
 done
 
 if [[ -n "$SELECTED_DOCKER_APPS" ]]; then
-    gum spin --title "Starting containers..." -- start-containers
+    gum spin --title "Starting containers..." -- start-containers ${SELECTED_DOCKER_APPS//,/ }
     echo "Docker containers started"
 fi

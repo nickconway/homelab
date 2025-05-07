@@ -15,7 +15,7 @@ function get-env-vars() {
         VAR="$(echo "$LINE" | cut -d '=' -f 1)"
         PLACEHOLDER="$(echo "$LINE" | cut -d '=' -f 2- | envsubst)"
 
-        if ! grep -q "^$VAR" .env; then
+        if ! grep -q "^export $VAR=" .env; then
             if env | grep -q "^$VAR"; then
                 INPUT="$(env | grep "^$VAR" | cut -d '=' -f 2-)"
             else
@@ -25,10 +25,10 @@ function get-env-vars() {
                     export INPUT="${INPUT:-"$PLACEHOLDER"}"
                 done
             fi
-            echo "$VAR='$INPUT'" >> .env
+            echo "export $VAR='$INPUT'" >> .env
             eval "export $VAR='$INPUT'"
         else
-            eval "export $(grep "^$VAR=" .env)"
+            eval "$(grep "^export $VAR=" .env)"
         fi
     done < env.example
 }

@@ -17,6 +17,7 @@ provider "proxmox" {
 resource "proxmox_vm_qemu" "talos-cp" {
   target_node = "pve"
   agent = 1
+  skip_ipv6 = true
   count = 3
   name = "talos-cp-0${count.index}"
   vmid = "100${count.index}"

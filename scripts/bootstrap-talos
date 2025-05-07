@@ -6,21 +6,29 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
+if ! command -v talosctl &> /dev/null || talosctl config contexts | grep -q "$TALOS_CONTEXT_NAME" &> /dev/null; then
+    if [[ -z "${BOOTSTRAP_TALOS:-}" ]] && ! gum confirm "A talos cluster has not been configured, would you like to configure it now?"; then
+        exit 0
+    fi
+fi
+
+gum spin --title 'Installing talosctl' -- bash -c 'curl -sL https://talos.dev/install | sh'
+
 cd "$SCRIPT_DIR/infrastructure/talos"
+
+if ! command -v tofu &> /dev/null; then
+    curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh | sh -s -- --install-method standalone
+fi
 
 if [[ ! -e terraform.tfstate ]]; then
     tofu init
-    tofu apply -auto-approve
 fi
+tofu apply -auto-approve
 
 CP_NODES="$(tofu output -json cp-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"
 WORKER_NODES="$(tofu output -json worker-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"
 
 cd "$SCRIPT_DIR/kubernetes/talos"
-
-if ([[ -e talosconfig ]] || ! gum confirm "A talos cluster has not been configured, would you like to configure it now?") && [[ -z "${BOOTSTRAP_TALOS:-}" ]]; then
-    exit 0
-fi
 
 if [[ ! -e secrets.yaml ]]; then
     talosctl gen secrets
@@ -31,17 +39,13 @@ rm secrets.yaml
 
 SECRETS="$(sops decrypt secrets.encrypted.yaml)"
 
-talosctl gen config proxmox "https://$TALOS_API_SERVER:6443" \
+talosctl gen config "$TALOS_CONTEXT_NAME" "https://$TALOS_API_SERVER:6443" \
     --install-image factory.talos.dev/metal-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.10.0 \
     --install-disk '/dev/vda' \
     --with-secrets <(echo "$SECRETS") \
     --force \
     --config-patch-control-plane @patches/vip.yaml \
-    --additional-sans "$TALOS_ENDPOINT"
-
-talosctl config --talosconfig talosconfig node "$TALOS_API_SERVER"
-talosctl config --talosconfig talosconfig endpoint "$TALOS_ENDPOINT"
-talosctl config merge talosconfig
+    --additional-sans "$TALOS_API_SERVER,$TALOS_ENDPOINT"
 
 while read -r c; do
     NAME="$(echo "$c" | awk '{print $1}')"
@@ -65,8 +69,21 @@ while read -r c; do
         --config-patch '[{ "op": "add", "path": "/machine/network/hostname", "value": "'"$NAME"'"}]'
 done < <(echo "$WORKER_NODES")
 
-echo "Waiting 1 minute for reboots..."
-sleep 60
+gum spin --title "Waiting 1 minute for reboots..." -- sleep 60
+
+talosctl config --talosconfig talosconfig node "$TALOS_API_SERVER"
+talosctl config --talosconfig talosconfig endpoint "$TALOS_ENDPOINT"
+talosctl config merge talosconfig
+
+SERVERS=""
+while read -r c; do
+    IP="$(echo "$c" | awk '{print $2}')"
+    SERVERS+=', { "address": "'"$IP:5000"'" }'
+done < <(echo "$CP_NODES")
+
+if [[ -e "$DOCKER_STACK_DIR/traefik/data/config.yml" ]]; then
+    yq -i ".tcp.services.talos.loadBalancer.servers = [ $(echo "$SERVERS" | cut -d ' ' -f 2-) ]"
+fi
 
 IP="$(echo "$CP_NODES" | xargs | awk '{print $2}')"
 talosctl bootstrap -n "$IP" -e "$IP" --talosconfig=./talosconfig

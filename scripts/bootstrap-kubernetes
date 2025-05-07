@@ -6,6 +6,8 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
+source "$SCRIPT_DIR/utils"
+
 cd "$SCRIPT_DIR/kubernetes/manifests"
 
 echo "Kubernetes manifests will be installed in $K8S_MANIFEST_DIR"

@@ -6,8 +6,10 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
-if ! command -v talosctl &> /dev/null || talosctl config contexts | grep -q "$TALOS_CONTEXT_NAME" &> /dev/null; then
-    if [[ -z "${BOOTSTRAP_TALOS:-}" ]] && ! gum confirm "A talos cluster has not been configured, would you like to configure it now?"; then
+if [[ -z "${BOOTSTRAP_TALOS:-}" ]]; then
+    if command -v talosctl &> /dev/null && \
+    talosctl config contexts | grep -q "$TALOS_CONTEXT_NAME" &> /dev/null || \
+    ! gum confirm "A talos cluster has not been configured, would you like to configure it now?"; then
         exit 0
     fi
 fi
@@ -65,7 +67,7 @@ while read -r c; do
     talosctl apply-config --insecure \
         -n "$IP" \
         -e "$IP" \
-        --file "controlplane.yaml" \
+        --file "worker.yaml" \
         --config-patch '[{ "op": "add", "path": "/machine/network/hostname", "value": "'"$NAME"'"}]'
 done < <(echo "$WORKER_NODES")
 

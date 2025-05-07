@@ -1,9 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-while getopts 'dkt' flag; do
+while getopts 'dh:kt' flag; do
     case $flag in
         d) export BOOTSTRAP_DOCKER=true;;
+        h) ssh -t "$OPTARG"; exit;;
         k) export BOOTSTRAP_KUBERNETES=true;;
         t) export BOOTSTRAP_TALOS=true;;
         *) exit 1;;

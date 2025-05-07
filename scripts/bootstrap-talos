@@ -69,21 +69,27 @@ while read -r c; do
         --config-patch '[{ "op": "add", "path": "/machine/network/hostname", "value": "'"$NAME"'"}]'
 done < <(echo "$WORKER_NODES")
 
+SERVERS=""
+while read -r c; do
+    IP="$(echo "$c" | awk '{print $2}')"
+    SERVERS+=', { "address": "'"$IP:50000"'" }'
+done < <(echo "$CP_NODES")
+
+if [[ -d "$DOCKER_STACK_DIR/traefik" ]]; then
+    (
+        cd "$DOCKER_STACK_DIR/traefik"
+        if [[ -e data/config.yml ]]; then
+            yq -i ".tcp.services.talos.loadBalancer.servers = [ $(echo "$SERVERS" | cut -d ' ' -f 2-) ]" data/config.yml
+            docker compose restart
+        fi
+    )
+fi
+
 gum spin --title "Waiting 1 minute for reboots..." -- sleep 60
 
 talosctl config --talosconfig talosconfig node "$TALOS_API_SERVER"
 talosctl config --talosconfig talosconfig endpoint "$TALOS_ENDPOINT"
 talosctl config merge talosconfig
-
-SERVERS=""
-while read -r c; do
-    IP="$(echo "$c" | awk '{print $2}')"
-    SERVERS+=', { "address": "'"$IP:5000"'" }'
-done < <(echo "$CP_NODES")
-
-if [[ -e "$DOCKER_STACK_DIR/traefik/data/config.yml" ]]; then
-    yq -i ".tcp.services.talos.loadBalancer.servers = [ $(echo "$SERVERS" | cut -d ' ' -f 2-) ]"
-fi
 
 IP="$(echo "$CP_NODES" | xargs | awk '{print $2}')"
 talosctl bootstrap -n "$IP" -e "$IP" --talosconfig=./talosconfig

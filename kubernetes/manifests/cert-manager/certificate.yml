@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   dnsNames:
-    - ${CERTIFICATE_DNS_NAME}
+    - "${CERTIFICATE_DNS_NAME}"
   secretName: letsencrypt-production-cert-tls
   issuerRef:
     kind: ClusterIssuer

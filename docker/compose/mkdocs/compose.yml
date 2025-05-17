@@ -16,10 +16,10 @@ services:
       SITE_URL: https://homelab.${SERVICES_BASE_DOMAIN}
       REPO_URL: https://github.com/nickconway/homelab
       HOMEPAGE: https://homelab.${SERVICES_BASE_DOMAIN}
-      LOGO: https://${SERVICES_BASE_DOMAIN}/favicon.png
-      FAVICON: https://conway.dev/favicon.png
       GITHUB_LINK: https://github.com/nickconway
       MASTODON_LINK: https://mastodon.social/@nickconway
+      LOGO: favicon.png
+      FAVICON: favicon.png
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mkdocs.middlewares=crowdsec-traefik-bouncer"

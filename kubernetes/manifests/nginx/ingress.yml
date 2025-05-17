@@ -10,10 +10,10 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-      - ${SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
+      - ${NGINX_SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
       secretName: nginx-certificate
   rules:
-    - host: ${SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
+    - host: ${NGINX_SUBDOMAIN}.${SERVICES_BASE_DOMAIN}
       http:
         paths:
           - path: /

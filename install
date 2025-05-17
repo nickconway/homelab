@@ -29,8 +29,8 @@ while getopts 'dh:kt' flag; do
         d) export BOOTSTRAP_DOCKER=true;;
         h)
             REMOTE_DIR="$(gum input --header "Where would you like to sync the repository to on the remote host?" --placeholder "Git/homelab" < /dev/tty)"
-            ssh -t "$OPTARG" "mkdir -p $REMOTE_DIR"
-            rsync -ahuz "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
+            REMOTE_DIR="${REMOTE_DIR:-Git/homelab}"
+            rsync -ahuz --mkpath "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
             ssh -t "$OPTARG" "$REMOTE_DIR/install"
             exit
             ;;

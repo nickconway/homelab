@@ -1,6 +1,6 @@
-## Installing
-
 [Documentation](https://homelab.conway.dev)
+
+## Installing
 
 To get started, run the following commands:
 

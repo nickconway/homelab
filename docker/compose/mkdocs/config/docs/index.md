@@ -1,5 +1,7 @@
 ## Installing
 
+[Documentation](https://homelab.conway.dev)
+
 To get started, run the following commands:
 
 ```

@@ -17,8 +17,8 @@ services:
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data:/mnt/ncdata
-    ports:
-      - 9080:8080
+    # ports:
+    #   - 9080:8080
     environment:
       - PUID=1000
       - PGID=1000
@@ -37,4 +37,5 @@ services:
       - "traefik.http.routers.cloud-aio.tls=true"
       - "traefik.http.routers.cloud-aio.entrypoints=websecure"
       - "traefik.http.routers.cloud-aio.tls.certresolver=prod"
-      - "traefik.http.services.cloud-aio.loadbalancer.server.port=8443"
+      - "traefik.http.services.cloud-aio.loadbalancer.server.port=8080"
+      - "traefik.http.services.cloud-aio.loadbalancer.server.scheme=https"

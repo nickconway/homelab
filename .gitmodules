@@ -34,3 +34,7 @@
 	path = docker/dockerfiles/reactive-resume/source
 	url = https://github.com/nickconway/Reactive-Resume
 	branch = dev
+[submodule "ansible"]
+	path = ansible
+	url = https://github.com/nickconway/ansible
+	branch = main

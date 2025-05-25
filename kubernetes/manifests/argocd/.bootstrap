@@ -2,3 +2,4 @@
 
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl get deployments.apps -n argocd argocd-server -o yaml | yq '.spec.template.spec.containers[0].args += "--insecure"' | kubectl apply -f -

@@ -82,8 +82,8 @@ if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --l
     export GPG_KEY
 fi
 
-./scripts/bootstrap-docker-stacks
-./scripts/bootstrap-talos
-./scripts/bootstrap-kubernetes
+./scripts/install-docker-stacks
+./scripts/create-talos-vms
+./scripts/install-kubernetes-manifests
 
 echo "Homelab setup complete!"

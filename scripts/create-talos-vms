@@ -98,6 +98,8 @@ talosctl config merge talosconfig
 talosctl config context "$TALOS_CONTEXT_NAME"
 
 IP="$(echo "$CP_NODES" | xargs | awk '{print $2}')"
+
 talosctl bootstrap -n "$IP" -e "$IP" --talosconfig=./talosconfig
+gum spin --title "Waiting for talos cluster to be healthy..." -- talosctl health -n "$IP" -e "$IP"
 
 talosctl kubeconfig -n "$IP" -e "$IP"

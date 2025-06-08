@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+source "$SCRIPT_DIR/utils"
+
 if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
     export DEBUG_MODE
@@ -25,7 +27,8 @@ fi
 if [[ ! -e terraform.tfstate ]]; then
     tofu init
 fi
-tofu apply -auto-approve
+get-terraform-vars
+gum spin --title "Provisioning talos VMs" -- tofu apply -auto-approve
 
 CP_NODES="$(tofu output -json cp-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"
 WORKER_NODES="$(tofu output -json worker-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"

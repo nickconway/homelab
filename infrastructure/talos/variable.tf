@@ -1,6 +1,6 @@
-variable pm_api_url {
+variable pm_api_host {
     type = string
-    default = "https://pve.example.com/api2/json"
+    default = "https://pve.example.com"
 }
 
 variable pm_user {

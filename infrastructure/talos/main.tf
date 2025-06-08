@@ -48,7 +48,7 @@ resource "proxmox_vm_qemu" "talos-cp" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas:iso/talos-1.9.2.iso"
+          iso = "${var.pm_talos_iso_id}"
         }
       }
     }
@@ -89,7 +89,7 @@ resource "proxmox_vm_qemu" "talos-worker" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas:iso/talos-1.9.2.iso"
+          iso = "${var.pm_talos_iso_id}"
         }
       }
     }

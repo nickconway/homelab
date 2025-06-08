@@ -12,12 +12,12 @@ echo "Jetstack helm repo added"
 
 if ! helm list -n cert-manager | grep cert-manager; then
     gum spin --title "Installing cert-manager" -- \
-	helm install \
-	cert-manager jetstack/cert-manager \
-	--namespace cert-manager \
-	--create-namespace \
-	--set crds.enabled=true \
-	--set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=1.1.1.1:53\,1.0.0.1:53}'
+        helm install \
+        cert-manager jetstack/cert-manager \
+        --namespace cert-manager \
+        --create-namespace \
+        --set crds.enabled=true \
+        --set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=1.1.1.1:53\,1.0.0.1:53}'
     echo "cert-manager helm chart installed"
 fi
 

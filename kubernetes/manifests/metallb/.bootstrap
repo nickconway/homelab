@@ -3,3 +3,4 @@ set -euo pipefail
 
 LATEST_METALLB="$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r '.tag_name')"
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/"$LATEST_METALLB"/config/manifests/metallb-native.yaml
+kubectl wait --for=condition=Ready pods --all --namespace metallb-system

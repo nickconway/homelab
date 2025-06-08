@@ -10,12 +10,17 @@ variable pm_user {
 
 variable pm_api_token_id {
     type = string
-    default = "user@realm!token_id"
+    default = "token_id"
 }
 
 variable pm_api_token_secret {
     type = string
     default = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+
+variable pm_talos_iso_id {
+    type = string
+    default = "storage:iso/talos-x.x.x.iso"
 }
 
 variable talos_cp_id {

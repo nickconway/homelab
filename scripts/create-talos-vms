@@ -92,6 +92,7 @@ gum spin --title "Waiting 1 minute for reboots..." -- sleep 60
 talosctl config --talosconfig talosconfig node "$TALOS_API_SERVER"
 talosctl config --talosconfig talosconfig endpoint "$TALOS_ENDPOINT"
 talosctl config merge talosconfig
+talosctl config context "$TALOS_CONTEXT_NAME"
 
 IP="$(echo "$CP_NODES" | xargs | awk '{print $2}')"
 talosctl bootstrap -n "$IP" -e "$IP" --talosconfig=./talosconfig

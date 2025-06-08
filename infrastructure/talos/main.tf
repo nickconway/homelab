@@ -2,16 +2,16 @@ terraform {
   required_providers {
     proxmox = {
       source = "telmate/proxmox"
-      version = "3.0.1-rc8"
+      version = "3.0.2-rc01"
     }
   }
 }
 
 provider "proxmox" {
-  pm_api_url          = "https://pve.conway.dev/api2/json"
-  pm_user             = "nick@authentik"
-  pm_api_token_id     = "nick@authentik!opentofu"
-  pm_api_token_secret = "1434f821-d015-4d36-bdb5-70e5dace7043"
+  pm_api_url          = "${var.pm_api_url}"
+  pm_user             = "${var.pm_user}"
+  pm_api_token_id     = "${var.pm_api_token_id}"
+  pm_api_token_secret = "${var.pm_api_token_secret}"
 }
 
 resource "proxmox_vm_qemu" "talos-cp" {
@@ -20,9 +20,13 @@ resource "proxmox_vm_qemu" "talos-cp" {
   skip_ipv6 = true
   count = 3
   name = "talos-cp-0${count.index}"
-  vmid = "100${count.index}"
+  vmid = "${var.talos_cp_id + count.index}"
 
   memory = 4096
+
+  cpu {
+    cores = 4
+  }
 
   network {
     id = 0
@@ -54,11 +58,16 @@ resource "proxmox_vm_qemu" "talos-cp" {
 resource "proxmox_vm_qemu" "talos-worker" {
   target_node = "pve"
   agent = 1
+  skip_ipv6 = true
   count = 3
   name = "talos-worker-0${count.index}"
-  vmid = "105${count.index}"
+  vmid = "${var.talos_worker_id + count.index}"
 
   memory = 2048
+
+  cpu {
+    cores = 2
+  }
 
   network {
     id = 0

@@ -57,7 +57,7 @@ services:
       - reactive-resume
 
   reactive-resume:
-    image: git.conway.dev/nick/reactive-resume:latest
+    image: git.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/reactive-resume:latest
     restart: unless-stopped
     depends_on:
       - reactive-resume-postgres

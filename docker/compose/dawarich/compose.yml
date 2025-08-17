@@ -35,6 +35,7 @@ services:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched
       - ./data/storage:/var/app/storage
+      - ./data/db:/var/lib/postgresql/data
     networks:
       - proxy
       - dawarich
@@ -45,13 +46,12 @@ services:
     restart: unless-stopped
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://dawarich-redis:6379/0
+      REDIS_URL: redis://dawarich-redis:6379
       DATABASE_HOST: dawarich-postgres
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_NAME: dawarich
       MIN_MINUTES_SPENT_IN_CITY: 60
-      APPLICATION_HOST: localhost
       APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.${SERVICES_BASE_DOMAIN}
       DISABLE_TELEMETRY: true
       ENABLE_TELEMETRY: false
@@ -63,6 +63,10 @@ services:
       SECRET_KEY_BASE: 1234567890
       RAILS_LOG_TO_STDOUT: "true"
       SELF_HOSTED: true
+      STORE_GEODATA: true
+      PROMETHEUS_EXPORTER_ENABLED: false
+      PROMETHEUS_EXPORTER_HOST: 0.0.0.0
+      PROMETHEUS_EXPORTER_PORT: 9394
     depends_on:
       - dawarich-postgres
       - dawarich-redis
@@ -90,13 +94,12 @@ services:
     restart: unless-stopped
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://dawarich-redis:6379/0
+      REDIS_URL: redis://dawarich-redis:6379
       DATABASE_HOST: dawarich-postgres
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_NAME: dawarich
       MIN_MINUTES_SPENT_IN_CITY: 60
-      APPLICATION_HOST: localhost
       APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.${SERVICES_BASE_DOMAIN}
       DISABLE_TELEMETRY: true
       ENABLE_TELEMETRY: false
@@ -108,6 +111,10 @@ services:
       SECRET_KEY_BASE: 1234567890
       RAILS_LOG_TO_STDOUT: "true"
       SELF_HOSTED: true
+      STORE_GEODATA: true
+      PROMETHEUS_EXPORTER_ENABLED: false
+      PROMETHEUS_EXPORTER_HOST: dawarich
+      PROMETHEUS_EXPORTER_PORT: 9394
     depends_on:
       - dawarich-postgres
       - dawarich-redis

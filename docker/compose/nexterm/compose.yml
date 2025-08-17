@@ -10,6 +10,7 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
     volumes:
       - ./data:/app/data
     labels:

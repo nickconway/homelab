@@ -4,13 +4,7 @@ services:
     build:
       context: source
       dockerfile: Dockerfile.gpu
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    runtime: nvidia
     environment:
       - ASR_MODEL=base
     ports:

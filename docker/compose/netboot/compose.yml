@@ -4,7 +4,7 @@ networks:
 
 services:
   netboot:
-    image: lscr.io/linuxserver/netbootxyz:latest
+    image: ghcr.io/netbootxyz/netbootxyz
     networks:
       - proxy
     environment:

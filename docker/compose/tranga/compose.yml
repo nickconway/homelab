@@ -6,7 +6,7 @@ networks:
 
 services:
     tranga-api:
-      image: glax/tranga-api:cuttingedge
+      image: glax/tranga-api:latest
       volumes:
         - /mnt/nas/content/media/manga:/Manga
         - ./data:/usr/share/tranga-api

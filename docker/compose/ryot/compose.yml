@@ -24,6 +24,7 @@ services:
     environment:
       - DATABASE_URL=postgres://ryot:${POSTGRES_PASSWORD}@ryot-postgres:5432/postgres
       - TZ=America/New_York
+      - SERVER_ADMIN_ACCESS_TOKEN=${SERVER_ADMIN_ACCESS_TOKEN}
     restart: unless-stopped
     networks:
       - ryot

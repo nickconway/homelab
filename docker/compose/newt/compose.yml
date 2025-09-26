@@ -1,0 +1,14 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  newt:
+    image: fosrl/newt
+    networks:
+      - proxy
+    restart: unless-stopped
+    environment:
+      - PANGOLIN_ENDPOINT=${PANGOLIN_ENDPOINT}
+      - NEWT_ID=${NEWT_ID}
+      - NEWT_SECRET=${NEWT_SECRET}

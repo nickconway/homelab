@@ -10,7 +10,7 @@ services:
       - PGID=1000
     volumes:
       - ./data:/var/syncthing
-      - /mnt/nas/home:/mnt/nas/home
+      - ${SYNC_DIR}:/var/syncthing/sync
     networks:
       - proxy
     restart: unless-stopped

@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres
+    image: ghcr.io/ferretdb/postgres-documentdb
     restart: unless-stopped
     logging:
       driver: local

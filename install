@@ -44,7 +44,7 @@ done
 source "$SCRIPT_DIR/utils"
 
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$SCRIPT_DIR/dotfiles/.local/bin:$PATH"
+export PATH="$SCRIPT_DIR/submodules/dotfiles/.local/bin:$PATH"
 
 if ! command -v go &> /dev/null; then
     echo "Installing go..."

@@ -19,7 +19,7 @@
 	url = https://github.com/rtuszik/photon-docker
 	branch = main
 [submodule "dotfiles"]
-	path = dotfiles
+	path = submodules/dotfiles
 	url = https://github.com/nickconway/dotfiles
 	branch = main
 [submodule "docker/compose/whisper/source"]
@@ -35,6 +35,6 @@
 	url = https://github.com/nickconway/Reactive-Resume
 	branch = dev
 [submodule "ansible"]
-	path = ansible
+	path = submodules/ansible
 	url = https://github.com/nickconway/ansible
 	branch = main

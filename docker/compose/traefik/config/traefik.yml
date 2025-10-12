@@ -48,6 +48,9 @@ entryPoints:
   talos:
     address: :50000
 
+  minecraft:
+    address: :25565
+
 
 serversTransport:
   insecureSkipVerify: true

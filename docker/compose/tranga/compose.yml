@@ -25,7 +25,6 @@ services:
         - "traefik.http.routers.tranga-api.tls=true"
         - "traefik.http.routers.tranga-api.tls.certresolver=prod"
         - "traefik.http.services.tranga-api.loadbalancer.server.port=6531"
-
     tranga:
       image: glax/tranga-website:latest
       depends_on:

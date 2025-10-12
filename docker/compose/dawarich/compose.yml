@@ -45,7 +45,7 @@ services:
     command: ["bin/rails", "server", "-p", "3000", "-b", "::"]
     restart: unless-stopped
     environment:
-      RAILS_ENV: production
+      RAILS_ENV: development
       REDIS_URL: redis://dawarich-redis:6379
       DATABASE_HOST: dawarich-postgres
       DATABASE_USERNAME: dawarich
@@ -93,7 +93,7 @@ services:
     command: ['bundle', 'exec', 'sidekiq']
     restart: unless-stopped
     environment:
-      RAILS_ENV: production
+      RAILS_ENV: development
       REDIS_URL: redis://dawarich-redis:6379
       DATABASE_HOST: dawarich-postgres
       DATABASE_USERNAME: dawarich

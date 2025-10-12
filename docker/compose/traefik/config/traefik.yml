@@ -51,10 +51,6 @@ entryPoints:
   minecraft:
     address: :25565
 
-
-serversTransport:
-  insecureSkipVerify: true
-
 ################################################################
 # Traefik logs configuration
 ################################################################

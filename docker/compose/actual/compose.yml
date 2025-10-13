@@ -46,8 +46,8 @@ services:
       API_KEY: ${API_KEY}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.actual-api-prefix.stripprefix.prefixes=/api"
-      - "traefik.http.routers.actual-api.middlewares=crowdsec-traefik-bouncer,actual-api-prefix"
-      - "traefik.http.routers.actual-api.rule=Host(`finance.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.actual-api.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.actual-api.rule=Host(`api.finance.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.actual-api.tls=true"
+      - "traefik.http.routers.actual-api.tls.certresolver=letsencrypt"
       - "traefik.http.services.actual-api.loadbalancer.server.port=5007"

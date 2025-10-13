@@ -15,9 +15,9 @@ services:
       - ./data:/app/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.nexterm-prefix.stripprefix.prefixes=/preview"
-      - "traefik.http.routers.nexterm.middlewares=crowdsec-traefik-bouncer,auth,nexterm-prefix"
-      - "traefik.http.routers.nexterm.rule=Host(`remote.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/preview`)"
+      - "traefik.http.routers.nexterm.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.nexterm.rule=Host(`preview.remote.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.nexterm.tls=true"
+      - "traefik.http.routers.nexterm.tls.certresolver=letsencrypt"
       - "traefik.http.services.nexterm.loadbalancer.server.port=6989"
     restart: unless-stopped

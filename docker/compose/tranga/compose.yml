@@ -11,9 +11,9 @@ services:
         - /mnt/nas/content/media/manga:/Manga
         - ./data:/usr/share/tranga-api
       restart: unless-stopped
-      # environment:
-      #   - PUID=1000
-      #   - PGID=1000
+      environment:
+        - PUID=1000
+        - PGID=1000
       networks:
         - proxy
         - tranga

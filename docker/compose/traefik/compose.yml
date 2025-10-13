@@ -39,7 +39,7 @@ services:
       - --entryPoints.websecure.address=:443
       - --entrypoints.websecure.http.tls.certresolver=letsencrypt
       - --entrypoints.websecure.http.tls.domains[0].main=conway.dev
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.conway.dev,blog.test.conway.dev
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.conway.dev
       - --entrypoints.websecure.transport.respondingtimeouts.idletimeout=5m
       - --entrypoints.websecure.transport.respondingtimeouts.readtimeout=5m
       - --entrypoints.websecure.forwardedheaders.trustedips=127.0.0.1/32,10.0.10.0/24

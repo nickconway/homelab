@@ -65,7 +65,8 @@ services:
       - ./data/grafana:/var/lib/grafana
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.teslamate-grafana.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.teslamate-grafana.rule=Host(`data.teslamate.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.middlewares.teslamate-grafana-prefix.stripprefix.prefixes=/graphs"
+      - "traefik.http.routers.teslamate-grafana.middlewares=crowdsec-traefik-bouncer,auth,teslamate-grafana-prefix"
+      - "traefik.http.routers.teslamate-grafana.rule=Host(`teslamate.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/graphs`)"
       - "traefik.http.routers.teslamate-grafana.tls=true"
       - "traefik.http.services.teslamate-grafana.loadbalancer.server.port=3000"

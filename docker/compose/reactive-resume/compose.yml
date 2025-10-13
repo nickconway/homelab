@@ -34,8 +34,9 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.reactive-resume-minio.middlewares=crowdsec-traefik-bouncer
-      - traefik.http.routers.reactive-resume-minio.rule=Host(`storage.resume.${SERVICES_BASE_DOMAIN}`)
+      - traefik.http.middlewares.reactive-resume-minio-prefix.stripprefix.prefixes=/storage
+      - traefik.http.routers.reactive-resume-minio.middlewares=crowdsec-traefik-bouncer,reactive-resume-minio-prefix
+      - traefik.http.routers.reactive-resume-minio.rule=Host(`resume.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/storage`)
       - traefik.http.routers.reactive-resume-minio.tls=true
       - traefik.http.services.reactive-resume-minio.loadbalancer.server.port=9000
     networks:
@@ -70,7 +71,7 @@ services:
       # -- URLs --
       INTERNAL_URL: http://reactive-resume:3000
       PUBLIC_URL: https://resume.${SERVICES_BASE_DOMAIN}
-      STORAGE_URL: https://storage.resume.${SERVICES_BASE_DOMAIN}/default
+      STORAGE_URL: https://resume.${SERVICES_BASE_DOMAIN}/storage/default
 
       # -- Printer (Chrome) --
       CHROME_TOKEN: ${CHROME_TOKEN}

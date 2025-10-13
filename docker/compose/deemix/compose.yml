@@ -20,6 +20,5 @@ services:
       - "traefik.http.routers.deemix.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.deemix.rule=Host(`deemix.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.deemix.tls=true"
-      - "traefik.http.routers.deemix.tls.certresolver=prod"
       - "traefik.http.services.deemix.loadbalancer.server.port=6595"
     restart: unless-stopped

@@ -37,7 +37,6 @@ services:
       - traefik.http.routers.reactive-resume-minio.middlewares=crowdsec-traefik-bouncer
       - traefik.http.routers.reactive-resume-minio.rule=Host(`storage.resume.${SERVICES_BASE_DOMAIN}`)
       - traefik.http.routers.reactive-resume-minio.tls=true
-      - traefik.http.routers.reactive-resume-minio.tls.certresolver=prod
       - traefik.http.services.reactive-resume-minio.loadbalancer.server.port=9000
     networks:
       - proxy
@@ -133,5 +132,4 @@ services:
       - traefik.enable=true
       - traefik.http.routers.reactive-resume.middlewares=crowdsec-traefik-bouncer
       - traefik.http.routers.reactive-resume.rule=Host(`resume.${SERVICES_BASE_DOMAIN}`)
-      - traefik.http.routers.reactive-resume.tls.certresolver=prod
       - traefik.http.services.reactive-resume.loadbalancer.server.port=3000

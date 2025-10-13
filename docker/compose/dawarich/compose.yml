@@ -75,7 +75,6 @@ services:
       - "traefik.http.routers.dawarich.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.dawarich.rule=Host(`location.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.dawarich.tls=true"
-      - "traefik.http.routers.dawarich.tls.certresolver=prod"
       - "traefik.http.services.dawarich.loadbalancer.server.port=3000"
 
   dawarich-sidekiq:

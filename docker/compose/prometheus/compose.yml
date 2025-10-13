@@ -21,6 +21,5 @@ services:
       - traefik.http.routers.prometheus.middlewares=crowdsec-traefik-bouncer,auth
       - traefik.http.routers.prometheus.rule=Host(`prometheus.${SERVICES_BASE_DOMAIN}`)
       - traefik.http.routers.prometheus.tls=true
-      - traefik.http.routers.prometheus.tls.certresolver=prod
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
     restart: unless-stopped

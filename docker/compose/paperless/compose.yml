@@ -70,7 +70,6 @@ services:
       - "traefik.http.routers.paperless.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.paperless.rule=Host(`docs.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.paperless.tls=true"
-      - "traefik.http.routers.paperless.tls.certresolver=prod"
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
     networks:
       - proxy

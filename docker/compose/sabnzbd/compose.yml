@@ -22,5 +22,4 @@ services:
       - "traefik.http.routers.sabnzbd.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.sabnzbd.rule=Host(`use.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.sabnzbd.tls=true"
-      - "traefik.http.routers.sabnzbd.tls.certresolver=prod"
       - "traefik.http.services.sabnzbd.loadbalancer.server.port=8080"

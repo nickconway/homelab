@@ -22,13 +22,44 @@ services:
         mode: host
       - "25565:25565"
       - "50000:50000"
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --api.debug=true
+      - --log.level=INFO
+      - --log.filepath=/var/log/traefik/traefik.log
+      - --accesslog.filepath=/var/log/traefik/access.log
+      - --accesslog.format=json
+      - --metrics.otlp=true
+      - --metrics.addinternals=true
+      - --tracing.addinternals=true
+      - --entryPoints.web.address=:80
+      - --entryPoints.web.http.redirections.entrypoint.to=websecure
+      - --entryPoints.web.http.redirections.entrypoint.scheme=https
+      - --entryPoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls.certresolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=conway.dev
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.conway.dev,blog.test.conway.dev
+      - --entrypoints.websecure.transport.respondingtimeouts.idletimeout=5m
+      - --entrypoints.websecure.transport.respondingtimeouts.readtimeout=5m
+      - --entrypoints.websecure.forwardedheaders.trustedips=127.0.0.1/32,10.0.10.0/24
+      - --entryPoints.mail.address=:465
+      - --entryPoints.talos.address=:50000
+      - --entryPoints.minecraft.address=:25565
+      - --providers.file.directory=/etc/traefik/configs
+      - --providers.file.watch=true
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.network=proxy
+      - --providers.docker.exposedbydefault=false
+      - --certificatesresolvers.letsencrypt.acme.email=nickconway175@gmail.com
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --experimental.localplugins.wakeonlan.modulename=github.com/MarkusJx/traefik-wol
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/traefik.yml:/etc/traefik/traefik.yml
-      - ./config/plugins:/plugins-local
       - ./data/config.yml:/etc/traefik/configs/config.yml
       - ./data/acme.json:/acme.json
       - ./data/logs:/var/log/traefik
+      - ./data/plugins:/plugins-local
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.auth.forwardAuth.address=http://authentik:9000/outpost.goauthentik.io/auth/traefik"
@@ -39,9 +70,6 @@ services:
       - "traefik.http.routers.traefik.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.traefik.rule=Host(`proxy.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.tls.certresolver=prod"
-      - "traefik.http.routers.traefik.tls.domains[0].main=${SERVICES_BASE_DOMAIN}"
-      - "traefik.http.routers.traefik.tls.domains[0].sans=*.${SERVICES_BASE_DOMAIN}"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     restart: unless-stopped
     environment:
@@ -49,9 +77,6 @@ services:
       - PGID=1000
       - CLOUDFLARE_EMAIL=${CF_EMAIL}
       - CLOUDFLARE_DNS_API_TOKEN=${DNS_TOKEN}
-      - TRAEFIK_CERTIFICATESRESOLVERS_prod_ACME_EMAIL=${CF_EMAIL}
-      - TRAEFIK_CERTIFICATESRESOLVERS_stage_ACME_EMAIL=${CF_EMAIL}
-
   whoami:
     image: "traefik/whoami"
     environment:
@@ -62,7 +87,6 @@ services:
       - "traefik.http.routers.whoami.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.whoami.rule=Host(`whoami.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.whoami.tls=true"
-      - "traefik.http.routers.whoami.tls.certresolver=prod"
       - "traefik.http.services.whoami.loadbalancer.server.port=80"
     networks:
       - proxy

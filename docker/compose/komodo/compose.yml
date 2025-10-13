@@ -87,7 +87,6 @@ services:
       - "traefik.http.routers.komodo.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.komodo.rule=Host(`deploy.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.komodo.tls=true"
-      - "traefik.http.routers.komodo.tls.certresolver=prod"
       - "traefik.http.services.komodo.loadbalancer.server.port=9120"
 
   ## Deploy Periphery container using this block,

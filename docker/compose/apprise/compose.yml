@@ -20,7 +20,6 @@ services:
       - "traefik.http.routers.apprise.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.apprise.rule=Host(`apprise.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.apprise.tls=true"
-      - "traefik.http.routers.apprise.tls.certresolver=prod"
       - "traefik.http.services.apprise.loadbalancer.server.port=8000"
 
   mailrise:
@@ -34,7 +33,6 @@ services:
       traefik.enable: true
       traefik.tcp.routers.mailrise.rule: "HostSNI(`*`)"
       traefik.tcp.routers.mailrise.tls: "true"
-      traefik.tcp.routers.mailrise.tls.certresolver: "prod"
       traefik.tcp.routers.mailrise.tls.domains[0].main: notifications.mail.${SERVICES_BASE_DOMAIN}
       traefik.tcp.routers.mailrise.tls.domains[0].sans: ""
       traefik.tcp.routers.mailrise.entrypoints: "mail"

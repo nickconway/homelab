@@ -36,6 +36,5 @@ services:
       - "traefik.http.routers.cloud-aio.rule=Host(`aio.cloud.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.cloud-aio.tls=true"
       - "traefik.http.routers.cloud-aio.entrypoints=websecure"
-      - "traefik.http.routers.cloud-aio.tls.certresolver=prod"
       - "traefik.http.services.cloud-aio.loadbalancer.server.port=8080"
       - "traefik.http.services.cloud-aio.loadbalancer.server.scheme=https"

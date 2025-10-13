@@ -19,6 +19,5 @@ services:
       - "traefik.http.routers.jellyseerr.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.jellyseerr.rule=Host(`discover.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.jellyseerr.tls=true"
-      - "traefik.http.routers.jellyseerr.tls.certresolver=prod"
       - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
     restart: unless-stopped

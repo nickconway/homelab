@@ -25,7 +25,6 @@ services:
       - "traefik.http.routers.shlink.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.shlink.rule=Host(`l.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.shlink.tls=true"
-      - "traefik.http.routers.shlink.tls.certresolver=prod"
       - "traefik.http.services.shlink.loadbalancer.server.port=8080"
     restart: unless-stopped
 
@@ -58,5 +57,4 @@ services:
       - "traefik.http.routers.shlink-web-client.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.shlink-web-client.rule=Host(`links.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.shlink-web-client.tls=true"
-      - "traefik.http.routers.shlink-web-client.tls.certresolver=prod"
       - "traefik.http.services.shlink-web-client.loadbalancer.server.port=8080"

@@ -32,5 +32,4 @@ services:
       - "traefik.http.routers.linkwarden.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.linkwarden.rule=Host(`bookmarks.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.linkwarden.tls=true"
-      - "traefik.http.routers.linkwarden.tls.certresolver=prod"
       - "traefik.http.services.linkwarden.loadbalancer.server.port=3000"

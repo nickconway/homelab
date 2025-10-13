@@ -40,7 +40,6 @@ services:
       - "traefik.http.routers.n8n.middlewares=crowdsec-traefik-bouncer,auth,n8n"
       - "traefik.http.routers.n8n.rule=Host(`automation.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.n8n.tls=true"
-      - "traefik.http.routers.n8n.tls.certresolver=prod"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
       - traefik.http.middlewares.n8n.headers.SSLRedirect=true
       - traefik.http.middlewares.n8n.headers.STSSeconds=315360000

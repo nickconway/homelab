@@ -33,5 +33,4 @@ services:
       - "traefik.http.routers.fresh-rss.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.fresh-rss.rule=Host(`rss.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.fresh-rss.tls=true"
-      - "traefik.http.routers.fresh-rss.tls.certresolver=prod"
       - "traefik.http.services.fresh-rss.loadbalancer.server.port=80"

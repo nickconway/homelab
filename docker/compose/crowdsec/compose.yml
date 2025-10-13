@@ -49,7 +49,6 @@ services:
       - "traefik.http.routers.crowdsec.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.crowdsec.rule=Host(`security.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.crowdsec.tls=true"
-      - "traefik.http.routers.crowdsec.tls.certresolver=prod"
       - "traefik.http.services.crowdsec.loadbalancer.server.port=3000"
     depends_on:
       - 'crowdsec'

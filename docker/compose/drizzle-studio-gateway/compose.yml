@@ -18,6 +18,5 @@ services:
       - "traefik.http.routers.drizzle-gateway.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.drizzle-gateway.rule=Host(`orm.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.drizzle-gateway.tls=true"
-      - "traefik.http.routers.drizzle-gateway.tls.certresolver=prod"
       - "traefik.http.services.drizzle-gateway.loadbalancer.server.port=4983"
     restart: unless-stopped

@@ -47,7 +47,6 @@ services:
       - "traefik.http.routers.mealie.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.mealie.rule=Host(`meals.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.mealie.tls=true"
-      - "traefik.http.routers.mealie.tls.certresolver=prod"
       - "traefik.http.services.mealie.loadbalancer.server.port=9000"
 
   mealie-postgres:

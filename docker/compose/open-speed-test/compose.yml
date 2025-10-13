@@ -15,6 +15,5 @@ services:
       - "traefik.http.routers.open-speed-test.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.open-speed-test.rule=Host(`speed.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.open-speed-test.tls=true"
-      - "traefik.http.routers.open-speed-test.tls.certresolver=prod"
       - "traefik.http.services.open-speed-test.loadbalancer.server.port=3000"
     restart: unless-stopped

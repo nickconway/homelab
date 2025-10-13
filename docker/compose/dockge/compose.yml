@@ -25,5 +25,4 @@ services:
       - "traefik.http.routers.dockge.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.dockge.rule=Host(`containers.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.dockge.tls=true"
-      - "traefik.http.routers.dockge.tls.certresolver=prod"
       - "traefik.http.services.dockge.loadbalancer.server.port=5001"

@@ -18,6 +18,5 @@ services:
       - "traefik.http.routers.nexterm.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.nexterm.rule=Host(`preview.remote.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.nexterm.tls=true"
-      - "traefik.http.routers.nexterm.tls.certresolver=prod"
       - "traefik.http.services.nexterm.loadbalancer.server.port=6989"
     restart: unless-stopped

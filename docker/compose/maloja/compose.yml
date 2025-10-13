@@ -21,6 +21,5 @@ services:
       - "traefik.http.routers.maloja.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.maloja.rule=Host(`scrobble.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.maloja.tls=true"
-      - "traefik.http.routers.maloja.tls.certresolver=prod"
       - "traefik.http.services.maloja.loadbalancer.server.port=42010"
     restart: unless-stopped

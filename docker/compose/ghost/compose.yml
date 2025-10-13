@@ -30,7 +30,6 @@ services:
       - "traefik.http.routers.ghost.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.ghost.rule=Host(`blog.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.ghost.tls=true"
-      - "traefik.http.routers.ghost.tls.certresolver=prod"
       - "traefik.http.services.ghost.loadbalancer.server.port=2368"
     restart: unless-stopped
 

@@ -20,5 +20,4 @@ services:
       - "traefik.http.routers.photon.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.photon.rule=Host(`geo.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.photon.tls=true"
-      - "traefik.http.routers.photon.tls.certresolver=prod"
       - "traefik.http.services.photon.loadbalancer.server.port=2322"

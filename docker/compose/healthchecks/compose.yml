@@ -31,6 +31,5 @@ services:
       - "traefik.http.routers.healthchecks.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.healthchecks.rule=Host(`health.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.healthchecks.tls=true"
-      - "traefik.http.routers.healthchecks.tls.certresolver=prod"
       - "traefik.http.services.healthchecks.loadbalancer.server.port=8000"
     restart: unless-stopped

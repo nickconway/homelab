@@ -24,7 +24,6 @@ services:
       - "traefik.http.routers.opengist.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.opengist.rule=Host(`gist.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.opengist.tls=true"
-      - "traefik.http.routers.opengist.tls.certresolver=prod"
       - "traefik.http.services.opengist.loadbalancer.server.port=6157"
 
   gitea:
@@ -54,7 +53,6 @@ services:
       - "traefik.http.routers.gitea.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.gitea.rule=Host(`git.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.gitea.tls=true"
-      - "traefik.http.routers.gitea.tls.certresolver=prod"
       - "traefik.http.services.gitea.loadbalancer.server.port=3000"
 
   gitea-runner:

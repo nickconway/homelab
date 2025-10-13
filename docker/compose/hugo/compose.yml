@@ -47,8 +47,9 @@ services:
       - ./data/cache:/tmp/hugo_cache
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.hugo-staging.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.hugo-staging.rule=Host(`staging.blog.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.middlewares.hugo-staging-prefix.stripprefix.prefixes=/staging"
+      - "traefik.http.routers.hugo-staging.middlewares=crowdsec-traefik-bouncer,hugo-staging-prefix"
+      - "traefik.http.routers.hugo-staging.rule=Host(`blog.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/staging`)"
       - "traefik.http.routers.hugo-staging.tls=true"
       - "traefik.http.services.hugo-staging.loadbalancer.server.port=1313"
     restart: unless-stopped

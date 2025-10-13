@@ -32,9 +32,9 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.cloud-aio.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.cloud-aio.rule=Host(`aio.cloud.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.middlewares.cloud-aio-prefix.stripprefix.prefixes=/aio"
+      - "traefik.http.routers.cloud-aio.middlewares=crowdsec-traefik-bouncer,auth,cloud-aio-prefix"
+      - "traefik.http.routers.cloud-aio.rule=Host(`cloud.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/aio`)"
       - "traefik.http.routers.cloud-aio.tls=true"
-      - "traefik.http.routers.cloud-aio.entrypoints=websecure"
       - "traefik.http.services.cloud-aio.loadbalancer.server.port=8080"
       - "traefik.http.services.cloud-aio.loadbalancer.server.scheme=https"

@@ -21,6 +21,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.radarr.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.radarr.rule=Host(`movies.download.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.radarr.rule=Host(`movies.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.radarr.tls=true"
       - "traefik.http.services.radarr.loadbalancer.server.port=7878"

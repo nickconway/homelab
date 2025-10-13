@@ -18,7 +18,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.headscale.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.headscale.rule=Host(`vpn.${SERVICES_BASE_DOMAIN}`) && Path(`/`)"
+      - "traefik.http.routers.headscale.rule=Host(`vpn.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.headscale.tls=true"
       - "traefik.http.services.headscale.loadbalancer.server.port=8080"
 

@@ -15,13 +15,14 @@ services:
       - ./data/assets:/assets
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.netboot.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.netboot.rule=Host(`boot.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.middlewares.netboot-prefix.stripprefix.prefixes=/local"
+      - "traefik.http.routers.netboot.middlewares=crowdsec-traefik-bouncer,auth,netboot-prefix"
+      - "traefik.http.routers.netboot.rule=Host(`boot.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/local`)"
       - "traefik.http.routers.netboot.service=netboot"
       - "traefik.http.routers.netboot.tls=true"
       - "traefik.http.services.netboot.loadbalancer.server.port=3000"
       - "traefik.http.routers.netboot-endpoint.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.netboot-endpoint.rule=Host(`local.boot.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.netboot-endpoint.rule=Host(`boot.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.netboot-endpoint.service=netboot-endpoint"
       - "traefik.http.routers.netboot-endpoint.tls=true"
       - "traefik.http.services.netboot-endpoint.loadbalancer.server.port=80"

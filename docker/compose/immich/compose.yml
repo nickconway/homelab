@@ -86,7 +86,8 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.immich-power-tools.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.immich-power-tools.rule=Host(`tools.photos.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.middlewares.immich-power-tools-prefix.stripprefix.prefixes=/tools"
+      - "traefik.http.routers.immich-power-tools.middlewares=crowdsec-traefik-bouncer,auth,immich-power-tools-prefix"
+      - "traefik.http.routers.immich-power-tools.rule=Host(`photos.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/tools`)"
       - "traefik.http.routers.immich-power-tools.tls=true"
       - "traefik.http.services.immich-power-tools.loadbalancer.server.port=3000"

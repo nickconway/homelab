@@ -21,7 +21,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.open-webui.middlewares=crowdsec-traefik-bouncer,auth,wakeonlan@file"
-      - "traefik.http.routers.open-webui.entrypoints=websecure"
       - "traefik.http.routers.open-webui.rule=Host(`ai.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.open-webui.tls=true"
       - "traefik.http.services.open-webui.loadbalancer.server.port=8080"

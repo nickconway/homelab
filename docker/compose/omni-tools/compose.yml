@@ -14,6 +14,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.onmi-tools.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.onmi-tools.rule=Host(`tools.media.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.onmi-tools.rule=Host(`tools.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.onmi-tools.tls=true"
       - "traefik.http.services.onmi-tools.loadbalancer.server.port=80"

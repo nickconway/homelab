@@ -1,0 +1,39 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  radicale:
+    image: tomsquest/docker-radicale
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - CHOWN
+      - KILL
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          pids: 50
+    healthcheck:
+      test: curl -f http://127.0.0.1:5232 || exit 1
+      interval: 30s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - ./data:/data
+      - ./config:/config:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radicale.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.radicale.rule=Host(`dav.${SERVICES_BASE_DOMAIN}`) || Host(`contacts.${SERVICES_BASE_DOMAIN}`) || Host(`calendar.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.radicale.tls=true"
+      - "traefik.http.services.radicale.loadbalancer.server.port=5232"

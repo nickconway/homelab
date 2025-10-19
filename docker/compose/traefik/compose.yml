@@ -33,6 +33,7 @@ services:
       - --metrics.otlp=true
       - --metrics.addinternals=true
       - --tracing.addinternals=true
+      - --serverstransport.insecureskipverify=true
       - --entryPoints.web.address=:80
       - --entryPoints.web.http.redirections.entrypoint.to=websecure
       - --entryPoints.web.http.redirections.entrypoint.scheme=https

@@ -4,7 +4,7 @@ networks:
 
 services:
   uptime-kuma:
-    image: louislam/uptime-kuma:latest
+    image: louislam/uptime-kuma:2
     environment:
       - PUID=1000
       - PGID=1000

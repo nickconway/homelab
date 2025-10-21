@@ -7,8 +7,6 @@ services:
     image: lscr.io/linuxserver/kasm:latest
     networks:
       - proxy
-    # ports:
-    #   - 3000:3000
     devices:
       - /dev/dri/:/dev/dri/
     environment:

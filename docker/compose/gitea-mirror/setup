@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+mkdir -p data
+
+if [[ ! -e data/gitea-mirror.db ]]; then
+    touch data/gitea-mirror.db
+fi

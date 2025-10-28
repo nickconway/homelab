@@ -92,7 +92,7 @@ services:
       - paperless
 
   paperless-tika:
-    image: ghcr.io/paperless-ngx/tika:latest
+    image: apache/tika:latest
     restart: unless-stopped
     environment:
       PUID: 1000

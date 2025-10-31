@@ -1,0 +1,97 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  traefik:
+    image: traefik:latest
+    networks:
+      - proxy
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      - target: 465
+        published: 465
+        protocol: tcp
+        mode: host
+      - "25565:25565"
+      - "50000:50000"
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --api.debug=true
+      - --log.level=INFO
+      - --log.filepath=/var/log/traefik/traefik.log
+      - --accesslog.filepath=/var/log/traefik/access.log
+      - --accesslog.format=json
+      - --metrics.otlp=true
+      - --metrics.addinternals=true
+      - --tracing.addinternals=true
+      - --serverstransport.insecureskipverify=true
+      - --entryPoints.web.address=:80
+      - --entryPoints.web.http.redirections.entrypoint.to=websecure
+      - --entryPoints.web.http.redirections.entrypoint.scheme=https
+      - --entryPoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls.certresolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=${SERVICES_BASE_DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${SERVICES_BASE_DOMAIN}
+      - --entrypoints.websecure.transport.respondingtimeouts.idletimeout=5m
+      - --entrypoints.websecure.transport.respondingtimeouts.readtimeout=5m
+      - --entrypoints.websecure.forwardedheaders.trustedips=127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+      - --entryPoints.mail.address=:465
+      - --entryPoints.talos.address=:50000
+      - --entryPoints.minecraft.address=:25565
+      - --providers.file.directory=/etc/traefik/configs
+      - --providers.file.watch=true
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.network=proxy
+      - --providers.docker.exposedbydefault=false
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --experimental.localplugins.wakeonlan.modulename=github.com/MarkusJx/traefik-wol
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/config.yml:/etc/traefik/configs/config.yml
+      - ./data/acme.json:/acme.json
+      - ./data/logs:/var/log/traefik
+      - ./data/plugins:/plugins-local
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.auth.forwardAuth.address=http://authentik:9000/outpost.goauthentik.io/auth/traefik"
+      - "traefik.http.middlewares.auth.forwardAuth.trustForwardHeader=true"
+      - "traefik.http.middlewares.auth.forwardAuth.authResponseHeaders=X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version,X-webAuth-User"
+      - "traefik.http.middlewares.crowdsec-traefik-bouncer.forwardAuth.address=http://crowdsec-traefik-bouncer:8080/api/v1/forwardAuth"
+      - "traefik.http.middlewares.crowdsec-traefik-bouncer.forwardAuth.trustForwardHeader=true"
+      - "traefik.http.routers.traefik.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.traefik.rule=Host(`proxy.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - CLOUDFLARE_EMAIL=${CF_EMAIL}
+      - CLOUDFLARE_DNS_API_TOKEN=${DNS_TOKEN}
+
+  whoami:
+    image: "traefik/whoami"
+    environment:
+      PUID: 1000
+      PGID: 1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.whoami.tls=true"
+      - "traefik.http.services.whoami.loadbalancer.server.port=80"
+    networks:
+      - proxy
+    depends_on:
+      - traefik
+    restart: unless-stopped

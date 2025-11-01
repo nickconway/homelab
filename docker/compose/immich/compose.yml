@@ -53,7 +53,7 @@ services:
     restart: unless-stopped
 
   immich-redis:
-    image: registry.hub.docker.com/library/redis:6.2-alpine@sha256:84882e87b54734154586e5f8abd4dce69fe7311315e2fc6d67c29614c8de2672
+    image: registry.hub.docker.com/library/redis:6.2-alpine@sha256:77697a75da9f94e9357b61fcaf8345f69e3d9d32e9d15032c8415c21263977dc
     restart: unless-stopped
     networks:
       - immich

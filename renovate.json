@@ -14,5 +14,11 @@
         "concurrentRequestLimit": 2
       }
     ]
-  }
+  },
+  "packageRules": [
+    {
+      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ]
 }

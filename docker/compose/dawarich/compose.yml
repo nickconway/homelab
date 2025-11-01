@@ -6,7 +6,7 @@ networks:
 
 services:
   dawarich-redis:
-    image: redis:7.4-alpine
+    image: redis:8.2-alpine
     restart: unless-stopped
     command: redis-server
     networks:

@@ -65,7 +65,7 @@ services:
     networks:
       - gitea
     environment:
-      - GITEA_INSTANCE_URL=https://git.${SERVICES_BASE_DOMAIN}
+      - GITEA_INSTANCE_URL=http://gitea:3000
       - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_REGISTRATION_TOKEN}
       - GITEA_RUNNER_NAME=Runner
       - USER_UID=1000

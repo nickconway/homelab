@@ -6,8 +6,6 @@ services:
       driver: local
     networks:
       - komodo-database
-    # ports:
-    #   - 5432:5432
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
@@ -32,7 +30,6 @@ services:
 
   core:
     image: ghcr.io/mbecker20/komodo:latest
-    # image: ghcr.io/mbecker20/komodo:latest-aarch64 ## Use for arm support
     restart: unless-stopped
     depends_on:
       - ferretdb
@@ -41,16 +38,14 @@ services:
     networks:
       - proxy
       - komodo
-    # ports:
-    #   - 9120:9120
-    # volumes: # Optionally mount a custom core.config.toml
-    #   - /path/to/core.config.toml:/config/config.toml
-    # extra_hosts: # allows for systemd Periphery connection at "http://host.docker.internal:8120"
-    #   - host.docker.internal:host-gateway
+    volumes:
+      - ${HOME}/Git:/repo-cache
     environment: # https://github.com/mbecker20/komodo/blob/main/config/core.config.toml
       KOMODO_HOST: ${KOMODO_HOST}
       KOMODO_TITLE: ${KOMODO_TITLE}
-      KOMODO_ENSURE_SERVER: http://periphery:8120
+      KOMODO_FIRST_SERVER: http://periphery:8120
+      KOMODO_FIRST_SERVER_NAME: ${KOMODO_FIRST_SERVER_NAME}
+
       ## Mongo
       KOMODO_DATABASE_URI: mongodb://${DB_USERNAME}:${DB_PASSWORD}@ferretdb:27017/komodo?authMechanism=PLAIN
       ## Secrets
@@ -83,6 +78,7 @@ services:
       KOMODO_OIDC_CLIENT_SECRET: ${KOMODO_OIDC_CLIENT_SECRET}
       KOMODO_OIDC_USE_FULL_EMAIL: ${KOMODO_OIDC_USE_FULL_EMAIL}
     labels:
+      - "komodo.skip=true"
       - "traefik.enable=true"
       - "traefik.http.routers.komodo.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.komodo.rule=Host(`deploy.${SERVICES_BASE_DOMAIN}`)"
@@ -101,8 +97,10 @@ services:
       - komodo
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/proc
       - ${HOME}/Git:/etc/komodo/repos # manage repos in a docker volume, or change it to an accessible host directory.
       - ..:/etc/komodo/stacks:ro # manage stack files in a docker volume, or change it to an accessible host directory.
+      - ./data/builds:/etc/komodo/builds
     ports:
       - 8120:8120
     environment:
@@ -112,6 +110,8 @@ services:
       # Usually whitelisting just /etc/hostname gives correct size.
       PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
       # PERIPHERY_EXCLUDE_DISK_MOUNTS: /snap,/etc/repos
+    labels:
+      - "komodo.skip=true"
 
 networks:
   komodo:

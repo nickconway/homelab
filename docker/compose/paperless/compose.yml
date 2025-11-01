@@ -76,7 +76,7 @@ services:
       - paperless
 
   paperless-gotenberg:
-    image: docker.io/gotenberg/gotenberg:7.10
+    image: docker.io/gotenberg/gotenberg:8.24
     restart: unless-stopped
 
     environment:

@@ -99,7 +99,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/proc
       - ./data/repos:/etc/komodo/repos # manage repos in a docker volume, or change it to an accessible host directory.
-      - ..:/etc/komodo/stacks:ro # manage stack files in a docker volume, or change it to an accessible host directory.
+      - ..:/etc/komodo/stacks # manage stack files in a docker volume, or change it to an accessible host directory.
       - ./data/builds:/etc/komodo/builds
     ports:
       - 8120:8120

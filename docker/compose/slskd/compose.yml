@@ -1,0 +1,23 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  slskd:
+    image: slskd/slskd
+    networks:
+      - proxy
+    ports:
+      - "5030:5030"
+      - "5031:5031"
+      - "50300:50300"
+    user: 1000:1000
+    environment:
+      - SLSKD_REMOTE_CONFIGURATION=true
+    volumes:
+      - ./data/slskd.yml:/app/slskd.yml
+      - ./data/data:/app/data
+      - ./data/incomplete:/app/incomplete
+      - /mnt/nas/content/media/music:/app/downloads
+      - /mnt/nas/content/media/music:/shares:ro
+    restart: unless-stopped

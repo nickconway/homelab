@@ -38,3 +38,7 @@
 	path = submodules/ansible
 	url = https://github.com/nickconway/ansible
 	branch = main
+[submodule "docker/compose/soularr/dashboard"]
+	path = docker/compose/soularr/dashboard
+	url = https://github.com/EricH9958/Soularr-Dashboard
+	branch = main

@@ -1,0 +1,38 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  soularr:
+    restart: unless-stopped
+    hostname: soularr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SCRIPT_INTERVAL=21600
+    user: "1000:1000"
+    networks:
+      - proxy
+    volumes:
+      - /mnt/nas/content/media/music:/downloads:ro
+      - ./config:/data
+    image: mrusse08/soularr:latest
+
+  soularr-dashboard:
+    build:
+      context: ./dashboard/dashboard
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    user: 1000:1000
+    ports:
+      - 8080:8080
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./dashboard/dashboard:/app
+      - ./config:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /app

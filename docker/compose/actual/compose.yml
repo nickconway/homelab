@@ -6,7 +6,7 @@ networks:
 
 services:
   actual:
-    image: docker.io/actualbudget/actual-server:latest
+    image: ghcr.io/actualbudget/actual:25.11.0@sha256:8f72d73e68958566850325c1f9fe780a4477340979969bd6979649dc519723ab
     user: 1000:1000
     # environment:
     #   - PUID=1000
@@ -33,7 +33,7 @@ services:
       - actual
 
   actual-api:
-    image: jhonderson/actual-http-api:latest
+    image: jhonderson/actual-http-api:25.10.0@sha256:379fcba89cbbb209d2f419a8c90c1d7ca4e8d45522117440d45476ed036d18a8
     networks:
       - proxy
       - actual

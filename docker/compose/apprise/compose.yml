@@ -4,7 +4,7 @@ networks:
 
 services:
   apprise:
-    image: caronc/apprise:latest
+    image: caronc/apprise:1.2.2@sha256:0d74af8c1df9cf1de91f20f46d00ddee3a3efa15be179f9dbbe8a0f99d64268f
     networks:
       - proxy
     environment:
@@ -23,7 +23,7 @@ services:
       - "traefik.http.services.apprise.loadbalancer.server.port=8000"
 
   mailrise:
-    image: yoryan/mailrise
+    image: ghcr.io/yoryan/mailrise:1.4.0@sha256:68e36cb35455564179f1a95f541339d4a01c4e662e0d498da6b14a2b911ae279
     restart: unless-stopped
     networks:
       - proxy

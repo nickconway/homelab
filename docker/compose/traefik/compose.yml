@@ -71,6 +71,9 @@ services:
       - "traefik.http.routers.traefik.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.traefik.rule=Host(`proxy.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.tls.domains[0].main=${SERVICES_BASE_DOMAIN}"
+      - "traefik.http.routers.traefik.tls.domains[0].sans=*.${SERVICES_BASE_DOMAIN}"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     restart: unless-stopped
     environment:

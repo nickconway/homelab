@@ -26,7 +26,7 @@ services:
       - --api.insecure=true
       - --api.dashboard=true
       - --api.debug=true
-      - --log.level=INFO
+      - --log.level=${LOG_LEVEL:-INFO}
       - --log.filepath=/var/log/traefik/traefik.log
       - --accesslog.filepath=/var/log/traefik/access.log
       - --accesslog.format=json

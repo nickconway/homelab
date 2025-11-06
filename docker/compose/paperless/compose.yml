@@ -7,7 +7,7 @@ networks:
 
 services:
   paperless-redis:
-    image: docker.io/library/redis:8
+    image: docker.io/library/redis:8.2.3@sha256:5c7c0445ed86918cb9efb96d95a6bfc03ed2059fe2c5f02b4d74f477ffe47915
     restart: unless-stopped
     environment:
       PUID: 1000
@@ -18,7 +18,7 @@ services:
       - paperless
 
   paperless-postgres:
-    image: docker.io/library/postgres:18
+    image: docker.io/library/postgres:18.0@sha256:41fc5342eefba6cc2ccda736aaf034bbbb7c3df0fdb81516eba1ba33f360162c
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql
@@ -32,7 +32,7 @@ services:
       - paperless
 
   paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    image: ghcr.io/paperless-ngx/paperless-ngx:2.19.4@sha256:7ec0797af256194f6e117d1b7ed3ef91ad31b4a14bf3092abdee6bb74f6b3656
     restart: unless-stopped
     depends_on:
       - paperless-postgres
@@ -76,7 +76,7 @@ services:
       - paperless
 
   paperless-gotenberg:
-    image: docker.io/gotenberg/gotenberg:8.24
+    image: docker.io/gotenberg/gotenberg:8.24.0@sha256:b116a40a1c24917e2bf3e153692da5acd2e78e7cd67e1b2d243b47c178f31c90
     restart: unless-stopped
 
     environment:
@@ -92,7 +92,7 @@ services:
       - paperless
 
   paperless-tika:
-    image: apache/tika:latest
+    image: apache/tika:3.2.3.0@sha256:3fafa194474c5f3a8cff25a0eefd07e7c0513b7f552074ad455e1af58a06bbea
     restart: unless-stopped
     environment:
       PUID: 1000

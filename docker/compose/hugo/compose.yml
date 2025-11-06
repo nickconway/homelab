@@ -4,13 +4,13 @@ networks:
 
 services:
   hugo-init:
-    image: busybox
+    image: busybox:1.37.0@sha256:e3652a00a2fabd16ce889f0aa32c38eec347b997e73bd09e69c962ec7f8732ee
     command: ['sh', '-c', 'chown -R 1000:1000 /src /tmp']
     volumes:
       - ${HOME}/Git/blog:/src
       - ./data/cache:/tmp/hugo_cache
   hugo:
-    image: klakegg/hugo:ext
+    image: klakegg/hugo:ext@sha256:2d1841844d7c4017d13c6949f31a8957cc17aacaf5a3d072c64866471d2b3549
     networks:
       - proxy
     user: 1000:1000
@@ -34,7 +34,7 @@ services:
     command: server --disableLiveReload
 
   hugo-staging:
-    image: klakegg/hugo:ext
+    image: klakegg/hugo:ext@sha256:2d1841844d7c4017d13c6949f31a8957cc17aacaf5a3d072c64866471d2b3549
     networks:
       - proxy
     user: 1000:1000

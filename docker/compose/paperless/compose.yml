@@ -92,7 +92,7 @@ services:
       - paperless
 
   paperless-tika:
-    image: apache/tika:3.2.3.0@sha256:3fafa194474c5f3a8cff25a0eefd07e7c0513b7f552074ad455e1af58a06bbea
+    image: apache/tika:3.2.3.0@sha256:c0154cb95587cde64be74f35ada1a2bd7892219f3f0ac3c9dc6cab34046b3573
     restart: unless-stopped
     environment:
       PUID: 1000

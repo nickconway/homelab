@@ -5,6 +5,5 @@ services:
       - FULL_SYNC=true
       - RUN_GRAVITY=false
       - CRON=*/5 * * * *
-    env_file:
-      - .env
+    env_file: .env
     restart: unless-stopped

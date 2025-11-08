@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql
-    env_file: ./data/paperless.env
+    env_file: .env
     environment:
       PUID: 1000
       PGID: 1000
@@ -52,7 +52,7 @@ services:
       - ./data/export:/usr/src/paperless/export
       - ./data/consume:/usr/src/paperless/consume
       - ./data/scripts:/scripts
-    env_file: ./data/paperless.env
+    env_file: .env
     environment:
       PUID: 1000
       PGID: 1000

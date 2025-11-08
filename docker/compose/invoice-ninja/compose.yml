@@ -8,7 +8,7 @@ services:
   invoice-ninja-server:
     image: nginx
     restart: unless-stopped
-    env_file: data/env
+    env_file: .env
     volumes:
       - ./data/config/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
       - ./data/app/public:/var/www/app/public:ro
@@ -29,7 +29,7 @@ services:
 
   invoice-ninja:
     image: invoiceninja/invoiceninja:latest
-    env_file: data/env
+    env_file: .env
     restart: unless-stopped
     volumes:
       - ./data/app/public:/var/www/app/public:rw,delegated

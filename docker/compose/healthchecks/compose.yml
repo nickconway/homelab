@@ -18,8 +18,7 @@ services:
 
   web:
     image: healthchecks/healthchecks:latest
-    env_file:
-        - .env
+    env_file: .env
     networks:
       - proxy
       - healthchecks

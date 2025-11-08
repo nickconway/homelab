@@ -20,8 +20,7 @@ services:
       POSTGRES_PASSWORD: ${PG_PASS:?database password required}
       POSTGRES_USER: authentik
       POSTGRES_DB: ${PG_DB:-authentik}
-    env_file:
-      - .env
+    env_file: .env
     networks:
       - authentik
 
@@ -58,8 +57,7 @@ services:
     volumes:
       - ./data/media:/media
       - ./data/custom-templates:/templates
-    env_file:
-      - .env
+    env_file: .env
     # ports:
     #   - "${COMPOSE_PORT_HTTP:-9000}:9000"
     #   - "${COMPOSE_PORT_HTTPS:-9443}:9443"
@@ -103,8 +101,7 @@ services:
       - ./data/media:/media
       - ./data/certs:/certs
       - ./data/custom-templates:/templates
-    env_file:
-      - .env
+    env_file: .env
     depends_on:
       - authentik-postgres
       - authentik-redis

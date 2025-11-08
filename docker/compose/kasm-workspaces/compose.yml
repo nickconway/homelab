@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
     privileged: true
     volumes:
-      - ./data/data:/opt
+      - ./data/app:/opt
       - ./data/profiles:/profiles #optional
       - /dev/input:/dev/input #optional
       - /run/udev/data:/run/udev/data #optional

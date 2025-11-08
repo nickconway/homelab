@@ -10,7 +10,7 @@ services:
     depends_on:
       - mealie-postgres
     volumes:
-      - ./data/data:/app/data
+      - ./data/app:/app/data
     environment:
       - ALLOW_SIGNUP=True
       - PUID=1000

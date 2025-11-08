@@ -7,7 +7,7 @@ services:
       image: gotson/komga
       volumes:
         - ./data/config:/config
-        - ./data/data:/data
+        - ./data/app:/data
         - /mnt/nas/content/media/manga:/library
       environment:
         - PUID=1000

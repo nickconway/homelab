@@ -12,7 +12,7 @@ services:
       options:
         max-size: 10m
     volumes:
-      - ./data/data:/var/www/FreshRSS/data
+      - ./data/app:/var/www/FreshRSS/data
       - ./data/extensions:/var/www/FreshRSS/extensions
       - ./data/phpinfo.php:/var/www/FreshRSS/p/i/phpinfo.php
     environment:

@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     image: ghcr.io/linkwarden/linkwarden:latest
     volumes:
-      - ./data/data:/data/data
+      - ./data/app:/data/data
     networks:
       - proxy
       - linkwarden

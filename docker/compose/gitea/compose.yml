@@ -43,7 +43,7 @@ services:
       - proxy
       - gitea
     volumes:
-      - ./data/data:/data
+      - ./data/app:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:

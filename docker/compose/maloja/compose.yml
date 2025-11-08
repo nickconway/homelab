@@ -14,7 +14,7 @@ services:
       - MALOJA_SKIP_SETUP=true
       - MALOJA_FORCE_PASSWORD=$MALOJA_FORCE_PASSWORD
     volumes:
-      - ./data/data:/mljdata
+      - ./data/app:/mljdata
       - ./data/backups:/usr/src/app
     labels:
       - "traefik.enable=true"

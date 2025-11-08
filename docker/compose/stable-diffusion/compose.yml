@@ -2,7 +2,7 @@ services:
   stable-diffusion-download:
     build: ./source/services/download/
     volumes:
-      - ./data/data:/data
+      - ./data/app:/data
 
   stable-diffusion:
     depends_on:
@@ -16,7 +16,7 @@ services:
     ports:
       - "${WEBUI_PORT:-7860}:7860"
     volumes:
-      - ./data/data:/data
+      - ./data/app:/data
       - ./data/output:/output
     stop_signal: SIGKILL
     tty: true

@@ -16,7 +16,7 @@ services:
       - SLSKD_REMOTE_CONFIGURATION=true
     volumes:
       - ./data/slskd.yml:/app/slskd.yml
-      - ./data/data:/app/data
+      - ./data/app:/app/data
       - ./data/incomplete:/app/incomplete
       - /mnt/nas/content/media/music:/app/downloads
       - /mnt/nas/content/media/music:/shares:ro

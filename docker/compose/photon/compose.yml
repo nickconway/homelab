@@ -4,7 +4,7 @@ networks:
 
 services:
   photon:
-    image: git.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/photon:latest
+    image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/photon:latest
     restart: unless-stopped
     volumes:
       - ./data:/photon/photon_data
@@ -18,6 +18,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.photon.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.photon.rule=Host(`geo.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.photon.rule=Host(`${SERVICE_SUBDOMAIN:-geo}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.photon.tls=true"
       - "traefik.http.services.photon.loadbalancer.server.port=2322"

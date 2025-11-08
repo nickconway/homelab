@@ -10,18 +10,18 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
-      OLLAMA_BASE_URL: https://ollama.${SERVICES_BASE_DOMAIN}
+      OLLAMA_BASE_URL: https://${OLLAMA_SUBDOMAIN:-ollama}.${SERVICES_BASE_DOMAIN}
       OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
       OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
       OAUTH_PROVIDER_NAME: Authentik
-      OPENID_PROVIDER_URL: https://auth.${SERVICES_BASE_DOMAIN}/application/o/open-web-ui/.well-known/openid-configuration
-      OPENID_REDIRECT_URI: https://auth.${SERVICES_BASE_DOMAIN}/oauth/oidc/callback
+      OPENID_PROVIDER_URL: https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/open-web-ui/.well-known/openid-configuration
+      OPENID_REDIRECT_URI: https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/oauth/oidc/callback
       ENABLE_SIGNUP: false
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.open-webui.middlewares=crowdsec-traefik-bouncer,auth,wakeonlan@file"
-      - "traefik.http.routers.open-webui.rule=Host(`ai.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.open-webui.rule=Host(`${SERVICE_SUBDOMAIN:-ai}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.open-webui.tls=true"
       - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
     networks:

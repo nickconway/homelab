@@ -18,7 +18,7 @@ services:
       - TZ=America/New_York
       - MAX_WORKERS=1
       - WEB_CONCURRENCY=1
-      - BASE_URL=https://meals.${SERVICES_BASE_DOMAIN}
+      - BASE_URL=https://${SERVICE_SUBDOMAIN:-meals}.${SERVICES_BASE_DOMAIN}
 
       - DB_ENGINE=postgres
       - POSTGRES_USER=mealie
@@ -34,7 +34,7 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
 
       - OIDC_AUTH_ENABLED=True
-      - OIDC_CONFIGURATION_URL=https://auth.${SERVICES_BASE_DOMAIN}/application/o/mealie/.well-known/openid-configuration
+      - OIDC_CONFIGURATION_URL=https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/mealie/.well-known/openid-configuration
       - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}
       - OIDC_AUTO_REDIRECT=True
       - OIDC_PROVIDER_NAME=Authentik
@@ -45,7 +45,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mealie.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.mealie.rule=Host(`meals.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.mealie.rule=Host(`${SERVICE_SUBDOMAIN:-meals}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.mealie.tls=true"
       - "traefik.http.services.mealie.loadbalancer.server.port=9000"
 

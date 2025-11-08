@@ -13,7 +13,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.olivetin.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.olivetin.rule=Host(`run.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.olivetin.rule=Host(`${SERVICE_SUBDOMAIN:-run}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.olivetin.tls=true"
       - "traefik.http.services.olivetin.loadbalancer.server.port=1337"
     restart: unless-stopped

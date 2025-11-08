@@ -13,20 +13,20 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.grafana.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.grafana.rule=Host(`monitoring.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.grafana.rule=Host(`${SERVICE_SUBDOMAIN:-monitoring}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.grafana.tls=true"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     environment:
-      GF_SERVER_ROOT_URL: https://monitoring.${SERVICES_BASE_DOMAIN}/
+      GF_SERVER_ROOT_URL: https://${SERVICE_SUBDOMAIN:-monitoring}.${SERVICES_BASE_DOMAIN}/
       GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
       GF_AUTH_GENERIC_OAUTH_NAME: "authentik"
       GF_AUTH_GENERIC_OAUTH_CLIENT_ID: ${GF_AUTH_GENERIC_OAUTH_CLIENT_ID}
       GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: ${GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET}
       GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email"
-      GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://auth.${SERVICES_BASE_DOMAIN}/application/o/authorize/"
-      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://auth.${SERVICES_BASE_DOMAIN}/application/o/token/"
-      GF_AUTH_GENERIC_OAUTH_API_URL: "https://auth.${SERVICES_BASE_DOMAIN}/application/o/userinfo/"
-      GF_AUTH_SIGNOUT_REDIRECT_URL: "https://auth.${SERVICES_BASE_DOMAIN}/application/o/grafana/end-session/"
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/authorize/"
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/token/"
+      GF_AUTH_GENERIC_OAUTH_API_URL: "https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/userinfo/"
+      GF_AUTH_SIGNOUT_REDIRECT_URL: "https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/grafana/end-session/"
       # Optionally enable auto-login (bypasses Grafana login screen)
       GF_AUTH_OAUTH_AUTO_LOGIN: "true"
       # Optionally map user groups to Grafana roles

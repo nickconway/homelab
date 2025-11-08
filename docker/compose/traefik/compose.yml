@@ -69,7 +69,7 @@ services:
       - "traefik.http.middlewares.crowdsec-traefik-bouncer.forwardAuth.address=http://crowdsec-traefik-bouncer:8080/api/v1/forwardAuth"
       - "traefik.http.middlewares.crowdsec-traefik-bouncer.forwardAuth.trustForwardHeader=true"
       - "traefik.http.routers.traefik.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.traefik.rule=Host(`proxy.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.traefik.rule=Host(`${SERVICE_SUBDOMAIN:-proxy}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik.tls.domains[0].main=${SERVICES_BASE_DOMAIN}"
@@ -90,7 +90,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.whoami.rule=Host(`${SERVICE2_SUBDOMAIN:-whoami}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.whoami.tls=true"
       - "traefik.http.services.whoami.loadbalancer.server.port=80"
     networks:

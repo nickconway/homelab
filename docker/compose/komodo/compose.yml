@@ -81,7 +81,7 @@ services:
       - "komodo.skip=true"
       - "traefik.enable=true"
       - "traefik.http.routers.komodo.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.komodo.rule=Host(`deploy.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.komodo.rule=Host(`${SERVICE_SUBDOMAIN:-deploy}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.komodo.tls=true"
       - "traefik.http.services.komodo.loadbalancer.server.port=9120"
 

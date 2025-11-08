@@ -23,7 +23,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lidarr.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.lidarr.rule=Host(`download.music.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.lidarr.rule=Host(`${SERVICE_SUBDOMAIN:-download.music}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.lidarr.tls=true"
       - "traefik.http.routers.lidarr.tls.certresolver=letsencrypt"
       - "traefik.http.services.lidarr.loadbalancer.server.port=8686"

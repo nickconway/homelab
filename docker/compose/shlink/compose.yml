@@ -13,7 +13,7 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
-      DEFAULT_DOMAIN: l.${SERVICES_BASE_DOMAIN}
+      DEFAULT_DOMAIN: ${SERVICE_SUBDOMAIN:-l}.${SERVICES_BASE_DOMAIN}
       IS_HTTPS_ENABLED: true
       GEOLITE_LICENSE_KEY: ${GEOLITE_LICENSE_KEY}
       DB_DRIVER: postgres
@@ -23,7 +23,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.shlink.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.shlink.rule=Host(`l.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.shlink.rule=Host(`${SERVICE_SUBDOMAIN:-l}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.shlink.tls=true"
       - "traefik.http.services.shlink.loadbalancer.server.port=8080"
     restart: unless-stopped
@@ -47,7 +47,7 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
-      SHLINK_SERVER_URL: https://l.${SERVICES_BASE_DOMAIN}
+      SHLINK_SERVER_URL: https://${SERVICE_SUBDOMAIN:-l}.${SERVICES_BASE_DOMAIN}
       SHLINK_SERVER_API_KEY: ${SHLINK_SERVER_API_KEY}
     networks:
       - shlink
@@ -55,6 +55,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.shlink-web-client.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.shlink-web-client.rule=Host(`links.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.shlink-web-client.rule=Host(`${SERVICE2_SUBDOMAIN:-links}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.shlink-web-client.tls=true"
       - "traefik.http.services.shlink-web-client.loadbalancer.server.port=8080"

@@ -13,7 +13,7 @@ services:
       ND_SCANSCHEDULE: 1h
       ND_LOGLEVEL: info
       ND_SESSIONTIMEOUT: 24h
-      ND_BASEURL: "https://navidrome.${SERVICES_BASE_DOMAIN}"
+      ND_BASEURL: "https://${SERVICE_SUBDOMAIN:-music}.${SERVICES_BASE_DOMAIN}"
       ND_SPOTIFY_ID: ${ND_SPOTIFY_ID}
       ND_SPOTIFY_SECRET: ${ND_SPOTIFY_SECRET}
       ND_LASTFM_APIKEY: ${ND_LASTFM_APIKEY}
@@ -26,6 +26,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.navidrome.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.navidrome.rule=Host(`music.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.navidrome.rule=Host(`${SERVICE_SUBDOMAIN:-music}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.navidrome.tls=true"
       - "traefik.http.services.navidrome.loadbalancer.server.port=4533"

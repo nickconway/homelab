@@ -34,6 +34,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.radicale.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.radicale.rule=Host(`dav.${SERVICES_BASE_DOMAIN}`) || Host(`contacts.${SERVICES_BASE_DOMAIN}`) || Host(`calendar.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.radicale.rule=Host(`${SERVICE_SUBDOMAIN:-dav}.${SERVICES_BASE_DOMAIN}`) || Host(`${SERVICE_SUBDOMAIN:-contacts}.${SERVICES_BASE_DOMAIN}`) || Host(`${SERVICE_SUBDOMAIN:-calendar}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.radicale.tls=true"
       - "traefik.http.services.radicale.loadbalancer.server.port=5232"

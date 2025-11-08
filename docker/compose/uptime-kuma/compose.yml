@@ -14,7 +14,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.uptime-kuma.rule=Host(`${SERVICE_SUBDOMAIN:-uptime}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.uptime-kuma.tls=true"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
     restart: unless-stopped

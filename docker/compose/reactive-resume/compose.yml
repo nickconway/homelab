@@ -36,7 +36,7 @@ services:
       - traefik.enable=true
       - traefik.http.middlewares.reactive-resume-minio-prefix.stripprefix.prefixes=/storage
       - traefik.http.routers.reactive-resume-minio.middlewares=crowdsec-traefik-bouncer,reactive-resume-minio-prefix
-      - traefik.http.routers.reactive-resume-minio.rule=Host(`resume.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/storage`)
+      - traefik.http.routers.reactive-resume-minio.rule=Host(`${SERVICE_SUBDOMAIN:-resume}.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/storage`)
       - traefik.http.routers.reactive-resume-minio.tls=true
       - traefik.http.services.reactive-resume-minio.loadbalancer.server.port=9000
     networks:
@@ -57,7 +57,7 @@ services:
       - reactive-resume
 
   reactive-resume:
-    image: git.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/reactive-resume:latest
+    image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/reactive-resume:latest
     restart: unless-stopped
     depends_on:
       - reactive-resume-postgres
@@ -70,8 +70,8 @@ services:
 
       # -- URLs --
       INTERNAL_URL: http://reactive-resume:3000
-      PUBLIC_URL: https://resume.${SERVICES_BASE_DOMAIN}
-      STORAGE_URL: https://resume.${SERVICES_BASE_DOMAIN}/storage/default
+      PUBLIC_URL: https://${SERVICE_SUBDOMAIN:-resume}.${SERVICES_BASE_DOMAIN}
+      STORAGE_URL: https://${SERVICE_SUBDOMAIN:-resume}.${SERVICES_BASE_DOMAIN}/storage/default
 
       # -- Printer (Chrome) --
       CHROME_TOKEN: ${CHROME_TOKEN}
@@ -132,5 +132,5 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.reactive-resume.middlewares=crowdsec-traefik-bouncer
-      - traefik.http.routers.reactive-resume.rule=Host(`resume.${SERVICES_BASE_DOMAIN}`)
+      - traefik.http.routers.reactive-resume.rule=Host(`${SERVICE_SUBDOMAIN:-resume}.${SERVICES_BASE_DOMAIN}`)
       - traefik.http.services.reactive-resume.loadbalancer.server.port=3000

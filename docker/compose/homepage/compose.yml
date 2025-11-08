@@ -11,7 +11,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York    # optional: set desired timezone
-      - HOMEPAGE_ALLOWED_HOSTS=dash.${SERVICES_BASE_DOMAIN}
+      - HOMEPAGE_ALLOWED_HOSTS=${SERVICE_SUBDOMAIN:-dash}.${SERVICES_BASE_DOMAIN}
     volumes:
       - ./data/config:/app/config
       - ./data/images:/app/public/images
@@ -19,7 +19,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.homepage.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.homepage.rule=Host(`dash.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.homepage.rule=Host(`${SERVICE_SUBDOMAIN:-dash}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.homepage.tls=true"
       - "traefik.http.services.homepage.loadbalancer.server.port=3000"
     restart: unless-stopped

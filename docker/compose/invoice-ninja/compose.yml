@@ -23,7 +23,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.invoice-ninja.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.invoice-ninja.rule=Host(`invoices.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.invoice-ninja.rule=Host(`${SERVICE_SUBDOMAIN:-invoices}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.invoice-ninja.tls=true"
       - "traefik.http.services.invoice-ninja.loadbalancer.server.port=80"
 

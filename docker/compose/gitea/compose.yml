@@ -22,7 +22,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.opengist.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.opengist.rule=Host(`gist.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.opengist.rule=Host(`${SERVICE2_SUBDOMAIN:-gist}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.opengist.tls=true"
       - "traefik.http.services.opengist.loadbalancer.server.port=6157"
 
@@ -51,7 +51,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.gitea.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.gitea.rule=Host(`git.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.gitea.rule=Host(`${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.gitea.tls=true"
       - "traefik.http.services.gitea.loadbalancer.server.port=3000"
 
@@ -65,7 +65,7 @@ services:
     networks:
       - gitea
     environment:
-      - GITEA_INSTANCE_URL=https://git.${SERVICES_BASE_DOMAIN}
+      - GITEA_INSTANCE_URL=https://${SERVICE_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}
       - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_REGISTRATION_TOKEN}
       - GITEA_RUNNER_NAME=Runner
       - USER_UID=1000

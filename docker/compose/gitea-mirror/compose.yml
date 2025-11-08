@@ -16,8 +16,8 @@ services:
       # === ABSOLUTELY REQUIRED ===
       # This MUST be set and CANNOT be changed via UI
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}  # Min 32 chars, required for sessions
-      - BETTER_AUTH_URL=https://mirror.git.${SERVICES_BASE_DOMAIN}
-      - BETTER_AUTH_TRUSTED_ORIGINS=https://mirror.git.${SERVICES_BASE_DOMAIN}
+      - BETTER_AUTH_URL=https://${SERVICE_SUBDOMAIN:-mirror.git}.${SERVICES_BASE_DOMAIN}
+      - BETTER_AUTH_TRUSTED_ORIGINS=https://${SERVICE_SUBDOMAIN:-mirror.git}.${SERVICES_BASE_DOMAIN}
       - PUID=1000
       - PGID=1000
       - ENCRYPTION_SECRET=${ENCRYPTION_SECRET}
@@ -28,7 +28,7 @@ services:
       - DATABASE_URL=file:data/gitea-mirror.db
       - HOST=0.0.0.0
       - PORT=4321
-      - PUBLIC_BETTER_AUTH_URL=https://mirror.git.${SERVICES_BASE_DOMAIN}
+      - PUBLIC_BETTER_AUTH_URL=https://${SERVICE_SUBDOMAIN:-mirror.git}.${SERVICES_BASE_DOMAIN}
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=3", "--spider", "http://localhost:4321/api/health"]
       interval: 30s
@@ -38,7 +38,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.gitea-mirror.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.gitea-mirror.rule=Host(`mirror.git.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.gitea-mirror.rule=Host(`${SERVICE_SUBDOMAIN:-mirror.git}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.gitea-mirror.tls=true"
       - "traefik.http.routers.gitea-mirror.tls.certresolver=letsencrypt"
       - "traefik.http.services.gitea-mirror.loadbalancer.server.port=4321"

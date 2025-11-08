@@ -17,7 +17,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.komga.middlewares=crowdsec-traefik-bouncer,auth"
-        - "traefik.http.routers.komga.rule=Host(`manga.${SERVICES_BASE_DOMAIN}`)"
+        - "traefik.http.routers.komga.rule=Host(`${SERVICE_SUBDOMAIN:-manga}.${SERVICES_BASE_DOMAIN}`)"
         - "traefik.http.routers.komga.tls=true"
         - "traefik.http.services.komga.loadbalancer.server.port=25600"
       networks:

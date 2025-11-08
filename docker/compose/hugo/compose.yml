@@ -27,7 +27,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hugo.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.hugo.rule=Host(`blog2.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.hugo.rule=Host(`${SERVICE_SUBDOMAIN:-blog}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.hugo.tls=true"
       - "traefik.http.services.hugo.loadbalancer.server.port=1313"
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hugo-staging.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.hugo-staging.rule=Host(`blog.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.hugo-staging.rule=Host(`${SERVICE2_SUBDOMAIN:-staging.blog}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.hugo-staging.tls=true"
       - "traefik.http.routers.hugo-staging.tls.certresolver=letsencrypt"
       - "traefik.http.services.hugo-staging.loadbalancer.server.port=1313"

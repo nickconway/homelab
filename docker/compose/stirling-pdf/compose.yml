@@ -20,7 +20,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.stirling-pdf.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.stirling-pdf.rule=Host(`pdfs.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.stirling-pdf.rule=Host(`${SERVICE_SUBDOMAIN:-pdfs}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.stirling-pdf.tls=true"
       - "traefik.http.services.stirling-pdf.loadbalancer.server.port=8080"
     restart: unless-stopped

@@ -52,7 +52,7 @@ services:
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_NAME: dawarich
       MIN_MINUTES_SPENT_IN_CITY: 60
-      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.${SERVICES_BASE_DOMAIN}
+      APPLICATION_HOSTS: localhost,::1,127.0.0.1,${SERVICE_SUBDOMAIN:-location}.${SERVICES_BASE_DOMAIN}
       DISABLE_TELEMETRY: true
       ENABLE_TELEMETRY: false
       TIME_ZONE: America/New_York
@@ -73,7 +73,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dawarich.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.dawarich.rule=Host(`location.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.dawarich.rule=Host(`${SERVICE_SUBDOMAIN:-location}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.dawarich.tls=true"
       - "traefik.http.services.dawarich.loadbalancer.server.port=3000"
 
@@ -99,7 +99,7 @@ services:
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_NAME: dawarich
       MIN_MINUTES_SPENT_IN_CITY: 60
-      APPLICATION_HOSTS: localhost,::1,127.0.0.1,location.${SERVICES_BASE_DOMAIN}
+      APPLICATION_HOSTS: localhost,::1,127.0.0.1,${SERVICE_SUBDOMAIN:-location}.${SERVICES_BASE_DOMAIN}
       DISABLE_TELEMETRY: true
       ENABLE_TELEMETRY: false
       TIME_ZONE: America/New_York

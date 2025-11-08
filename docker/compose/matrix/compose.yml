@@ -49,5 +49,5 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.matrix-nginx.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.matrix-nginx.rule=Host(`matrix.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.matrix-nginx.rule=Host(`${SERVICE_SUBDOMAIN:-matrix}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.services.matrix-nginx.loadbalancer.server.port=80"

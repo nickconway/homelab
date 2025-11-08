@@ -53,17 +53,17 @@ services:
       - POSTGRESQL_DATABASE=guacamole
       - POSTGRESQL_USER=guac
       - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD}
-      - OPENID_AUTHORIZATION_ENDPOINT=https://auth.${SERVICES_BASE_DOMAIN}/application/o/authorize/
+      - OPENID_AUTHORIZATION_ENDPOINT=https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/authorize/
       - OPENID_CLIENT_ID=${OPENID_CLIENT_ID}
-      - OPENID_ISSUER=https://auth.${SERVICES_BASE_DOMAIN}/application/o/guacamole/
-      - OPENID_JWKS_ENDPOINT=https://auth.${SERVICES_BASE_DOMAIN}/application/o/guacamole/jwks/
-      - OPENID_REDIRECT_URI=https://remote.${SERVICES_BASE_DOMAIN}
+      - OPENID_ISSUER=https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/guacamole/
+      - OPENID_JWKS_ENDPOINT=https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/guacamole/jwks/
+      - OPENID_REDIRECT_URI=https://${SERVICE_SUBDOMAIN:-remote}.${SERVICES_BASE_DOMAIN}
       - OPENID_USERNAME_CLAIM_TYPE=preferred_username
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.guacamole.addprefix.prefix=/guacamole"
       - "traefik.http.routers.guacamole.middlewares=crowdsec-traefik-bouncer,auth,guacamole"
-      - "traefik.http.routers.guacamole.rule=Host(`remote.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.guacamole.rule=Host(`${SERVICE_SUBDOMAIN:-remote}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.guacamole.tls=true"
       - "traefik.http.services.guacamole.loadbalancer.server.port=8080"
     restart: unless-stopped

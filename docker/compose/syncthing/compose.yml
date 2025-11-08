@@ -21,6 +21,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.syncthing.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.syncthing.rule=Host(`sync.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.syncthing.rule=Host(`${SERVICE_SUBDOMAIN:-sync}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.syncthing.tls=true"
       - "traefik.http.services.syncthing.loadbalancer.server.port=8384"

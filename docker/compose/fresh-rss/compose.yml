@@ -21,9 +21,9 @@ services:
       TRUSTED_PROXY: 172.16.0.1/12 192.168.0.1/16 10.0.10.0/24 10.0.10.2/32
       PUID: 1000
       PGID: 1000
-      SERVER_DNS: rss.${SERVICES_BASE_DOMAIN}
+      SERVER_DNS: ${SERVICE_SUBDOMAIN:-rss}.${SERVICES_BASE_DOMAIN}
       OIDC_ENABLED: 1
-      OIDC_PROVIDER_METADATA_URL: https://auth.${SERVICES_BASE_DOMAIN}/application/o/fresh-rss/.well-known/openid-configuration
+      OIDC_PROVIDER_METADATA_URL: https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/fresh-rss/.well-known/openid-configuration
       OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
       OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
       OIDC_X_FORWARDED_HEADERS: X-Forwarded-Port X-Forwarded-Proto X-Forwarded-Host
@@ -31,6 +31,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fresh-rss.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.fresh-rss.rule=Host(`rss.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.fresh-rss.rule=Host(`${SERVICE_SUBDOMAIN:-rss}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.fresh-rss.tls=true"
       - "traefik.http.services.fresh-rss.loadbalancer.server.port=80"

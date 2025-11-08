@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 
   crowdsec-dashboard:
-    image: git.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/crowdsec-dashboard:latest
+    image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/crowdsec-dashboard:latest
     restart: unless-stopped
     environment:
       PUID: 1000
@@ -47,7 +47,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.crowdsec.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.crowdsec.rule=Host(`security.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.crowdsec.rule=Host(`${SERVICE_SUBDOMAIN:-security}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.crowdsec.tls=true"
       - "traefik.http.services.crowdsec.loadbalancer.server.port=3000"
     depends_on:

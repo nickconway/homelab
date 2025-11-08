@@ -13,7 +13,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.open-speed-test.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.open-speed-test.rule=Host(`speed.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.open-speed-test.rule=Host(`${SERVICE_SUBDOMAIN:-speed}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.open-speed-test.tls=true"
       - "traefik.http.services.open-speed-test.loadbalancer.server.port=3000"
     restart: unless-stopped

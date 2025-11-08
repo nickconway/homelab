@@ -31,14 +31,14 @@ services:
       EXTERNAL_FRONTEND_HOOKS_URLS:
       N8N_DIAGNOSTICS_CONFIG_FRONTEND:
       N8N_DIAGNOSTICS_CONFIG_BACKEND:
-      WEBHOOK_URL: https://automation.${SERVICES_BASE_DOMAIN}
+      WEBHOOK_URL: https://${SERVICE_SUBDOMAIN:-automation}.${SERVICES_BASE_DOMAIN}
     volumes:
       - ./data/config:/home/node/.n8n
       - ./data/files:/files
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.n8n.middlewares=crowdsec-traefik-bouncer,auth,n8n"
-      - "traefik.http.routers.n8n.rule=Host(`automation.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.n8n.rule=Host(`${SERVICE_SUBDOMAIN:-automation}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.n8n.tls=true"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
       - traefik.http.middlewares.n8n.headers.SSLRedirect=true

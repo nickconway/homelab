@@ -19,6 +19,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.bazarr.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.bazarr.rule=Host(`subtitles.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.bazarr.rule=Host(`${SERVICE_SUBDOMAIN:-subtitles}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.bazarr.tls=true"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"

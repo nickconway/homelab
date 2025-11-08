@@ -20,7 +20,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.audiobookshelf.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.audiobookshelf.rule=Host(`audio.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`${SERVICE_SUBDOMAIN:-audio}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.audiobookshelf.tls=true"
       - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
     restart: unless-stopped

@@ -18,7 +18,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.headscale.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.headscale.rule=Host(`vpn.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.headscale.rule=Host(`${SERVICE_SUBDOMAIN:-vpn}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.headscale.tls=true"
       - "traefik.http.services.headscale.loadbalancer.server.port=8080"
 
@@ -40,6 +40,6 @@ services:
         - "me.tale.headplane.target=headscale"
         - "traefik.enable=true"
         - "traefik.http.routers.headplane.middlewares=crowdsec-traefik-bouncer,auth"
-        - "traefik.http.routers.headplane.rule=Host(`vpn.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/admin`)"
+        - "traefik.http.routers.headplane.rule=Host(`${SERVICE_SUBDOMAIN:-vpn}.${SERVICES_BASE_DOMAIN}`) && PathPrefix(`/admin`)"
         - "traefik.http.routers.headplane.tls=true"
         - "traefik.http.services.headplane.loadbalancer.server.port=3000"

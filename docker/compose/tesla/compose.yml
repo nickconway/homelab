@@ -16,7 +16,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tesla.middlewares=crowdsec-traefik-bouncer"
-      - "traefik.http.routers.tesla.rule=Host(`tesla.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.tesla.rule=Host(`${SERVICE_SUBDOMAIN:-tesla}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.tesla.tls=true"
       - "traefik.http.services.tesla.loadbalancer.server.port=80"
     restart: unless-stopped

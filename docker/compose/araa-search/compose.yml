@@ -16,7 +16,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.araa.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.araa.rule=Host(`search.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.araa.rule=Host(`${SERVICE_SUBDOMAIN:-search}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.araa.tls=true"
       - "traefik.http.services.araa.loadbalancer.server.port=${PORT}"
     restart: unless-stopped

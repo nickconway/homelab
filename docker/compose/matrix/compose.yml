@@ -6,7 +6,7 @@ networks:
 
 services:
   matrix-postgres:
-    image: postgres:15-alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

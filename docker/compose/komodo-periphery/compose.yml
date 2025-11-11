@@ -1,6 +1,6 @@
 services:
   periphery:
-    image: ghcr.io/mbecker20/periphery:latest
+    image: ghcr.io/moghtech/komodo-periphery:1.19.5@sha256:bd79cf960ed054fe8e02384322303e462448679b1149dde48bbef151417255b1
     restart: unless-stopped
     # image: ghcr.io/mbecker20/periphery:latest-aarch64 # Use for arm support
     logging:

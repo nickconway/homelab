@@ -1,6 +1,14 @@
+networks:
+  komodo:
+    name: komodo
+  komodo-database:
+    name: komodo-database
+  proxy:
+    external: true
+
 services:
   postgres:
-    image: ghcr.io/ferretdb/postgres-documentdb
+    image: ghcr.io/ferretdb/postgres-documentdb:17-0.107.0-ferretdb-2.7.0@sha256:2386795ec2aa7ae559304361979f1dc5708d383ee9020ae63dadc2940dfe58f7
     restart: unless-stopped
     logging:
       driver: local
@@ -11,25 +19,29 @@ services:
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=komodo
+      - POSTGRES_DB=postgres
+    labels:
+      - "komodo.skip=true"
 
   ferretdb:
-    image: ghcr.io/ferretdb/ferretdb:1
+    image: ghcr.io/ferretdb/ferretdb:2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
     restart: unless-stopped
     depends_on:
       - postgres
     logging:
       driver: local
+    volumes:
+      - ./data/state:/state
     networks:
       - komodo
       - komodo-database
-    # ports:
-    #   - 27017:27017
     environment:
-      - FERRETDB_POSTGRESQL_URL=postgres://postgres:5432/komodo
+      - FERRETDB_POSTGRESQL_URL=postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:5432/postgres
+    labels:
+      - "komodo.skip=true"
 
   core:
-    image: ghcr.io/mbecker20/komodo:latest
+    image: ghcr.io/moghtech/komodo-core:1.19.5@sha256:a1cceb4f971443b1e9f2a767788f663d0afb6244ee2135f7fe3fd1036af37ade
     restart: unless-stopped
     depends_on:
       - ferretdb
@@ -40,43 +52,11 @@ services:
       - komodo
     volumes:
       - ${HOME}/Git:/repo-cache
-    environment: # https://github.com/mbecker20/komodo/blob/main/config/core.config.toml
-      KOMODO_HOST: ${KOMODO_HOST}
-      KOMODO_TITLE: ${KOMODO_TITLE}
-      KOMODO_FIRST_SERVER: http://periphery:8120
-      KOMODO_FIRST_SERVER_NAME: ${KOMODO_FIRST_SERVER_NAME}
-
-      ## Mongo
-      KOMODO_DATABASE_URI: mongodb://${DB_USERNAME}:${DB_PASSWORD}@ferretdb:27017/komodo?authMechanism=PLAIN
-      ## Secrets
-      KOMODO_PASSKEY: ${KOMODO_PASSKEY}
-      KOMODO_WEBHOOK_SECRET: ${KOMODO_WEBHOOK_SECRET}
-      KOMODO_JWT_SECRET: ${KOMODO_JWT_SECRET}
-      ## Auth
-      KOMODO_LOCAL_AUTH: ${KOMODO_LOCAL_AUTH}
-      KOMODO_DISABLE_USER_REGISTRATION: ${KOMODO_DISABLE_USER_REGISTRATION}
-      ## Github Oauth
-      KOMODO_GITHUB_OAUTH_ENABLED: ${KOMODO_GITHUB_OAUTH_ENABLED}
-      KOMODO_GITHUB_OAUTH_ID: ${KOMODO_GITHUB_OAUTH_ID}
-      KOMODO_GITHUB_OAUTH_SECRET: ${KOMODO_GITHUB_OAUTH_SECRET}
-      ## Google Oauth
-      KOMODO_GOOGLE_OAUTH_ENABLED: ${KOMODO_GOOGLE_OAUTH_ENABLED}
-      KOMODO_GOOGLE_OAUTH_ID: ${KOMODO_GOOGLE_OAUTH_ID}
-      KOMODO_GOOGLE_OAUTH_SECRET: ${KOMODO_GOOGLE_OAUTH_SECRET}
-      ## Aws
-      KOMODO_AWS_ACCESS_KEY_ID: ${KOMODO_AWS_ACCESS_KEY_ID}
-      KOMODO_AWS_SECRET_ACCESS_KEY: ${KOMODO_AWS_SECRET_ACCESS_KEY}
-      ## Hetzner
-      KOMODO_HETZNER_TOKEN: ${KOMODO_HETZNER_TOKEN}
-
-      KOMODO_DISABLE_CONFIRM_DIALOG: ${KOMODO_DISABLE_CONFIRM_DIALOG}
-
-      KOMODO_OIDC_ENABLED: ${KOMODO_OIDC_ENABLED}
-      KOMODO_OIDC_PROVIDER: ${KOMODO_OIDC_PROVIDER}
-      KOMODO_OIDC_REDIRECT: ${KOMODO_OIDC_REDIRECT}
-      KOMODO_OIDC_CLIENT_ID: ${KOMODO_OIDC_CLIENT_ID}
-      KOMODO_OIDC_CLIENT_SECRET: ${KOMODO_OIDC_CLIENT_SECRET}
-      KOMODO_OIDC_USE_FULL_EMAIL: ${KOMODO_OIDC_USE_FULL_EMAIL}
+    env_file: .env
+    environment:
+      KOMODO_DATABASE_ADDRESS: ferretdb:27017
+      KOMODO_DATABASE_USERNAME: ${DB_USERNAME}
+      KOMODO_DATABASE_PASSWORD: ${DB_PASSWORD}
     labels:
       - "komodo.skip=true"
       - "traefik.enable=true"
@@ -85,12 +65,9 @@ services:
       - "traefik.http.routers.komodo.tls=true"
       - "traefik.http.services.komodo.loadbalancer.server.port=9120"
 
-  ## Deploy Periphery container using this block,
-  ## or deploy the Periphery binary with systemd using https://github.com/mbecker20/komodo/tree/main/scripts
   periphery:
-    image: ghcr.io/mbecker20/periphery:latest
+    image: ghcr.io/moghtech/komodo-periphery:1.19.5@sha256:bd79cf960ed054fe8e02384322303e462448679b1149dde48bbef151417255b1
     restart: unless-stopped
-    # image: ghcr.io/mbecker20/periphery:latest-aarch64 # Use for arm support
     logging:
       driver: local
     networks:
@@ -101,8 +78,6 @@ services:
       - ./data/repos:/etc/komodo/repos # manage repos in a docker volume, or change it to an accessible host directory.
       - ..:/etc/komodo/stacks # manage stack files in a docker volume, or change it to an accessible host directory.
       - ./data/builds:/etc/komodo/builds
-    ports:
-      - 8120:8120
     environment:
       # If the disk size is overreporting, can use one of these to
       # whitelist / blacklist the disks to filter them, whichever is easier.
@@ -112,11 +87,3 @@ services:
       # PERIPHERY_EXCLUDE_DISK_MOUNTS: /snap,/etc/repos
     labels:
       - "komodo.skip=true"
-
-networks:
-  komodo:
-    name: komodo
-  komodo-database:
-    name: komodo-database
-  proxy:
-    external: true

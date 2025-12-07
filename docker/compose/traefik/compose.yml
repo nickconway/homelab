@@ -20,8 +20,14 @@ services:
         published: 465
         protocol: tcp
         mode: host
-      - "25565:25565"
-      - "50000:50000"
+      - target: 25565
+        published: 25565
+        protocol: tcp
+        mode: host
+      - target: 50000
+        published: 50000
+        protocol: tcp
+        mode: host
     command:
       - --api.insecure=true
       - --api.dashboard=true

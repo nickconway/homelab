@@ -7,6 +7,8 @@ services:
     image: itzg/minecraft-server
     environment:
       EULA: "true"
+    ports:
+      - 25565:25565
     networks:
       - proxy
     volumes:
@@ -14,7 +16,3 @@ services:
     stdin_open: true
     tty: true
     restart: unless-stopped
-    labels:
-      traefik.enable: true
-      traefik.tcp.routers.minecraft.rule: "HostSNI(`*`)"
-      traefik.tcp.routers.minecraft.entrypoints: "minecraft"

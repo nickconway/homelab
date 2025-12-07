@@ -20,10 +20,6 @@ services:
         published: 465
         protocol: tcp
         mode: host
-      - target: 25565
-        published: 25565
-        protocol: tcp
-        mode: host
       - target: 50000
         published: 50000
         protocol: tcp
@@ -52,7 +48,6 @@ services:
       - --entrypoints.websecure.forwardedheaders.trustedips=127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
       - --entryPoints.mail.address=:465
       - --entryPoints.talos.address=:50000
-      - --entryPoints.minecraft.address=:25565
       - --providers.file.directory=/etc/traefik/configs
       - --providers.file.watch=true
       - --providers.docker.endpoint=unix:///var/run/docker.sock

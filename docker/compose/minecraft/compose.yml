@@ -1,6 +1,10 @@
 networks:
-  proxy:
-    external: true
+    mc:
+      ipam:
+        config:
+          - subnet: 10.0.250.0/24
+    proxy:
+        external: true
 
 services:
   mc:
@@ -8,11 +12,37 @@ services:
     environment:
       EULA: "true"
     ports:
-      - 25565:25565
-    networks:
-      - proxy
+        - 25565:25565
     volumes:
-      - ./data:/data
+      - ./data/server:/data
     stdin_open: true
     tty: true
     restart: unless-stopped
+    networks:
+      mc:
+        ipv4_address: 10.0.250.2
+
+  mc-router:
+    image: itzg/mc-router
+    restart: unless-stopped
+    networks:
+      mc:
+        ipv4_address: 10.0.250.3
+      proxy:
+    volumes:
+        - ./data/proxy/config.json:/config.json
+    environment:
+        ROUTES_CONFIG: /config.json
+        ROUTES_CONFIG_WATCH: true
+    command:
+        - -trusted-proxies=127.0.0.1/32,10.0.0.0/8,172.16.0.0/12
+        - -receive-proxy-protocol
+        # - -use-proxy-protocol
+
+  playit:
+    image: ghcr.io/playit-cloud/playit-agent:latest
+    networks:
+      mc:
+        ipv4_address: 10.0.250.4
+    environment:
+        - SECRET_KEY=${SECRET_KEY}

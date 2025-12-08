@@ -10,9 +10,9 @@ services:
   mc:
     image: itzg/minecraft-server
     environment:
+      TYPE: PAPER
       EULA: "true"
-    ports:
-        - 25565:25565
+      ONLINE_MODE: FALSE
     volumes:
       - ./data/server:/data
     stdin_open: true
@@ -25,24 +25,39 @@ services:
   mc-router:
     image: itzg/mc-router
     restart: unless-stopped
+    ports:
+        - "25565:25565"
     networks:
       mc:
         ipv4_address: 10.0.250.3
       proxy:
     volumes:
-        - ./data/proxy/config.json:/config.json
+        - ./data/router/config.json:/config.json
     environment:
         ROUTES_CONFIG: /config.json
         ROUTES_CONFIG_WATCH: true
     command:
         - -trusted-proxies=127.0.0.1/32,10.0.0.0/8,172.16.0.0/12
         - -receive-proxy-protocol
-        # - -use-proxy-protocol
+        - -use-proxy-protocol
+
+  mc-proxy:
+    image: itzg/mc-proxy
+    environment:
+      BUNGEE_JAR_REVISION: "1"
+      CFG_MOTD: Powered by Docker
+      REPLACE_ENV_VARIABLES: "true"
+    volumes:
+      - ./data/proxy/config.yml:/config/config.yml
+      - ./data/proxy/server:/server
+    networks:
+        mc:
+            ipv4_address: 10.0.250.4
 
   playit:
     image: ghcr.io/playit-cloud/playit-agent:latest
     networks:
       mc:
-        ipv4_address: 10.0.250.4
+        ipv4_address: 10.0.250.5
     environment:
         - SECRET_KEY=${SECRET_KEY}

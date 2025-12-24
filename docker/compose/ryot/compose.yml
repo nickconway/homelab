@@ -6,7 +6,7 @@ networks:
 
 services:
   ryot-postgres:
-    image: postgres:16-alpine # atleast version 15 is required
+    image: postgres:18-alpine # atleast version 15 is required
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

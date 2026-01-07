@@ -11,7 +11,7 @@ services:
       - UMASK=002
       - TZ=America/New_York
     volumes:
-      - ./data/config:/config
+      - ./data/config:/app/config
     networks:
       - proxy
     labels:

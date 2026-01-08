@@ -6,6 +6,7 @@ services:
     environment:
       - ASR_ENGINE=whisperx
       - ASR_MODEL=distil-medium.en
+      - HF_TOKEN=${HF_TOKEN}
     ports:
       - "9000:9000"
     volumes:

@@ -22,10 +22,6 @@
 	path = submodules/dotfiles
 	url = https://github.com/nickconway/dotfiles
 	branch = main
-[submodule "docker/compose/whisper/source"]
-	path = docker/compose/whisper/source
-	url = https://github.com/ahmetoner/whisper-asr-webservice
-	branch = main
 [submodule "docker/dockerfiles/whisper/source"]
 	path = docker/dockerfiles/whisper/source
 	url = https://github.com/ahmetoner/whisper-asr-webservice

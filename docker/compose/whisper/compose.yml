@@ -1,9 +1,7 @@
 services:
   whisper:
     restart: unless-stopped
-    build:
-      context: source
-      dockerfile: Dockerfile.gpu
+    image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/whisper:latest
     runtime: nvidia
     environment:
       - ASR_MODEL=base
@@ -11,6 +9,4 @@ services:
       - "9000:9000"
     volumes:
       - ./source/app:/app/app:ro
-      - ./data/cache/pip:/root/.cache/pip
-      - ./data/cache/poetry:/root/.cache/poetry
-      - ./data/cache/whisper:/root/.cache/whisper
+      - ./data/cache:/root/.cache

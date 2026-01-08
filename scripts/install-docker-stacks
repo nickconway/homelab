@@ -25,13 +25,15 @@ DOCKER_APPS="$(
     done
 )"
 
-PRESELECTED_DOCKER_APPS="$(
-    for APP in *; do
-        if [[ -e "$DOCKER_STACK_DIR/$APP" ]]; then
-            echo "$APP"
-        fi
-    done | xargs | sed "s/ /,/g"
-)"
+if [[ -z ${PRESELECTED_DOCKER_APPS:-} ]]; then
+    PRESELECTED_DOCKER_APPS="$(
+        for APP in *; do
+            if [[ -e "$DOCKER_STACK_DIR/$APP" ]]; then
+                echo "$APP"
+            fi
+        done | xargs | sed "s/ /,/g"
+    )"
+fi
 
 SELECTED_DOCKER_APPS="$(
     gum choose $DOCKER_APPS \

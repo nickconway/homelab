@@ -24,21 +24,45 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 export SCRIPT_DIR
 cd "$SCRIPT_DIR"
 
-while getopts 'dh:kt' flag; do
+getopts_get_optional_argument() {
+  eval "arg=\${$OPTIND}"
+  if [[ -n $arg && $arg != -* ]]; then
+    OPTIND=$((OPTIND + 1))
+    OPTARG=$arg
+  fi
+}
+
+while getopts ':dh:kt' flag; do
     case $flag in
-        d) export BOOTSTRAP_DOCKER=true;;
-        h)
-            REMOTE_DIR="$(gum input --header "Where would you like to sync the repository to on the remote host?" --placeholder "Git/homelab" < /dev/tty)"
-            REMOTE_DIR="${REMOTE_DIR:-Git/homelab}"
-            rsync -ahuz --mkpath "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
-            shift "$((OPTIND-1))"
-            ssh -t "$OPTARG" "$REMOTE_DIR/install $*"
-            exit
-            ;;
-        k) export BOOTSTRAP_KUBERNETES=true;;
-        t) export BOOTSTRAP_TALOS=true;;
-        *) exit 1;;
+    d)
+        export BOOTSTRAP_DOCKER=true
+        export BOOTSTRAP_TALOS=${BOOTSTRAP_TALOS:-false}
+        export BOOTSTRAP_KUBERNETES=${BOOTSTRAP_KUBERNETES:-false}
+
+        getopts_get_optional_argument "$@"
+        export PRESELECTED_DOCKER_APPS="${OPTARG:-}"
+        ;;
+    h)
+        REMOTE_DIR="$(gum input --header "Where would you like to sync the repository to on the remote host?" --placeholder "Git/homelab" </dev/tty)"
+        REMOTE_DIR="${REMOTE_DIR:-Git/homelab}"
+        rsync -ahuz --mkpath "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
+        shift "$((OPTIND - 1))"
+        ssh -t "$OPTARG" "$REMOTE_DIR/install $*"
+        exit
+        ;;
+    k)
+        export BOOTSTRAP_KUBERNETES=true
+        export BOOTSTRAP_TALOS=${BOOTSTRAP_TALOS:-false}
+        export BOOTSTRAP_DOCKER=${BOOTSTRAP_DOCKER:-false}
+        ;;
+    t)
+        export BOOTSTRAP_TALOS=true
+        export BOOTSTRAP_KUBERNETES=${BOOTSTRAP_KUBERNETES:-false}
+        export BOOTSTRAP_DOCKER=${BOOTSTRAP_DOCKER:-false}
+        ;;
+    *) exit 1 ;;
     esac
+    shift $((OPTIND - 1))
 done
 
 source "$SCRIPT_DIR/utils"
@@ -46,14 +70,14 @@ source "$SCRIPT_DIR/utils"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$SCRIPT_DIR/submodules/dotfiles/.local/bin:$PATH"
 
-if ! command -v go &> /dev/null; then
+if ! command -v go &>/dev/null; then
     echo "Installing go..."
 
-    if command -v apt &> /dev/null; then
+    if command -v apt &>/dev/null; then
         sudo apt install -y golang
     fi
 
-    if command -v pacman &> /dev/null; then
+    if command -v pacman &>/dev/null; then
         sudo pacman -S go
     fi
 fi
@@ -68,13 +92,13 @@ fi
 
 get-env-vars
 
-if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &> /dev/null; then
+if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &>/dev/null; then
     GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"
     export GPG_KEY
 fi
 
-./scripts/install-docker-stacks
-./scripts/create-talos-vms
-./scripts/install-kubernetes-manifests
+if [[ ${BOOTSTRAP_DOCKER:-true} == true ]]; then ./scripts/install-docker-stacks; fi
+if [[ ${BOOTSTRAP_TALOS:-true} == true ]]; then ./scripts/create-talos-vms; fi
+if [[ ${BOOTSTRAP_KUBERNETES:-true} == true ]]; then ./scripts/install-kubernetes-manifests; fi
 
 echo "Homelab setup complete!"

@@ -4,9 +4,9 @@ services:
     image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/whisper:latest
     runtime: nvidia
     environment:
-      - ASR_MODEL=base
+      - ASR_ENGINE=whisperx
+      - ASR_MODEL=distil-medium.en
     ports:
       - "9000:9000"
     volumes:
-      - ./source/app:/app/app:ro
       - ./data/cache:/root/.cache

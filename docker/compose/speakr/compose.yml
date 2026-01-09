@@ -1,0 +1,25 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  app:
+    image: learnedmachine/speakr:0.8.0-alpha@sha256:e9354e5ecaedf13b3d0288f1a9abe01db9dd42af860cb985bb0adab03071897e
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - LOG_LEVEL=INFO
+    networks:
+        - proxy
+    volumes:
+      - ./data/uploads:/data/uploads
+      - ./data/instance:/data/instance
+      - ./data/exports:/data/exports
+      - ./data/auto-process:/data/auto-process
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.speakr.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.speakr.rule=Host(`${SERVICE_SUBDOMAIN:-transcriptions}.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.speakr.tls=true"
+      - "traefik.http.services.speakr.loadbalancer.server.port=8899"

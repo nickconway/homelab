@@ -90,7 +90,7 @@ if ! command -v gum &>/dev/null; then
     go install github.com/charmbracelet/gum@latest
 fi
 
-get-env-vars
+get-env-vars export
 
 if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &>/dev/null; then
     GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"

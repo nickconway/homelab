@@ -5,6 +5,10 @@ function get-env-vars() {
         return 0
     fi
 
+    if [[ -n ${1:-} ]]; then
+        ext="$1 "
+    fi
+
     touch .env
 
     while read -r LINE; do
@@ -13,7 +17,7 @@ function get-env-vars() {
         VAR="$(echo "$LINE" | cut -d '=' -f 1)"
         PLACEHOLDER="$(echo "$LINE" | cut -d '=' -f 2- | envsubst)"
 
-        if ! grep -q "^export $VAR=" .env; then
+        if ! grep -q "^${ext:-}$VAR=" .env; then
             if env | grep -q "^$VAR"; then
                 INPUT="$(env | grep "^$VAR" | cut -d '=' -f 2-)"
             else
@@ -23,8 +27,8 @@ function get-env-vars() {
                     export INPUT="${INPUT:-"$PLACEHOLDER"}"
                 done
             fi
-            echo "export $VAR='$INPUT'" >> .env
-            eval "export $VAR='$INPUT'"
+            echo "${ext:-}$VAR='$INPUT'" >> .env
+            eval "${ext:-}$VAR='$INPUT'"
         else
             eval "$(grep "^export $VAR=" .env)"
         fi

@@ -4,8 +4,10 @@ set -euo pipefail
 cd source
 VERSION="$(git tag | tail -n -1)"
 
-docker build . -f Dockerfile.gpu --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper:"$VERSION"
+docker build . -f Dockerfile --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper:"$VERSION"
+docker build . -f Dockerfile.gpu --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper:"$VERSION"-gpu
 
 docker tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper:"$VERSION" git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper:latest
+docker tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper:"$VERSION"-gpu git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper:latest-gpu
 
 docker push -a git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/whisper

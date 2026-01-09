@@ -1,7 +1,7 @@
 services:
   whisper:
     restart: unless-stopped
-    image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/whisper:latest
+    image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/whisper:${IMAGE:-latest-gpu}
     runtime: nvidia
     environment:
       - ASR_ENGINE=whisperx

@@ -1,59 +1,24 @@
 #!/bin/env bash
 
-function get-env-vars() {
-    if [[ ! -e env.example ]]; then
-        return 0
-    fi
-
-    if [[ -n ${1:-} ]]; then
-        ext="$1 "
-    fi
-
-    touch .env
-
-    while read -r LINE; do
-        if [[ -z "$LINE" ]]; then continue; fi
-
-        VAR="$(echo "$LINE" | cut -d '=' -f 1)"
-        PLACEHOLDER="$(echo "$LINE" | cut -d '=' -f 2- | envsubst)"
-
-        if ! grep -q "^${ext:-}$VAR=" .env; then
-            if env | grep -q "^$VAR"; then
-                INPUT="$(env | grep "^$VAR" | cut -d '=' -f 2-)"
-            else
-                INPUT=
-                while [[ -z "${INPUT:-}" ]]; do
-                    INPUT="$(gum input --header "Enter a value for $VAR" --placeholder "$PLACEHOLDER" < /dev/tty)"
-                    export INPUT="${INPUT:-"$PLACEHOLDER"}"
-                done
-            fi
-            echo "${ext:-}$VAR='$INPUT'" >> .env
-            eval "${ext:-}$VAR='$INPUT'"
-        else
-            eval "$(grep "^export $VAR=" .env)"
-        fi
-    done < env.example
-}
-
 get-terraform-vars() {
     touch terraform.tfvars
 
     grep '^variable' variable.tf | while read -r LINE; do
-    VAR=$(echo "$LINE" | awk '{print $2}')
-    DEFAULT=$(echo var."$VAR" | tofu console)
-    DEFAULT_STRIPPED=$(echo "$DEFAULT" | xargs)
+        VAR=$(echo "$LINE" | awk '{print $2}')
+        DEFAULT=$(echo var."$VAR" | tofu console)
+        DEFAULT_STRIPPED=$(echo "$DEFAULT" | xargs)
 
-    if ! grep -q "$VAR" terraform.tfvars; then
-        INPUT=
-        while [[ -z "${INPUT:-}" ]]; do
-            INPUT="$(gum input --header "Enter a value for $VAR" --placeholder "$DEFAULT_STRIPPED" < /dev/tty)"
-        done
+        if ! grep -q "$VAR" terraform.tfvars; then
+            INPUT=
+            while [[ -z "${INPUT:-}" ]]; do
+                INPUT="$(gum input --header "Enter a value for $VAR" --placeholder "$DEFAULT_STRIPPED" </dev/tty)"
+            done
 
-        if [[ $DEFAULT = '"'*'"' ]]; then
-            INPUT="\"$INPUT\""
+            if [[ $DEFAULT = '"'*'"' ]]; then
+                INPUT="\"$INPUT\""
+            fi
+
+            echo "$VAR = $INPUT" >>terraform.tfvars
         fi
-
-        echo "$VAR = $INPUT" >> terraform.tfvars
-    fi
-done
+    done
 }

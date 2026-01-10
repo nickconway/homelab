@@ -25,11 +25,11 @@ export SCRIPT_DIR
 cd "$SCRIPT_DIR"
 
 getopts_get_optional_argument() {
-  eval "arg=\${$OPTIND}"
-  if [[ -n $arg && $arg != -* ]]; then
-    OPTIND=$((OPTIND + 1))
-    OPTARG=$arg
-  fi
+    eval "arg=\${$OPTIND}"
+    if [[ -n $arg && $arg != -* ]]; then
+        OPTIND=$((OPTIND + 1))
+        OPTARG=$arg
+    fi
 }
 
 while getopts ':dh:kt' flag; do
@@ -90,7 +90,9 @@ if ! command -v gum &>/dev/null; then
     go install github.com/charmbracelet/gum@latest
 fi
 
-get-env-vars export
+ENVS="$(get-env-vars)"
+[[ -n "$ENVS" ]] && echo "$ENVS" >>.env || true
+source .env
 
 if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &>/dev/null; then
     GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"

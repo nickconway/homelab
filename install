@@ -90,8 +90,7 @@ if ! command -v gum &>/dev/null; then
     go install github.com/charmbracelet/gum@latest
 fi
 
-ENVS="$(get-env-vars)"
-[[ -n "$ENVS" ]] && echo "$ENVS" >>.env || true
+get-env-vars >>.env
 source .env
 
 if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &>/dev/null; then

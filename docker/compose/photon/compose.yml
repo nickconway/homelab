@@ -9,10 +9,12 @@ services:
     volumes:
       - ./data:/photon/photon_data
     environment:
-      - UPDATE_STRATEGY=PARALLEL
-      - UPDATE_INTERVAL=1d
+      - UPDATE_STRATEGY=SEQUENTIAL
+      - UPDATE_INTERVAL=30d
       - LOG_LEVEL=DEBUG
       - COUNTRY_CODE=us
+      - DOWNLOAD_MAX_RETRIES=10
+      - APPRISE_URLS=${APPRISE_URLS:-}
     networks:
       - proxy
     labels:

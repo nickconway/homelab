@@ -38,3 +38,7 @@
 	path = docker/compose/soularr/dashboard
 	url = https://github.com/EricH9958/Soularr-Dashboard
 	branch = main
+[submodule "docker/dockerfiles/bifrost/source"]
+	path = docker/dockerfiles/bifrost/source
+	url = https://github.com/chrivers/bifrost
+	branch = master

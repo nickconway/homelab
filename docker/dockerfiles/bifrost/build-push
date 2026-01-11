@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+export DOCKER_BUILDKIT=1
+VERSION="$(cat source/Cargo.toml | grep ^version | cut -d '=' -f 2 | xargs)"
+
+docker build source --build-arg VERSION="$VERSION" --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/bifrost:"$VERSION"
+
+docker tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/bifrost:"$VERSION" git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/bifrost:latest
+
+docker push -a git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/bifrost

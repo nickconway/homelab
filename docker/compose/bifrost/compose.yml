@@ -1,0 +1,15 @@
+services:
+  bifrost:
+    image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/bifrost:${IMAGE:-latest}
+    restart: unless-stopped
+    ports:
+      - 2100:2100
+    volumes:
+      - ./data/config.yaml:/app/config.yaml
+      - ./data/certs:/app/certs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bifrost.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.bifrost.rule=Host(`${SERVICE_SUBDOMAIN:-hue}.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.bifrost.tls=true"
+      - "traefik.http.services.bifrost.loadbalancer.server.port=80"

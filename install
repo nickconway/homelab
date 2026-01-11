@@ -25,7 +25,7 @@ export SCRIPT_DIR
 cd "$SCRIPT_DIR"
 
 getopts_get_optional_argument() {
-    eval "arg=\${$OPTIND}"
+    eval "arg=\${$OPTIND:-}"
     if [[ -n $arg && $arg != -* ]]; then
         OPTIND=$((OPTIND + 1))
         OPTARG=$arg

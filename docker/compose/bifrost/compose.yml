@@ -2,8 +2,7 @@ services:
   bifrost:
     image: ${GIT_SUBDOMAIN:-git}.${SERVICES_BASE_DOMAIN}/${GITEA_USER}/bifrost:${IMAGE:-latest}
     restart: unless-stopped
-    ports:
-      - 2100:2100
+    network_mode: host
     volumes:
       - ./data/config.yaml:/app/config.yaml
       - ./data/certs:/app/certs

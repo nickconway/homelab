@@ -9,7 +9,7 @@ services:
     volumes:
       - ./data:/photon/photon_data
     environment:
-      - UPDATE_STRATEGY=SEQUENTIAL
+      - UPDATE_STRATEGY=PARALLEL
       - UPDATE_INTERVAL=30d
       - LOG_LEVEL=DEBUG
       - COUNTRY_CODE=us

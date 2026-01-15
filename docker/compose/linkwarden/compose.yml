@@ -6,7 +6,7 @@ networks:
 
 services:
   linkwarden-postgres:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     env_file: .env
     networks:
       - linkwarden

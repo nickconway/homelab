@@ -45,7 +45,7 @@ services:
       - invoice-ninja
 
   invoice-ninja-mysql:
-    image: mysql:8
+    image: mysql:9
     restart: unless-stopped
     env_file: data/env
     environment:

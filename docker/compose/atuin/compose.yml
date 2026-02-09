@@ -7,7 +7,7 @@ networks:
 services:
   atuin:
     image: ghcr.io/atuinsh/atuin:latest
-    command: server start
+    command: start
     networks:
       - atuin
       - proxy

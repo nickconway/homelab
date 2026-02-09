@@ -18,7 +18,7 @@ services:
     environment:
       TZ: America/New_York
       CRON_MIN: '3,33'
-      TRUSTED_PROXY: 172.16.0.1/12 192.168.0.1/16 10.0.10.0/24 10.0.10.2/32
+      TRUSTED_PROXY: 172.16.0.1/12 192.168.0.1/16 10.0.0.0/8
       PUID: 1000
       PGID: 1000
       SERVER_DNS: ${SERVICE_SUBDOMAIN:-rss}.${SERVICES_BASE_DOMAIN}

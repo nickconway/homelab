@@ -10,7 +10,7 @@ variable pm_user {
 
 variable pm_api_token_id {
     type = string
-    default = "token_id"
+    default = "talos-token"
 }
 
 variable pm_api_token_secret {

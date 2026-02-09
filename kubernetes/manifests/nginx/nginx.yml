@@ -25,7 +25,7 @@ spec:
         - name: src
           nfs:
             path: /mnt/main/kubernetes/nginx
-            server: 10.0.10.10
+            server: ${NFS_IP}
 ---
 apiVersion: v1
 kind: Service

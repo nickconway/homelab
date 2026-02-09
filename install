@@ -93,10 +93,7 @@ fi
 get-env-vars env.example ~/.env
 source ~/.env
 
-if [[ -n "${GPG_EMAIL:-}" ]] && [[ -z "${GPG_KEY:-}" ]] && gpg --with-colons --list-keys "$GPG_EMAIL" &>/dev/null; then
-    GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"
-    export GPG_KEY
-fi
+export SOPS_PGP_FP="$(gpg --list-keys $GPG_EMAIL | head -n 2 | tail -n 1 | xargs)"
 
 if [[ ${BOOTSTRAP_DOCKER:-true} == true ]]; then ./scripts/install-docker-stacks; fi
 if [[ ${BOOTSTRAP_TALOS:-true} == true ]]; then ./scripts/create-talos-vms; fi

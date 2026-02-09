@@ -18,7 +18,7 @@ services:
       - DATABASE_PASS=${POSTGRES_PASSWORD}
       - DATABASE_NAME=teslamate
       - DATABASE_HOST=teslamate-postgres
-      - MQTT_HOST=10.0.107.2
+      - MQTT_HOST=${MQTT_HOST}
       - MQTT_USERNAME=mqtt
       - MQTT_PASSWORD=${MQTT_PASSWORD}
     volumes:

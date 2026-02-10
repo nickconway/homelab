@@ -1,4 +1,5 @@
 *.rsync-backup
+terraform-plugin-proxmox.log
 
 ### Terraform ###
 # Local .terraform directories

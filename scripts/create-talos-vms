@@ -96,9 +96,6 @@ while read -r NODE; do
         sleep 5
     done
 
-    sed -i 's/^\(auto: stable\)/\# \1/g' worker.yaml
-    echo "hostname: $NAME" >>worker.yaml
-
     talosctl --talosconfig=talosconfig apply-config --insecure \
         -n "$IP" \
         -e "$IP" \

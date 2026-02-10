@@ -33,6 +33,7 @@ resource "proxmox_vm_qemu" "talos-cp" {
     model = "virtio"
     bridge = "vmbr0"
     tag = "10"
+    macaddr = "BC:24:11:00:46:E${count.index}"
   }
 
   disks {
@@ -74,6 +75,7 @@ resource "proxmox_vm_qemu" "talos-worker" {
     model = "virtio"
     bridge = "vmbr0"
     tag = "10"
+    macaddr = "BC:24:11:00:46:F${count.index}"
   }
 
   disks {

@@ -1,20 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
-source "$SCRIPT_DIR/utils"
-
 if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
     export DEBUG_MODE
 fi
+
+cd "$SCRIPT_DIR/docker/compose"
+source "$SCRIPT_DIR/utils"
 
 if ! command -v docker &>/dev/null; then
     if [[ -n "${INSTALL_DEPENDENCIES:-}" ]] || gum confirm "Docker is not installed, would you like to install it?"; then
         curl -fsSL https://get.docker.com | sh
     fi
 fi
-
-cd "$SCRIPT_DIR/docker/compose"
 
 echo "Docker stacks will be installed in $DOCKER_STACK_DIR"
 mkdir -p "$DOCKER_STACK_DIR"

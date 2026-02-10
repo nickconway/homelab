@@ -35,7 +35,10 @@ gum spin --title "Provisioning talos VMs" -- tofu apply -auto-approve
 CP_NODES="$(tofu output -json cp-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"
 WORKER_NODES="$(tofu output -json worker-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"
 
-(cd patches; get-env-vars >>.env)
+(
+    cd patches
+    get-env-vars
+)
 source patches/.env
 
 rm -f taloconfig

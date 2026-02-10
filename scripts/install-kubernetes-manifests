@@ -44,6 +44,6 @@ for APP in $SELECTED_K8S_APPS; do
 done
 
 if [[ -n "$SELECTED_K8S_APPS" ]]; then
-    gum spin --title "Applying manifests..." -- apply-manifests ${SELECTED_K8S_APPS//,/ }
+    gum spin --title "Applying manifests..." -- manifests apply ${SELECTED_K8S_APPS//,/ }
     echo "Kubernetes manifests applied"
 fi

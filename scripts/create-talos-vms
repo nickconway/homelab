@@ -30,6 +30,26 @@ if [[ ! -e terraform.tfstate ]]; then
 fi
 
 get-terraform-vars
+
+export PROXMOX_HOST=$(echo var.pm_api_host | tofu console | xargs)
+export PROXMOX_USER=$(echo var.pm_user | tofu console | xargs)
+export PROXMOX_TOKEN_ID=$(echo var.pm_api_token_id | tofu console | xargs)
+export PROXMOX_TOKEN_SECRET=$(echo var.pm_api_token_secret | tofu console | xargs)
+export PROXMOX_ISO_ID=$(echo var.pm_talos_iso_id | tofu console | xargs)
+export PROXMOX_STORAGE_ID=$(echo "$PROXMOX_ISO_ID" | cut -d ':' -f 1)
+
+function download-talos-iso() {
+    until curl -sSL -H "Authorization: PVEAPIToken=$PROXMOX_USER!$PROXMOX_TOKEN_ID=$PROXMOX_TOKEN_SECRET" $PROXMOX_HOST/api2/json/nodes/pve/storage/"$PROXMOX_STORAGE_ID"/content | grep -q "$PROXMOX_ISO_ID"; do
+        curl -sSL -H "Authorization: PVEAPIToken=$PROXMOX_USER!$PROXMOX_TOKEN_ID=$PROXMOX_TOKEN_SECRET" $PROXMOX_HOST/api2/json/nodes/pve/storage/"$PROXMOX_STORAGE_ID"/download-url \
+            -d content=iso \
+            -d filename="talos-$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' terraform.tfvars).iso" \
+            -d url="https://factory.talos.dev/image/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515/v$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' terraform.tfvars)/metal-amd64.iso"
+    done
+}
+
+export -f download-talos-iso
+
+gum spin --title "Downloading talos ISO" -- bash -c download-talos-iso
 gum spin --title "Provisioning talos VMs" -- tofu apply -auto-approve
 
 CP_NODES="$(tofu output -json cp-nodes | jq '.[]' | sed -e 's/^"//' -e 's/"$//')"

@@ -7,7 +7,6 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 cd "$SCRIPT_DIR/docker/compose"
-source "$SCRIPT_DIR/utils"
 
 if ! command -v docker &>/dev/null; then
     if [[ -n "${INSTALL_DEPENDENCIES:-}" ]] || gum confirm "Docker is not installed, would you like to install it?"; then
@@ -46,7 +45,7 @@ for APP in $SELECTED_DOCKER_APPS; do
 
     (
         cd "$DOCKER_STACK_DIR/$APP"
-        get-env-vars
+        get-vars env
     )
 done
 

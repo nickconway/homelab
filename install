@@ -47,7 +47,7 @@ while getopts ':dh:kt' flag; do
         REMOTE_DIR="${REMOTE_DIR:-Git/homelab}"
         rsync -abhuz --suffix .rsync-backup --mkpath "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
         shift "$((OPTIND - 1))"
-        ssh -t "$OPTARG" "bash -lc '$REMOTE_DIR/install $*'"
+        ssh -t "$OPTARG" "bash -lc '${DEBUG_MODE:+DEBUG_MODE=y} $REMOTE_DIR/install $*'"
         exit
         ;;
     k)
@@ -64,8 +64,6 @@ while getopts ':dh:kt' flag; do
     esac
     shift $((OPTIND - 1))
 done
-
-source "$SCRIPT_DIR/utils"
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$SCRIPT_DIR/submodules/dotfiles/.local/bin:$PATH"
@@ -90,7 +88,7 @@ if ! command -v gum &>/dev/null; then
     go install github.com/charmbracelet/gum@latest
 fi
 
-get-env-vars env.example ~/.env
+get-vars env env.example ~/.env
 source ~/.env
 
 if [[ ${BOOTSTRAP_DOCKER:-true} == true ]]; then ./scripts/install-docker-stacks; fi

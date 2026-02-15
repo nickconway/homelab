@@ -1,9 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
-    export DEBUG_MODE
 fi
 
 cd "$SCRIPT_DIR/docker/compose"

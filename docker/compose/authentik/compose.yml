@@ -44,8 +44,6 @@ services:
     restart: unless-stopped
     command: server
     environment:
-      PUID: 1000
-      PGID: 1000
       AUTHENTIK_REDIS__HOST: authentik-redis
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
@@ -58,9 +56,6 @@ services:
       - ./data/media:/media
       - ./data/custom-templates:/templates
     env_file: .env
-    # ports:
-    #   - "${COMPOSE_PORT_HTTP:-9000}:9000"
-    #   - "${COMPOSE_PORT_HTTPS:-9443}:9443"
     depends_on:
       - authentik-postgres
       - authentik-redis
@@ -78,9 +73,8 @@ services:
     image: ghcr.io/goauthentik/server:2025.10.1@sha256:8f70895ad48bb7de656a2aac7c78c2bec6a4e820e009a570b0c285fe406eadac
     restart: unless-stopped
     command: worker
+    # user: root
     environment:
-      PUID: 1000
-      PGID: 1000
       AUTHENTIK_REDIS__HOST: authentik-redis
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
@@ -89,13 +83,6 @@ services:
       AUTHENTIK_DISABLE_STARTUP_ANALYTICS: true
       AUTHENTIK_DISABLE_UPDATE_CHECK: true
       AUTHENTIK_ERROR_REPORTING__ENABLED: false
-    # `user: root` and the docker socket volume are optional.
-    # See more for the docker socket integration here:
-    # https://goauthentik.io/docs/outposts/integrations/docker
-    # Removing `user: root` also prevents the worker from fixing the permissions
-    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
-    # (1000:1000 by default)
-    # user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data/media:/media

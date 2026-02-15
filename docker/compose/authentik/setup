@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+if [[ -d data ]]; then
+    exit 0
+fi
+
+yq '.services["authentik-worker"].user = "root"' compose.yml | docker compose -f - up -d
+
+until curl -fsSL auth.$SERVICES_BASE_DOMAIN.com; do
+    sleep 1
+done
+
+docker compose down

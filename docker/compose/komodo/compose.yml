@@ -78,12 +78,28 @@ services:
       - ./data/repos:/etc/komodo/repos # manage repos in a docker volume, or change it to an accessible host directory.
       - ..:/etc/komodo/stacks # manage stack files in a docker volume, or change it to an accessible host directory.
       - ./data/builds:/etc/komodo/builds
+      - ${DOCKER_STACK_DIR}:${DOCKER_STACK_DIR}:ro
     environment:
-      # If the disk size is overreporting, can use one of these to
-      # whitelist / blacklist the disks to filter them, whichever is easier.
-      # Accepts comma separated list of paths.
-      # Usually whitelisting just /etc/hostname gives correct size.
       PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
-      # PERIPHERY_EXCLUDE_DISK_MOUNTS: /snap,/etc/repos
     labels:
       - "komodo.skip=true"
+
+  import:
+    image: foxxmd/komodo-import:0.2.4@sha256:ad266e6082c99f2e48b509ddcf2bdbcd225615267e99d837dba90bb1567655ce
+    restart: on-failure
+    volumes:
+      - ${DOCKER_STACK_DIR}:/filesOnServer:ro
+    networks:
+      - komodo
+    depends_on:
+      - core
+    environment:
+      - HOST_DIR=${DOCKER_STACK_DIR}
+      - STACKS_FROM=dir
+      - SERVER_NAME=${SERVER_NAME}
+      - DOCKER_HOST=tcp://socket-proxy:2375
+      - KOMODO_URL=http://core:9120
+      - API_KEY=${API_KEY}
+      - API_SECRET=${API_SECRET}
+      - OUTPUT_API_SYNC=true
+      - SYNC_NAME=import-"${SERVER_NAME}"

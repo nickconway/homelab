@@ -18,7 +18,7 @@ actions:
   - title: Update Containers
     id: updateContainers
     icon: restart
-    shell: ssh {{ hostname }} 'bash -lc ".local/bin/update-containers &> /tmp/update-containers.log"'
+    shell: ssh {{ hostname }} 'bash -lc "LOG=y .local/bin/containers update"'
     timeout: 600
     popupOnStart: execution-dialog
     maxConcurrent: 5

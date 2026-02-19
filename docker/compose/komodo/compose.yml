@@ -75,9 +75,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/proc
-      - ./data/repos:/etc/komodo/repos # manage repos in a docker volume, or change it to an accessible host directory.
-      - ..:/etc/komodo/stacks # manage stack files in a docker volume, or change it to an accessible host directory.
-      - ./data/builds:/etc/komodo/builds
+      - ./data/app:/etc/komodo
       - ${DOCKER_STACK_DIR}:${DOCKER_STACK_DIR}:ro
     environment:
       PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
@@ -102,4 +100,4 @@ services:
       - API_KEY=${API_KEY}
       - API_SECRET=${API_SECRET}
       - OUTPUT_API_SYNC=true
-      - SYNC_NAME=import-"${SERVER_NAME}"
+      - SYNC_NAME=import-${SERVER_NAME:-default}

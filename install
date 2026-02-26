@@ -44,7 +44,7 @@ while getopts ':dh:kt' flag; do
     h)
         REMOTE_DIR="$(gum input --header "Where would you like to sync the repository to on the remote host?" --placeholder "Git/homelab" </dev/tty)"
         REMOTE_DIR="${REMOTE_DIR:-Git/homelab}"
-        rsync -abhuz --suffix .rsync-backup --mkpath "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
+        rsync -abhruz --backup-dir ".rsync-backup" --mkpath "$SCRIPT_DIR/" "$OPTARG:$REMOTE_DIR"
         shift "$((OPTIND - 1))"
         ssh -t "$OPTARG" "bash -lc '${DEBUG_MODE:+DEBUG_MODE=y} $REMOTE_DIR/install $*'"
         exit

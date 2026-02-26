@@ -34,12 +34,8 @@ SELECTED_K8S_APPS="$(
 )"
 
 for APP in $SELECTED_K8S_APPS; do
-    gum spin --title "Copying $APP config..." -- rsync -bhruvz --progress --stats "$APP/" "$K8S_MANIFEST_DIR/$APP"
-
-    (
-        cd "$K8S_MANIFEST_DIR/$APP"
-        get-vars env
-    )
+    gum spin --title "Copying $APP config..." -- rsync -abhruvz --backup-dir ".rsync-backup" --progress --stats "$APP/" "$K8S_MANIFEST_DIR/$APP"
+    (cd "$K8S_MANIFEST_DIR/$APP" && get-vars env)
 done
 
 if [[ -n "$SELECTED_K8S_APPS" ]]; then

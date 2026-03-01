@@ -47,7 +47,7 @@ services:
         - "traefik.http.services.tranga.loadbalancer.server.port=80"
 
     tranga-postgres:
-      image: docker.io/library/postgres:18.0@sha256:41fc5342eefba6cc2ccda736aaf034bbbb7c3df0fdb81516eba1ba33f360162c
+      image: docker.io/library/postgres:18.2@sha256:a688ae5c99f86c1424e046ace0de890608cc0ddb5ec8ef72a6ff8305fdc8f4d2
       environment:
         - POSTGRES_USER=${POSTGRES_USER:-tranga}
         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

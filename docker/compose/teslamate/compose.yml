@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
 
   teslamate-postgres:
-    image: postgres:17
+    image: postgres:18-trixie
     restart: unless-stopped
     environment:
       - PUID=1000
@@ -45,18 +45,16 @@ services:
     networks:
       - teslamate
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql
 
   teslamate-grafana:
     image: teslamate/grafana:latest
     restart: unless-stopped
-    user: 1000:1000
+    user: 0:0
     networks:
       - teslamate
       - proxy
     environment:
-      - PUID=1000
-      - PGID=1000
       - DATABASE_USER=teslamate
       - DATABASE_PASS=${POSTGRES_PASSWORD}
       - DATABASE_NAME=teslamate

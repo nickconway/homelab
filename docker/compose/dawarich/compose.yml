@@ -8,11 +8,17 @@ services:
   dawarich-redis:
     image: redis:8.4-alpine
     restart: unless-stopped
-    command: redis-server
+    command: redis-server --save 900 1 --save 300 10 --appendonly no
     networks:
       - dawarich
     volumes:
       - ./data/shared:/var/shared/redis
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   dawarich-postgres:
     image: postgis/postgis:17-3.5-alpine
@@ -28,6 +34,12 @@ services:
       POSTGRES_USER: dawarich
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: dawarich
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-dawarich_development}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   dawarich:
     image: freikin/dawarich:latest
@@ -35,7 +47,7 @@ services:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched
       - ./data/storage:/var/app/storage
-      - ./data/db:/var/lib/postgresql/data
+      - ./data/db:/dawarich_db_data
     networks:
       - proxy
       - dawarich
@@ -45,7 +57,7 @@ services:
     command: ["bin/rails", "server", "-p", "3000", "-b", "::"]
     restart: unless-stopped
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://dawarich-redis:6379
       DATABASE_HOST: dawarich-postgres
       DATABASE_USERNAME: dawarich
@@ -67,9 +79,22 @@ services:
       PROMETHEUS_EXPORTER_ENABLED: false
       PROMETHEUS_EXPORTER_HOST: 0.0.0.0
       PROMETHEUS_EXPORTER_PORT: 9394
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      OIDC_ISSUER: https://${AUTH_SUBDOMAIN:-auth}.${SERVICES_BASE_DOMAIN}/application/o/dawarich/
+      OIDC_REDIRECT_URI: https://${SERVICE_SUBDOMAIN:-location}.${SERVICES_BASE_DOMAIN}/users/auth/openid_connect/callback
+      OIDC_PROVIDER_NAME: "Authentik"
+      OIDC_AUTO_REGISTER: "true"
+      ALLOW_EMAIL_PASSWORD_REGISTRATION: "false"
     depends_on:
       - dawarich-postgres
       - dawarich-redis
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dawarich.middlewares=crowdsec-traefik-bouncer"
@@ -89,10 +114,10 @@ services:
     stdin_open: true
     tty: true
     entrypoint: sidekiq-entrypoint.sh
-    command: ['bundle', 'exec', 'sidekiq']
+    command: ['sidekiq']
     restart: unless-stopped
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://dawarich-redis:6379
       DATABASE_HOST: dawarich-postgres
       DATABASE_USERNAME: dawarich
@@ -118,6 +143,12 @@ services:
       - dawarich-postgres
       - dawarich-redis
       - dawarich
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
     # deploy:
     #   resources:
     #     limits:

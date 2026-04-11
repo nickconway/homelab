@@ -18,7 +18,7 @@ actions:
   - title: Update Containers
     id: updateContainers
     icon: restart
-    shell: ssh {{ hostname }} 'bash -lc "LOG=y .local/bin/containers update"'
+    shell: ssh -t {{ hostname }} 'bash -lc "LOG=y .local/bin/containers update {{ containers }}"'
     timeout: 600
     popupOnStart: execution-dialog
     maxConcurrent: 5
@@ -26,6 +26,9 @@ actions:
       - name: hostname
         title: Hostname
         type: ascii_identifier
+      - name: containers
+        title: Containers
+        type: ascii_sentence
 
   # Lastly, you can hide actions from the web UI, this is useful for creating
   # background helpers that execute only on startup or a cron, for updating

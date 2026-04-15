@@ -6,7 +6,7 @@ networks:
 
 services:
   actual:
-    image: ghcr.io/actualbudget/actual:25.11.0@sha256:8f72d73e68958566850325c1f9fe780a4477340979969bd6979649dc519723ab
+    image: ghcr.io/actualbudget/actual:26.4.0@sha256:b0e732e2c41b3dc468a71548e88ef76d3f0c157fc43d15fa05d14ec1c5747e1e
     user: 1000:1000
     # environment:
     #   - PUID=1000

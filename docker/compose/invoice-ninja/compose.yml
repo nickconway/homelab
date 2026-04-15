@@ -6,7 +6,7 @@ networks:
 
 services:
   invoice-ninja-server:
-    image: nginx
+    image: nginx:1.29.8@sha256:7f0adca1fc6c29c8dc49a2e90037a10ba20dc266baaed0988e9fb4d0d8b85ba0
     restart: unless-stopped
     env_file: .env
     volumes:
@@ -45,7 +45,7 @@ services:
       - invoice-ninja
 
   invoice-ninja-mysql:
-    image: mysql:8
+    image: mysql:8.0.45@sha256:529b4afa138686871cf698617ef6e347a857179fa2c58e6811b6c20862a1cd6a
     restart: unless-stopped
     env_file: data/env
     environment:

@@ -6,7 +6,7 @@ networks:
 
 services:
   atuin:
-    image: ghcr.io/atuinsh/atuin:latest
+    image: ghcr.io/atuinsh/atuin:18.13.6@sha256:9bde3fe6b1633c357cb19c07ea49bb9834720e8ff42d04b39ad7865155581150
     command: start
     networks:
       - atuin
@@ -30,7 +30,7 @@ services:
       - "traefik.http.services.atuin.loadbalancer.server.port=8888"
 
   atuin-postgres:
-    image: postgres:14
+    image: postgres:14.22@sha256:ae46a8452f2c137766c9d4a62f4fe60166355ff8b00512e6c48692dbf1eed3d5
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data/

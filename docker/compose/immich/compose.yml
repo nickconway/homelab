@@ -6,7 +6,7 @@ networks:
 
 services:
   immich:
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    image: ghcr.io/immich-app/immich-server:v2.7.5@sha256:c15bff75068effb03f4355997d03dc7e0fc58720c2b54ad6f7f10d1bc57efaa5
     volumes:
       - ./data/uploads:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -38,7 +38,7 @@ services:
   immich-machine-learning:
     # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
     # Example tag: ${IMMICH_VERSION:-release}-cuda
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    image: ghcr.io/immich-app/immich-machine-learning:v2.7.5@sha256:a2501141440f10516d329fdfba2c68082e19eb9ba6016c061ac80d23beadf7f3
     user: 0:106
     extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
       file: hwaccel.ml.yml
@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
 
   immich-redis:
-    image: docker.io/valkey/valkey:9@sha256:546304417feac0874c3dd576e0952c6bb8f06bb4093ea0c9ca303c73cf458f63
+    image: valkey/valkey:9.0.3@sha256:3b55fbaa0cd93cf0d9d961f405e4dfcc70efe325e2d84da207a0a8e6d8fde4f9
     restart: unless-stopped
     networks:
       - immich
@@ -71,7 +71,7 @@ services:
     restart: unless-stopped
 
   immich-power-tools:
-    image: ghcr.io/varun-raj/immich-power-tools:latest
+    image: ghcr.io/immich-power-tools/immich-power-tools:0.21.1@sha256:b00aedf04e7c9c848ec37fb2608ac679dee10a58c14a7910d22f9134f981da4b
     restart: unless-stopped
     env_file: .env
     environment:

@@ -6,7 +6,7 @@ networks:
 
 services:
   mealie:
-    image: ghcr.io/mealie-recipes/mealie:latest
+    image: ghcr.io/mealie-recipes/mealie:v3.15.1@sha256:62897c85f7db1882e4c9a67e7b9eed8c227096700e02450ba61d0b99a03cc605
     depends_on:
       - mealie-postgres
     volumes:
@@ -50,7 +50,7 @@ services:
       - "traefik.http.services.mealie.loadbalancer.server.port=9000"
 
   mealie-postgres:
-    image: postgres:15
+    image: postgres:15.17@sha256:3e43515057e113ee741fca2f621f15300be34a6d4a8dfcf2e20651288c8272f3
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

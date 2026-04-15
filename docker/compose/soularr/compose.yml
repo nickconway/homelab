@@ -4,6 +4,7 @@ networks:
 
 services:
   soularr:
+    image: mrusse08/soularr:v1.1.0@sha256:06e4829433b5c6f4cc08fef10c70d90973b48c4c3dc0207679b7e80e63f574aa
     restart: unless-stopped
     hostname: soularr
     environment:
@@ -17,7 +18,6 @@ services:
     volumes:
       - /mnt/nas/content/media/music:/downloads:ro
       - ./config:/data
-    image: mrusse08/soularr:latest
 
   soularr-dashboard:
     build:

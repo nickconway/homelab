@@ -6,7 +6,7 @@ networks:
 
 services:
   opengist:
-    image: ghcr.io/thomiceli/opengist
+    image: ghcr.io/thomiceli/opengist:1.12.1@sha256:85361da4c2f259df6e0675c54574c991ae2601922cb56c4d0419fd3e15ceb139
     restart: unless-stopped
     networks:
       - proxy
@@ -27,7 +27,7 @@ services:
       - "traefik.http.services.opengist.loadbalancer.server.port=6157"
 
   gitea:
-    image: gitea/gitea:latest
+    image: gitea/gitea:1.25.5@sha256:f846d26a4fc389c5806a580a765e00bfdd1fd181e6f2060da98ea2669d914472
     ports:
       - 222:22
     environment:
@@ -56,7 +56,7 @@ services:
       - "traefik.http.services.gitea.loadbalancer.server.port=3000"
 
   gitea-runner:
-    image: gitea/act_runner:latest
+    image: gitea/act_runner:0.3.1@sha256:c2a169c5e99864c25e32527cef3d82203225e09558773022bf3dc164a2e6d762
     restart: unless-stopped
     volumes:
       - ./data/runner/config.yaml:/config.yaml
@@ -72,7 +72,7 @@ services:
       - USER_GID=1000
 
   gitea-postgres:
-    image: postgres:14
+    image: postgres:14.22@sha256:ae46a8452f2c137766c9d4a62f4fe60166355ff8b00512e6c48692dbf1eed3d5
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

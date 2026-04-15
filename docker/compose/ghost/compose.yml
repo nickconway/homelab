@@ -6,7 +6,7 @@ networks:
 
 services:
   ghost:
-    image: ghost:alpine
+    image: ghost:6.28.0-alpine3.23@sha256:0208a517fa6545e3621674a9c888796bb13a0b34aeba89f3201e7aa944bac8f4
     environment:
       PUID: 1000
       PGID: 1000
@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
 
   ghost-mysql:
-    image: mysql:8.4
+    image: mysql:8.4.8@sha256:669b2d89f3916f5263af230ffa20889a03c7f4bedf58133fe8780466c613f7ae
     restart: unless-stopped
     networks:
       - ghost

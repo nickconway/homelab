@@ -9,7 +9,7 @@ networks:
 
 services:
   pihole:
-    image: pihole/pihole:latest
+    image: pihole/pihole:2026.04.0@sha256:300cc8f9e966b00440358aafef21f91b32dfe8887e8bd9a6193ed1c4328655d4
     depends_on:
       - unbound
     dns:
@@ -39,7 +39,7 @@ services:
         ipv4_address: 10.1.1.2
 
   unbound:
-    image: mvance/unbound:latest
+    image: mvance/unbound:1.21.1@sha256:8ecfef72c5b436a6fe2af318c7a77a97e4565623cb069305e8262805714cb561
     environment:
       - PUID=1000
       - PGID=1000

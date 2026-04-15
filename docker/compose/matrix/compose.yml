@@ -6,7 +6,7 @@ networks:
 
 services:
   matrix-postgres:
-    image: postgres:15-alpine
+    image: postgres:15.17-alpine3.23@sha256:fceb6f86328c36f2438fae3b851b0cc57c4a7e69a58c866d9ce24281f2cf0c9c
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data
@@ -23,8 +23,8 @@ services:
       - matrix
 
   matrix:
+    image: matrixdotorg/dendrite-monolith:v0.15.2@sha256:7dafe6edfc8cfab758a68a4cf20414df1ade4a36b45b1852554d81fb70b1272c
     hostname: monolith
-    image: matrixdotorg/dendrite-monolith:latest
     volumes:
       - ./data/config:/etc/dendrite
       - ./data/media:/var/dendrite/media
@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
 
   matrix-nginx:
-    image: nginx:latest
+    image: nginx:1.29.8@sha256:7f0adca1fc6c29c8dc49a2e90037a10ba20dc266baaed0988e9fb4d0d8b85ba0
     restart: "unless-stopped"
     networks:
       - matrix

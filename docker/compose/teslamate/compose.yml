@@ -6,7 +6,7 @@ networks:
 
 services:
   teslamate:
-    image: teslamate/teslamate:latest
+    image: teslamate/teslamate:3.0.0@sha256:6569026b73bd657455bbec05965d07fa30b6d4d70eaab0bd5b343231c0429167
     networks:
       - teslamate
       - proxy
@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
 
   teslamate-postgres:
-    image: postgres:18-trixie
+    image: postgres:18.3-trixie@sha256:52e6ffd11fddd081ae63880b635b2a61c14008c17fc98cdc7ce5472265516dd0
     restart: unless-stopped
     environment:
       - PUID=1000
@@ -48,7 +48,7 @@ services:
       - ./data/db:/var/lib/postgresql
 
   teslamate-grafana:
-    image: teslamate/grafana:latest
+    image: teslamate/grafana:3.0.0@sha256:e02d1f036dd10771ea04db2bafc483067a9dbb874d0b5137dda5a6fe539b77dc
     restart: unless-stopped
     user: 0:0
     networks:

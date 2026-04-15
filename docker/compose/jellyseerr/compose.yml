@@ -4,7 +4,7 @@ networks:
 
 services:
   jellyseerr:
-    image: ghcr.io/fallenbagel/jellyseerr:latest
+    image: ghcr.io/seerr-team/seerr:v3.1.1@sha256:d535391db3b5a22ce02241e6d7a50ca714e75d927e46aa20456b77fa051cbf52
     environment:
       - PUID=1000
       - PGID=1000

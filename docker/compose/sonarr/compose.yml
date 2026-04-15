@@ -4,7 +4,7 @@ networks:
 
 services:
   sonarr:
-    image: linuxserver/sonarr:latest
+    image: linuxserver/sonarr:4.0.17@sha256:6854df9de20b8c82e1982604f39473d64dbb4c4584b1013f18f9ade1ee92af13
     restart: unless-stopped
     environment:
       - TZ=America/New_York # Specify a timezone to use

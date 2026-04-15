@@ -6,7 +6,7 @@ networks:
 
 services:
   ryot-postgres:
-    image: postgres:16-alpine # atleast version 15 is required
+    image: postgres:16.13-alpine3.23@sha256:20edbde7749f822887a1a022ad526fde0a47d6b2be9a8364433605cf65099416
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data
@@ -20,7 +20,7 @@ services:
       - ryot
 
   ryot:
-    image: ghcr.io/ignisda/ryot:latest
+    image: ghcr.io/ignisda/ryot:v10.3.8@sha256:179f153c58a52c87c2a28c7bfe21bd4a510fb387c55bf2b4fff7f08bc12c69c2
     environment:
       - DATABASE_URL=postgres://ryot:${POSTGRES_PASSWORD}@ryot-postgres:5432/postgres
       - TZ=America/New_York

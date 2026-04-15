@@ -3,7 +3,7 @@ networks:
     external: true
 
 services:
-  jellyseerr:
+  seerr:
     image: ghcr.io/seerr-team/seerr:v3.1.1@sha256:d535391db3b5a22ce02241e6d7a50ca714e75d927e46aa20456b77fa051cbf52
     environment:
       - PUID=1000
@@ -16,8 +16,8 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jellyseerr.middlewares=crowdsec-traefik-bouncer,auth"
-      - "traefik.http.routers.jellyseerr.rule=Host(`${SERVICE_SUBDOMAIN:-discover}.${SERVICES_BASE_DOMAIN}`)"
-      - "traefik.http.routers.jellyseerr.tls=true"
-      - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
+      - "traefik.http.routers.seerr.middlewares=crowdsec-traefik-bouncer,auth"
+      - "traefik.http.routers.seerr.rule=Host(`${SERVICE_SUBDOMAIN:-discover}.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.seerr.tls=true"
+      - "traefik.http.services.seerr.loadbalancer.server.port=5055"
     restart: unless-stopped

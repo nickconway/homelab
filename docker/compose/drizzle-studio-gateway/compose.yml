@@ -4,7 +4,7 @@ networks:
 
 services:
   drizzle-gateway:
-    image: ghcr.io/drizzle-team/gateway:latest
+    image: ghcr.io/drizzle-team/gateway:1.2.0@sha256:c235b874fe1a94491b0fd1ff83a7c80eb2eab42ae60bd728bb036afc2a5ad38a
     networks:
       - proxy
     volumes:

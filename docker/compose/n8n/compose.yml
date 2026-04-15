@@ -11,7 +11,7 @@ services:
       - ./data/files:/files
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
+    image: ghcr.io/n8n-io/n8n:2.16.0@sha256:c9932d755356f6879ac4aab2efcb334e1e4f2248fc516ab7b115f0def9c69873
     networks:
       - proxy
     user: 1000:1000

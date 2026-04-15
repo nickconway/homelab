@@ -4,7 +4,7 @@ networks:
 
 services:
   deemix:
-    image: registry.gitlab.com/bockiii/deemix-docker
+    image: ghcr.io/bambanah/deemix:v4.5.1@sha256:367a03f070a163fb41129b7f7717a2dbaa611eca6c767194f77bd0575b1b7e79
     networks:
       - proxy
     volumes:

@@ -6,7 +6,7 @@ networks:
 
 services:
   dawarich-redis:
-    image: redis:8.4-alpine
+    image: redis:8.6.2-alpine@sha256:81b6f81d6a6c5b9019231a2e8eb10085e3a139a34f833dcc965a8a959b040b72
     restart: unless-stopped
     command: redis-server --save 900 1 --save 300 10 --appendonly no
     networks:
@@ -21,7 +21,7 @@ services:
       timeout: 10s
 
   dawarich-postgres:
-    image: postgis/postgis:17-3.5-alpine
+    image: postgis/postgis:17-3.5-alpine@sha256:9decf9805b9ca1adf74ce18749e2430138fb72ccf5e57586ad6e4777354666b5
     restart: unless-stopped
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
@@ -42,7 +42,7 @@ services:
       timeout: 10s
 
   dawarich:
-    image: freikin/dawarich:latest
+    image: freikin/dawarich:1.6.1@sha256:a884f69f19ce0f66992f3872d24544d1e587e133b8a003e072711aafc1e02429
     volumes:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched
@@ -103,7 +103,7 @@ services:
       - "traefik.http.services.dawarich.loadbalancer.server.port=3000"
 
   dawarich-sidekiq:
-    image: freikin/dawarich:latest
+    image: freikin/dawarich:1.6.1@sha256:a884f69f19ce0f66992f3872d24544d1e587e133b8a003e072711aafc1e02429
     volumes:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched

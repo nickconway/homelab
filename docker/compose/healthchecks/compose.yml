@@ -6,7 +6,7 @@ networks:
 
 services:
   db:
-    image: postgres:16
+    image: postgres:16.13@sha256:5a65324fe84dc41709ff914e90b07f3e2f577073ed27bf917d4873aca0c9ec51
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: healthchecks/healthchecks:latest
+    image: healthchecks/healthchecks:v4.1.1@sha256:121ba627216f04ef56b6f4c4e1e2028c9ebb8457bd2b6ede797582a80769841d
     env_file: .env
     networks:
       - proxy

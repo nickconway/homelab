@@ -4,7 +4,7 @@ networks:
 
 services:
   nexterm:
-    image: germannewsmaker/nexterm:latest
+    image: germannewsmaker/nexterm:1.2.0-BETA@sha256:89afcecb66d87aed3ff7df1c958683de062eea2ed969fcd75fef0faff099634a
     networks:
       - proxy
     environment:

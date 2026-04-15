@@ -6,7 +6,7 @@ networks:
 
 services:
   romm:
-    image: rommapp/romm:latest
+    image: rommapp/romm:4.8.1@sha256:2b7a1714b287f69b081ad2a63bb8c2fa673666a17b2f21322b580b0cd51cb266
     restart: unless-stopped
     networks:
       - proxy
@@ -39,7 +39,7 @@ services:
       - "traefik.http.services.romm.loadbalancer.server.port=8080"
 
   romm-mariadb:
-    image: mariadb:latest
+    image: mariadb:12.2.2@sha256:b3af559fc38e013c50dd5b5993bfbbb21125c1a62d976b3b0a14d9c4acaae578
     restart: unless-stopped
     networks:
       - romm

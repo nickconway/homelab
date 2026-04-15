@@ -4,7 +4,7 @@ networks:
 
 services:
   kasm-workspaces:
-    image: lscr.io/linuxserver/kasm:latest
+    image: lscr.io/linuxserver/kasm:1.18.0@sha256:6a0c2f461f5c42566b54e5ec8488073d3076cca84565356c0b342c0248059dcf
     networks:
       - proxy
     devices:

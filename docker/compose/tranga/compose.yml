@@ -6,7 +6,7 @@ networks:
 
 services:
     tranga-api:
-      image: glax/tranga-api:latest
+      image: glax/tranga-api:latest@sha256:dd7d8fc08ee3455c5e02feea35d70ce1bf2b58b671d72e1cbd861933d91219c7
       volumes:
         - /mnt/nas/content/media/manga:/Manga
         - ./data:/usr/share/tranga-api
@@ -29,7 +29,7 @@ services:
         - "traefik.http.services.tranga-api.loadbalancer.server.port=6531"
 
     tranga:
-      image: glax/tranga-website:latest
+      image: glax/tranga-website:latest@sha256:68c1f4ca19b90bda9ad533036d71c94c1f31567e34b93eae5a87bc3c3fc13616
       depends_on:
         - tranga-api
       restart: unless-stopped

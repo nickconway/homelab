@@ -6,7 +6,7 @@ networks:
 
 services:
   reactive-resume-postgres:
-    image: postgres:15-alpine
+    image: postgres:15.17-alpine3.23@sha256:fceb6f86328c36f2438fae3b851b0cc57c4a7e69a58c866d9ce24281f2cf0c9c
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data
@@ -24,7 +24,7 @@ services:
 
   # Storage (for image uploads)
   reactive-resume-minio:
-    image: minio/minio
+    image: minio/minio:latest@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
     restart: unless-stopped
     command: server /data
     volumes:
@@ -45,7 +45,7 @@ services:
 
   # Chrome Browser (for printing and previews)
   reactive-resume-chrome:
-    image: ghcr.io/browserless/chromium:v2.38.2
+    image: ghcr.io/browserless/chromium:v2.47.0@sha256:62781a63da6fc1894c8c102fcd831ed6a28c3b63012cc03d84eafe16d672f397
     restart: unless-stopped
     environment:
       TIMEOUT: 10000

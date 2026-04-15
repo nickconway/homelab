@@ -4,7 +4,7 @@ networks:
 
 services:
   syncthing:
-    image: syncthing/syncthing
+    image: syncthing/syncthing:2.0.16@sha256:4a961394ca471f4e48f31ad2cef50697e502c8799e2e98477a1c3844e0c5bc54
     environment:
       - PUID=1000
       - PGID=1000

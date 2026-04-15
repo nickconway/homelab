@@ -6,7 +6,7 @@ networks:
 
 services:
   shlink:
-    image: shlinkio/shlink:stable
+    image: shlinkio/shlink:5.0.1@sha256:a6d8508bc6b0eba5a28e1ee8b64dd5253434cd113c950e715baab4020edcd2a1
     networks:
       - proxy
       - shlink
@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
 
   shlink-postgres:
-    image: postgres:15
+    image: postgres:15.17@sha256:3e43515057e113ee741fca2f621f15300be34a6d4a8dfcf2e20651288c8272f3
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data
@@ -42,7 +42,7 @@ services:
       - shlink
 
   shlink-web-client:
-    image: shlinkio/shlink-web-client
+    image: shlinkio/shlink-web-client:4.7.0@sha256:80b4d00c445f61e38164a4f13bea4f915b0bdc051e74705fe21ffa92a3d6fed5
     restart: unless-stopped
     environment:
       PUID: 1000

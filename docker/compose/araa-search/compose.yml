@@ -4,7 +4,7 @@ networks:
 
 services:
   araa:
-    image: docker.io/temthelem/araa-search:latest
+    image: docker.io/temthelem/araa-search:latest@sha256:a57b42afecf7e59e61038d578e3b4e93dd2b4a4c7c52b346bf21d33cf4811c15
     networks:
       - proxy
     env_file: .env

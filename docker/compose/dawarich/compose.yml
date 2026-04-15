@@ -23,11 +23,9 @@ services:
   dawarich-postgres:
     image: postgis/postgis:17-3.5-alpine@sha256:9decf9805b9ca1adf74ce18749e2430138fb72ccf5e57586ad6e4777354666b5
     restart: unless-stopped
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
       - ./data/db:/var/lib/postgresql/data
       - ./data/shared:/var/shared
-      - ./config/postgresql.conf:/etc/postgresql/postgresql.conf
     networks:
       - dawarich
     environment:

@@ -5,13 +5,32 @@ networks:
     name: invoice-ninja
 
 services:
-  invoice-ninja-server:
+  invoice-ninja:
+    image: invoiceninja/invoiceninja-debian:5.13.17@sha256:4ed96ac75a4efbba47331e681c7c366d099fa57bb518f1f520b44a264eb60759
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - ./data/app/public:/var/www/html/public
+      - ./data/app/storage:/var/www/html/storage
+    environment:
+      - PUID=1000
+      - PGID=1000
+    depends_on:
+      invoice-ninja-mysql:
+        condition: service_healthy
+      invoice-ninja-redis:
+        condition: service_healthy
+    networks:
+      - invoice-ninja
+
+  invoice-ninja-nginx:
     image: nginx:1.29.8@sha256:7f0adca1fc6c29c8dc49a2e90037a10ba20dc266baaed0988e9fb4d0d8b85ba0
     restart: unless-stopped
     env_file: .env
     volumes:
-      - ./data/config/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
-      - ./data/app/public:/var/www/app/public:ro
+      - ./config/nginx:/etc/nginx/conf.d:ro
+      - ./data/app/public:/var/www/html/public:ro
+      - ./data/app/storage:/var/www/html/storage:ro
     depends_on:
       - invoice-ninja
     environment:
@@ -27,35 +46,35 @@ services:
       - "traefik.http.routers.invoice-ninja.tls=true"
       - "traefik.http.services.invoice-ninja.loadbalancer.server.port=80"
 
-  invoice-ninja:
-    image: invoiceninja/invoiceninja:latest
-    env_file: .env
-    restart: unless-stopped
-    volumes:
-      - ./data/app/public:/var/www/app/public:rw,delegated
-      - ./data/app/storage:/var/www/app/storage:rw,delegated
-      - ./data/config/php.ini:/usr/local/etc/php/php.ini
-      - ./data/config/php-cli.ini:/usr/local/etc/php/php-cli.ini
-    environment:
-      - PUID=1000
-      - PGID=1000
-    depends_on:
-      - invoice-ninja-mysql
-    networks:
-      - invoice-ninja
-
   invoice-ninja-mysql:
     image: mysql:8.0.45@sha256:529b4afa138686871cf698617ef6e347a857179fa2c58e6811b6c20862a1cd6a
     restart: unless-stopped
-    env_file: data/env
+    env_file: .env
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - ./data/db:/var/lib/mysql:rw,delegated
-      # - ./mysql/backups:/backups:rw
-      # - ./mysql/backup-script:/etc/cron.daily/daily:ro
-      # - ./mysql/backup-script:/etc/cron.weekly/weekly:ro
-      # - ./mysql/backup-script:/etc/cron.monthly/monthly:ro
+      - ./data/db:/var/lib/mysql
     networks:
       - invoice-ninja
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u${MYSQL_USER}",
+          "-p${MYSQL_PASSWORD}",
+        ]
+
+  invoice-ninja-redis:
+    image: redis:8.6.2-alpine@sha256:81b6f81d6a6c5b9019231a2e8eb10085e3a139a34f833dcc965a8a959b040b72
+    restart: unless-stopped
+    volumes:
+      - ./data/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+    networks:
+        - invoice-ninja

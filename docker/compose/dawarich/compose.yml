@@ -67,8 +67,8 @@ services:
       ENABLE_TELEMETRY: false
       TIME_ZONE: America/New_York
       REVERSE_GEOCODING_ENABLED: true
-      PHOTON_API_USE_HTTPS: false
-      PHOTON_API_HOST: photon:2322
+      PHOTON_API_USE_HTTPS: ${PHOTON_API_USE_HTTPS:-false}
+      PHOTON_API_HOST: ${PHOTON_API_HOST:-photon:2322}
       DISTANCE_UNIT: mi
       SECRET_KEY_BASE: 1234567890
       RAILS_LOG_TO_STDOUT: "true"
@@ -127,8 +127,8 @@ services:
       ENABLE_TELEMETRY: false
       TIME_ZONE: America/New_York
       REVERSE_GEOCODING_ENABLED: true
-      PHOTON_API_USE_HTTPS: false
-      PHOTON_API_HOST: photon:2322
+      PHOTON_API_USE_HTTPS: ${PHOTON_API_USE_HTTPS:-false}
+      PHOTON_API_HOST: ${PHOTON_API_HOST:-photon:2322}
       DISTANCE_UNIT: mi
       SECRET_KEY_BASE: 1234567890
       RAILS_LOG_TO_STDOUT: "true"

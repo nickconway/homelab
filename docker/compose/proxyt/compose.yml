@@ -1,0 +1,15 @@
+networks:
+  proxy:
+    external: true
+
+services:
+  proxyt:
+    image: ghcr.io/jaxxstorm/proxyt:v0.0.6@sha256:b77a889d19684330ee1e5e081cf82e4ebc20d4770e95c7f6a93d5070a2ee21c3
+    command: serve --domain ${SERVICE_SUBDOMAIN:-proxy.vpn}.${SERVICES_BASE_DOMAIN} --http-only
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proxyt.middlewares=crowdsec-traefik-bouncer"
+      - "traefik.http.routers.proxyt.rule=Host(`${SERVICE_SUBDOMAIN:-proxy.vpn}.${SERVICES_BASE_DOMAIN}`)"
+      - "traefik.http.routers.proxyt.tls=true"
+      - "traefik.http.services.proxyt.loadbalancer.server.port=80"
+    restart: unless-stopped

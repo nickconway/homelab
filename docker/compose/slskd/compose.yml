@@ -17,7 +17,7 @@ services:
     volumes:
       - ./data/slskd.yml:/app/slskd.yml
       - ./data/app:/app/data
-      - ./data/incomplete:/app/incomplete
-      - /mnt/nas/content/media/music:/app/downloads
+      - /mnt/nas/content/incomplete:/data/incomplete
+      - /mnt/nas/content/downloads:/data/downloads
       - /mnt/nas/content/media/music:/shares:ro
     restart: unless-stopped

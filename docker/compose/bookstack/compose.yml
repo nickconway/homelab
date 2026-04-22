@@ -6,7 +6,7 @@ networks:
 
 services:
   bookstack:
-    image: lscr.io/linuxserver/bookstack:26.03.3@sha256:496d1303087fc668bc8d17ce024b5c30612b88adb6958894003f345f1987f479
+    image: lscr.io/linuxserver/bookstack:26.03.3@sha256:a8d5828fa4363c49b3110917d7578927bc70af89654904c60b01f6d347570612
     environment:
       PUID: 1000
       PGID: 1000

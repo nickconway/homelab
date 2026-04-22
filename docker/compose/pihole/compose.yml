@@ -15,10 +15,8 @@ services:
     dns:
       - "127.0.0.1"
     ports:
-      - ${LOCAL_IP}:53:53/tcp
-      - ${LOCAL_IP}:53:53/udp
-      - ${TAILSCALE_IP}:53:53/tcp
-      - ${TAILSCALE_IP}:53:53/udp
+      - 53:53/tcp
+      - 53:53/udp
     environment:
       - PUID=1000
       - PGID=1000

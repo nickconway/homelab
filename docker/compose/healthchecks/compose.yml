@@ -6,7 +6,7 @@ networks:
 
 services:
   db:
-    image: postgres:16.13@sha256:5a65324fe84dc41709ff914e90b07f3e2f577073ed27bf917d4873aca0c9ec51
+    image: postgres:18.3@sha256:059fa0289cc5a184034e05a1f4f6d6fd79f69dc718b8b04ab60b6b469eed411e
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:

@@ -47,7 +47,7 @@ services:
       - "traefik.http.services.invoice-ninja.loadbalancer.server.port=80"
 
   invoice-ninja-mysql:
-    image: mysql:8.0.45@sha256:529b4afa138686871cf698617ef6e347a857179fa2c58e6811b6c20862a1cd6a
+    image: mysql:9.7.0@sha256:c9e48b0c008f1936d4139d1c0dcd5950a9dbe57d4d40f383013cde432fa6d6aa
     restart: unless-stopped
     env_file: .env
     environment:

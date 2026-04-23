@@ -21,7 +21,7 @@ services:
       timeout: 10s
 
   dawarich-postgres:
-    image: postgis/postgis:17-3.5-alpine@sha256:9decf9805b9ca1adf74ce18749e2430138fb72ccf5e57586ad6e4777354666b5
+    image: postgis/postgis:17-3.5-alpine@sha256:8dd04a956b91a7efa109133026fa1c3abfe12e018d712110b0df405bb2a9b7b5
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

@@ -18,7 +18,7 @@ services:
       - paperless
 
   paperless-postgres:
-    image: docker.io/library/postgres:18.0@sha256:41fc5342eefba6cc2ccda736aaf034bbbb7c3df0fdb81516eba1ba33f360162c
+    image: docker.io/library/postgres:18.3@sha256:78481659c47e862334611ccdaf7c369c986b3046da9857112f3b309114a65fb4
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql

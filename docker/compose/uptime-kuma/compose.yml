@@ -21,3 +21,19 @@ services:
     restart: unless-stopped
     networks:
       - proxy
+
+  autokuma:
+    image: ghcr.io/bigboot/autokuma:2.0.0@sha256:8acbd3ad3ec8cb6c066aa0ee541154921283ec78159015937128541921c47974
+    restart: unless-stopped
+    environment:
+      AUTOKUMA__KUMA__URL: http://uptime-kuma:3001
+      AUTOKUMA__KUMA__USERNAME: ${UPTIME_USERNAME}
+      AUTOKUMA__KUMA__PASSWORD: ${UPTIME_PASSWORD}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/auto:/data
+      - ./data/auto/config.toml:/root/.config/autokuma/config.toml
+    networks:
+      - proxy
+    depends_on:
+      - uptime-kuma

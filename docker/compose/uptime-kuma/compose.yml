@@ -10,7 +10,8 @@ services:
       - PGID=1000
       - TZ=America/New_York    # optional: set desired timezone
     volumes:
-      - ./data:/app/data
+      - ./data/app:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.middlewares=crowdsec-traefik-bouncer,auth"

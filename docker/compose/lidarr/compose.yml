@@ -16,8 +16,8 @@ services:
     volumes:
       - /mnt/nas/content:/data # Location of all your media
       - ./data/config:/config # Contains all relevant configuration files.
-      - ./data/custom-services.d:/custom-services.d
-      - ./data/custom-cont-init.d:/custom-cont-init.d
+      # - ./data/custom-services.d:/custom-services.d
+      # - ./data/custom-cont-init.d:/custom-cont-init.d
     networks:
       - proxy
     labels:

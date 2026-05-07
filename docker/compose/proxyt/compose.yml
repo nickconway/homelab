@@ -11,5 +11,6 @@ services:
       - "traefik.http.routers.proxyt.middlewares=crowdsec-traefik-bouncer"
       - "traefik.http.routers.proxyt.rule=Host(`${SERVICE_SUBDOMAIN:-proxy.vpn}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.proxyt.tls=true"
+      - "traefik.http.routers.proxyt.tls.certresolver=letsencrypt"
       - "traefik.http.services.proxyt.loadbalancer.server.port=80"
     restart: unless-stopped

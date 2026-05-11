@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+(cd source && pnpm i && SIGNALING_URL="share.$SERVICES_BASE_DOMAIN" pnpm run generate)
+docker build source --tag git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/localsend:latest -f source/Containerfile --build-arg SIGNALING_URL="share.$SERVICES_BASE_DOMAIN"
+docker push -a git."${SERVICES_BASE_DOMAIN}"/"$GITEA_USER"/localsend

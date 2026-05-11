@@ -38,3 +38,7 @@
 	path = docker/dockerfiles/bifrost/source
 	url = https://github.com/chrivers/bifrost
 	branch = master
+[submodule "docker/dockerfiles/localsend/source"]
+	path = docker/dockerfiles/localsend/source
+	url = https://github.com/localsend/web
+	branch = main

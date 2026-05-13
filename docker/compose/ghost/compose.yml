@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
 
   ghost-mysql:
-    image: mysql:8.4.8@sha256:669b2d89f3916f5263af230ffa20889a03c7f4bedf58133fe8780466c613f7ae
+    image: mysql:9.7.0@sha256:c11782aa2a96624c1efc121768641d96954faa136d6aa82751b032d8c426ffbc
     restart: unless-stopped
     networks:
       - ghost

@@ -4,7 +4,7 @@ networks:
 
 services:
   grafana:
-    image: grafana/grafana-enterprise:12.4.3@sha256:c7516cc195e0c6fed177006156312cae0a90867274afe9373a45229ed20a7cf7
+    image: grafana/grafana-enterprise:12.4.5@sha256:9c0a1a80690ff36dc52499f10a44d80d83c5275bee864b3e7c01cc980a6c506e
     networks:
       - proxy
     user: 1000:1000

@@ -24,7 +24,7 @@ services:
       - invoice-ninja
 
   invoice-ninja-nginx:
-    image: nginx:1.29.8@sha256:7f0adca1fc6c29c8dc49a2e90037a10ba20dc266baaed0988e9fb4d0d8b85ba0
+    image: nginx:1.31.2@sha256:ec4ed8b5299e5e90694af7750eb6dffd2627317d30544d056b0371f8082f7bce
     restart: unless-stopped
     env_file: .env
     volumes:

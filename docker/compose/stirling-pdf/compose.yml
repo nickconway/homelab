@@ -4,7 +4,7 @@ networks:
 
 services:
   stirling-pdf:
-    image: frooodle/s-pdf:2.9.2-fat@sha256:ebaa984c410681939837920c18d2cea8103b46d4961fe6ddc6b6498fa26590b2
+    image: frooodle/s-pdf:2.13.2-fat@sha256:9d2eb201270eec74114f3f9c0059772270220a5d07f45c20c072156ec0819bc9
     networks:
       - proxy
     environment:

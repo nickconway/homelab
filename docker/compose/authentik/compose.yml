@@ -40,7 +40,7 @@ services:
       - authentik
 
   authentik:
-    image: ghcr.io/goauthentik/server:2025.10.1@sha256:8f70895ad48bb7de656a2aac7c78c2bec6a4e820e009a570b0c285fe406eadac
+    image: ghcr.io/goauthentik/server:2026.5.3@sha256:377ee38726785f98aafc3665202ad198a366fa979b0f61c0660a9c05e3a9b1b3
     restart: unless-stopped
     command: server
     environment:
@@ -70,7 +70,7 @@ services:
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"
 
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2025.10.1@sha256:8f70895ad48bb7de656a2aac7c78c2bec6a4e820e009a570b0c285fe406eadac
+    image: ghcr.io/goauthentik/server:2026.5.3@sha256:377ee38726785f98aafc3665202ad198a366fa979b0f61c0660a9c05e3a9b1b3
     restart: unless-stopped
     command: worker
     environment:

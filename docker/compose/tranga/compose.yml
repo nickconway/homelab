@@ -29,7 +29,7 @@ services:
         - "traefik.http.services.tranga-api.loadbalancer.server.port=6531"
 
     tranga:
-      image: glax/tranga-website:latest@sha256:68c1f4ca19b90bda9ad533036d71c94c1f31567e34b93eae5a87bc3c3fc13616
+      image: glax/tranga-website:latest@sha256:e67f26a5c10d54fa8233cca57a90917ec0c78e4dfccde8d88486322b1b2c0ca8
       depends_on:
         - tranga-api
       restart: unless-stopped

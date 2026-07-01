@@ -27,7 +27,7 @@ services:
       - "traefik.http.services.opengist.loadbalancer.server.port=6157"
 
   gitea:
-    image: gitea/gitea:1.25.5@sha256:f846d26a4fc389c5806a580a765e00bfdd1fd181e6f2060da98ea2669d914472
+    image: gitea/gitea:1.26.4@sha256:8e25c717b8f748445e15ec46e0390f577cb628101184cb0a150d1dae126c1f39
     ports:
       - 222:22
     environment:

@@ -5,7 +5,7 @@ networks:
 
 services:
   prowlarr:
-    image: linuxserver/prowlarr:2.3.5@sha256:35f48abb3e976fcf077fae756866c582e4a90f8b24810ae4067b3558f7cdbbdf
+    image: linuxserver/prowlarr:2.4.0@sha256:3950b5e48cf4ba9dab78fe14038dd7f062e66b7b4ab368b02c94a13f6a3dae9f
     restart: unless-stopped
     environment:
       - TZ=America/New_York # Specify a timezone to use

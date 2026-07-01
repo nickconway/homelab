@@ -41,7 +41,7 @@ services:
       - "komodo.skip=true"
 
   core:
-    image: ghcr.io/moghtech/komodo-core:1.19.5@sha256:a1cceb4f971443b1e9f2a767788f663d0afb6244ee2135f7fe3fd1036af37ade
+    image: ghcr.io/moghtech/komodo-core:2.2.0@sha256:7afbcfa99674bf3f51539ec3aa7235795e9b994af9b7099a6c4c654d5d8a5b6b
     restart: unless-stopped
     depends_on:
       - ferretdb

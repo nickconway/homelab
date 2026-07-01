@@ -1,6 +1,6 @@
 services:
     periphery:
-        image: ghcr.io/moghtech/komodo-periphery:1.19.5@sha256:bd79cf960ed054fe8e02384322303e462448679b1149dde48bbef151417255b1
+        image: ghcr.io/moghtech/komodo-periphery:2.2.0@sha256:7fb1a4807d125ce036a17d37c940b4001402afcaf342a2c720c98d096b1b54da
         restart: unless-stopped
         logging:
             driver: local

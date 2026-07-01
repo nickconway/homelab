@@ -55,7 +55,7 @@ services:
             ipv4_address: 10.0.250.4
 
   playit:
-    image: ghcr.io/playit-cloud/playit-agent:0.17.1@sha256:84d8ea84529ae9ac6a4c9463033e0b7d29c1e6cc8311897bd2df0cb1a7af06f6
+    image: ghcr.io/playit-cloud/playit-agent:1.0.10@sha256:ca4766ced6e5bcee19137337808ec8fee5867c0910ac737efbb0bb452c378521
     networks:
       mc:
         ipv4_address: 10.0.250.5

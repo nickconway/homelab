@@ -4,7 +4,7 @@ networks:
 
 services:
   cyberchef:
-    image: ghcr.io/gchq/cyberchef:10.23.0@sha256:9f9205cfc20368bd9a4152f7708a9e7626525d8f4eadb1a25e5079708c5c4304
+    image: ghcr.io/gchq/cyberchef:11.2.0@sha256:f829c2f358153b6b0ce5c226d97851e8728719d1e02e682bf7210d40663e93f9
     networks:
       - proxy
     environment:

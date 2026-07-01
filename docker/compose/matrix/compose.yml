@@ -6,7 +6,7 @@ networks:
 
 services:
   matrix-postgres:
-    image: postgres:15.17-alpine3.23@sha256:fceb6f86328c36f2438fae3b851b0cc57c4a7e69a58c866d9ce24281f2cf0c9c
+    image: postgres:18.4-alpine3.23@sha256:865a3cfdac164ea2608bea36342a9bb5c11e99b5aa8ed9b83b662185e556e178
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

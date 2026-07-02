@@ -1,15 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":rebaseStalePrs"
-  ],
+  "extends": ["config:recommended", ":rebaseStalePrs"],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard",
   "assignees": [],
-  "labels": [
-    "renovate"
-  ],
+  "labels": ["renovate"],
   "configMigration": true,
   "prHourlyLimit": 0,
   "docker-compose": {
@@ -22,12 +17,11 @@
   },
   "packageRules": [
     {
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "matchUpdateTypes": ["digest"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin"],
       "minimumReleaseAge": "3 days",
       "automerge": true
     }

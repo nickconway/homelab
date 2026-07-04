@@ -5,15 +5,6 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-tput smcup
-tput clear
-
-function clean() {
-    tput rmcup
-}
-
-trap clean ERR EXIT
-
 export GUM_SPIN_SHOW_ERROR=true
 
 export GUM_CHOOSE_CURSOR_FOREGROUND=10

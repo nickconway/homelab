@@ -5,7 +5,7 @@
 To get started, run the following commands:
 
 ```
-git clone --recurse-submodules https://github.com/nickconway/homelab --depth 1
+git clone --depth 1 --recurse-submodules https://github.com/nickconway/homelab
 cd homelab
 ./install
 ```

@@ -1,6 +1,6 @@
 services:
     renovate:
-        image: renovate/renovate
+        image: renovate/renovate:43.252.5@sha256:e607d6ccf264e1ffda617c98d598d55ed7fa620ecd35656d644ed6835a9374ca
         environment:
           - LOG_LEVEL=debug
           - RENOVATE_CONFIG_FILE=/config.js

@@ -4,7 +4,7 @@ networks:
 
 services:
   ntfy:
-    image: binwiederhier/ntfy:v2.16.0@sha256:115357a63dd35e3d08ad03c93ade7d7eef63761726572b809da13f2999f1958f
+    image: binwiederhier/ntfy:v2.25.0@sha256:cfbbb1bac9196cb711e29ef0ac4adaeb033be6235f1df857705dc39c14384a1d
     command:
       - serve
     environment:

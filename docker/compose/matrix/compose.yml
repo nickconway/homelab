@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
 
   matrix-nginx:
-    image: nginx:1.29.8@sha256:7f0adca1fc6c29c8dc49a2e90037a10ba20dc266baaed0988e9fb4d0d8b85ba0
+    image: nginx:1.29.8@sha256:1881968aff6f7cdcc4b888c00a11f4ce241ad7ec957e0cb4a9e19e93a3ff87ea
     restart: "unless-stopped"
     networks:
       - matrix

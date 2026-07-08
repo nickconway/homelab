@@ -4,7 +4,7 @@ networks:
 
 services:
   fresh-rss:
-    image: freshrss/freshrss:1.28.1@sha256:9100f649f5c946f589f54cdb9be7a65996528f48f691ef90eb262a0e06e5a522
+    image: freshrss/freshrss:1.29.1@sha256:ab6b363102ccdbc39f6a62db926f567c61a5289bf25ba460f1c34423d8cc1a4d
     networks:
       - proxy
     restart: unless-stopped

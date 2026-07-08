@@ -6,7 +6,7 @@ networks:
 
 services:
   shlink:
-    image: shlinkio/shlink:5.0.1@sha256:a6d8508bc6b0eba5a28e1ee8b64dd5253434cd113c950e715baab4020edcd2a1
+    image: shlinkio/shlink:5.1.5@sha256:77b8eb87bcb1a56bd0ecc590398d415545e5ba83414f28d37dc565a91c3c50b2
     networks:
       - proxy
       - shlink

@@ -1,6 +1,7 @@
 module.exports = {
-  platform: 'github',
+  platform: "github",
   onboardingConfig: {
-    extends: ['config:recommended'],
+    extends: ["config:recommended"],
   },
+  allowedEnv: ["SERVICES_BASE_DOMAIN"],
 };

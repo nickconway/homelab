@@ -33,7 +33,7 @@ services:
       - actual
 
   actual-api:
-    image: jhonderson/actual-http-api:26.4.0@sha256:b1dd1de5b8be53be9164c7881c13ffe92066b89b50e890884cb05b4fad3f621d
+    image: jhonderson/actual-http-api:26.7.0@sha256:7bb545a83456660dda1484f7f1197e1c0a4c1066ede3b7d924cd2e1eabbdbd73
     networks:
       - proxy
       - actual

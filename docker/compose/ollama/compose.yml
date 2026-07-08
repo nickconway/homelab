@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: ollama/ollama:0.20.7@sha256:487324a9312240e3e122446f351b1f1e3f68d884ef854c246db2e08792440d94
+    image: ollama/ollama:0.31.1@sha256:f1a705f2bd113fb8d15f85f7c217f0dc5f6bebda6b0cc42b82c3ad165ffcb9dc
     ports:
       - 11434:11434
     volumes:

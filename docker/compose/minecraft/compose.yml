@@ -8,7 +8,7 @@ networks:
 
 services:
   mc:
-    image: itzg/minecraft-server:2026.4.1@sha256:1544b0bd94b2734a5b12cb38e73751cc5dee4d7f6ab5b751afcb6ecc4b8f1460
+    image: itzg/minecraft-server:2026.7.0@sha256:5ffbc91d933e2f0e194a4f49674a2d17b65bb051c86e61961a6c775312ef61c0
     environment:
       TYPE: PAPER
       EULA: "true"

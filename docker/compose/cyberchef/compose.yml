@@ -15,5 +15,5 @@ services:
       - "traefik.http.routers.cyberchef.middlewares=crowdsec-traefik-bouncer,auth"
       - "traefik.http.routers.cyberchef.rule=Host(`${SERVICE_SUBDOMAIN:-cyberchef}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.cyberchef.tls=true"
-      - "traefik.http.services.cyberchef.loadbalancer.server.port=80"
+      - "traefik.http.services.cyberchef.loadbalancer.server.port=8080"
     restart: unless-stopped

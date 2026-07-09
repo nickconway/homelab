@@ -27,6 +27,11 @@
       "matchUpdateTypes": ["minor", "patch", "pin"],
       "minimumReleaseAge": "3 days",
       "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["nextcloud/all-in-one"],
+      "matchManagers": ["docker-compose"],
+      "enabled": false
     }
   ]
 }

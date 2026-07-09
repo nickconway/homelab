@@ -4,7 +4,7 @@ networks:
 
 services:
   traefik:
-    image: traefik:3.6.13@sha256:34d5089d0b414945342848518b383f11f5b3a645504ed87b77ffeb9d683d0e48
+    image: traefik:v3.7.6@sha256:21a3d83696379bac6434bb32e1dde0aff0e84ef2abd053ed3db87d3f45e749b2
     networks:
       - proxy
     ports:

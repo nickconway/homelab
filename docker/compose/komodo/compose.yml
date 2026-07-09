@@ -42,6 +42,7 @@ services:
 
   core:
     image: ghcr.io/moghtech/komodo-core:2.2.0@sha256:7afbcfa99674bf3f51539ec3aa7235795e9b994af9b7099a6c4c654d5d8a5b6b
+    init: true
     restart: unless-stopped
     depends_on:
       - ferretdb
@@ -51,7 +52,8 @@ services:
       - proxy
       - komodo
     volumes:
-      - ${HOME}/Git:/repo-cache
+      - ${PROJECT_DIR}:/repo-cache
+      - ./data/keys:/config/keys
     env_file: .env
     environment:
       KOMODO_DATABASE_ADDRESS: ferretdb:27017
@@ -64,40 +66,3 @@ services:
       - "traefik.http.routers.komodo.rule=Host(`${SERVICE_SUBDOMAIN:-deploy}.${SERVICES_BASE_DOMAIN}`)"
       - "traefik.http.routers.komodo.tls=true"
       - "traefik.http.services.komodo.loadbalancer.server.port=9120"
-
-  periphery:
-    image: ghcr.io/moghtech/komodo-periphery:1.19.5@sha256:bd79cf960ed054fe8e02384322303e462448679b1149dde48bbef151417255b1
-    restart: unless-stopped
-    logging:
-      driver: local
-    networks:
-      - komodo
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /proc:/proc
-      - ./data/app:/etc/komodo
-      - ${DOCKER_STACK_DIR}:${DOCKER_STACK_DIR}:ro
-    environment:
-      PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
-    labels:
-      - "komodo.skip=true"
-
-  import:
-    image: foxxmd/komodo-import:0.2.4@sha256:ad266e6082c99f2e48b509ddcf2bdbcd225615267e99d837dba90bb1567655ce
-    restart: on-failure
-    volumes:
-      - ${DOCKER_STACK_DIR}:/filesOnServer:ro
-    networks:
-      - komodo
-    depends_on:
-      - core
-    environment:
-      - HOST_DIR=${DOCKER_STACK_DIR}
-      - STACKS_FROM=dir
-      - SERVER_NAME=${SERVER_NAME}
-      - DOCKER_HOST=tcp://socket-proxy:2375
-      - KOMODO_URL=http://core:9120
-      - API_KEY=${API_KEY}
-      - API_SECRET=${API_SECRET}
-      - OUTPUT_API_SYNC=true
-      - SYNC_NAME=import-${SERVER_NAME:-default}

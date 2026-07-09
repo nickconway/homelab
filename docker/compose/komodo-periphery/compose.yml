@@ -1,20 +1,23 @@
 services:
     periphery:
-        image: ghcr.io/moghtech/komodo-periphery:1.19.5@sha256:bd79cf960ed054fe8e02384322303e462448679b1149dde48bbef151417255b1
+        image: ghcr.io/moghtech/komodo-periphery:2.2.0@sha256:7fb1a4807d125ce036a17d37c940b4001402afcaf342a2c720c98d096b1b54da
+        init: true
         restart: unless-stopped
         logging:
             driver: local
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /proc:/proc
-            - ./data/repos:/etc/komodo/repos # manage repos in a docker volume, or change it to an accessible host directory.
-            - ..:/etc/komodo/stacks # manage stack files in a docker volume, or change it to an accessible host directory.
-            - ./data/builds:/etc/komodo/builds
+            - ./data/app:/etc/komodo
+            - ./data/keys:/config/keys
             - ${DOCKER_STACK_DIR}:${DOCKER_STACK_DIR}:ro
-        ports:
-            - 8120:8120
         environment:
             PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
+            PERIPHERY_CORE_ADDRESS: deploy.${SERVICES_BASE_DOMAIN}
+            PERIPHERY_CONNECT_AS: ${HOSTNAME}
+            PERIPHERY_ONBOARDING_KEY: ${PERIPHERY_ONBOARDING_KEY}
+        labels:
+            - "komodo.skip=true"
 
     import:
         image: foxxmd/komodo-import:0.2.4@sha256:ad266e6082c99f2e48b509ddcf2bdbcd225615267e99d837dba90bb1567655ce
@@ -22,7 +25,7 @@ services:
         healthcheck:
             disable: true
         volumes:
-            - ${DOCKER_STACK_DIR}:/filesOnServer:ro
+            - ${DOCKER_STACK_DIR}:${DOCKER_STACK_DIR}:ro
         environment:
             - HOST_DIR=${DOCKER_STACK_DIR}
             - STACKS_FROM=dir
@@ -32,4 +35,4 @@ services:
             - API_KEY=${API_KEY}
             - API_SECRET=${API_SECRET}
             - OUTPUT_API_SYNC=true
-            - SYNC_NAME=import-"${SERVER_NAME}"
+            - SYNC_NAME="${SERVER_NAME:-Default}"

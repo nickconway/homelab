@@ -6,5 +6,6 @@ services:
           - RENOVATE_CONFIG_FILE=/config.js
           - RENOVATE_TOKEN=$RENOVATE_TOKEN
           - RENOVATE_REPOSITORIES=$RENOVATE_REPOSITORIES
+          - SERVICES_BASE_DOMAIN=$SERVICES_BASE_DOMAIN
         volumes:
           - ./config/config.js:/config.js

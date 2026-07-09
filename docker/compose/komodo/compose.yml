@@ -1,8 +1,6 @@
 networks:
   komodo:
     name: komodo
-  komodo-database:
-    name: komodo-database
   proxy:
     external: true
 
@@ -13,7 +11,7 @@ services:
     logging:
       driver: local
     networks:
-      - komodo-database
+      - komodo
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
@@ -34,7 +32,6 @@ services:
       - ./data/state:/state
     networks:
       - komodo
-      - komodo-database
     environment:
       - FERRETDB_POSTGRESQL_URL=postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:5432/postgres
     labels:

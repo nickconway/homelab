@@ -7,7 +7,7 @@ networks:
 
 services:
   paperless-redis:
-    image: docker.io/library/redis:8.4.0@sha256:c22af04bb576503bf16b3e34a1fd2fd82de0f765afd866d2e380145e0af30d78
+    image: docker.io/library/redis:8.8.0@sha256:2838d5524559494f6f1cd66e97e76b200d64a633a8614200620755ed395daf32
     restart: unless-stopped
     environment:
       PUID: 1000
@@ -76,7 +76,7 @@ services:
       - paperless
 
   paperless-gotenberg:
-    image: docker.io/gotenberg/gotenberg:8.26.0@sha256:328551506b3dec3ff6381dd47e5cd72a44def97506908269e201a8fbfa1c12c0
+    image: docker.io/gotenberg/gotenberg:8.34.0@sha256:67097317623a503ba2a6a7e9ae8db6929a1f7e1bbd88077bacf2d325fbdab923
     restart: unless-stopped
 
     environment:

@@ -4,7 +4,7 @@ networks:
 
 services:
   tesla:
-    image: nginx:1.29.8@sha256:1881968aff6f7cdcc4b888c00a11f4ce241ad7ec957e0cb4a9e19e93a3ff87ea
+    image: nginx:1.31.2@sha256:ec4ed8b5299e5e90694af7750eb6dffd2627317d30544d056b0371f8082f7bce
     networks:
       - proxy
     environment:

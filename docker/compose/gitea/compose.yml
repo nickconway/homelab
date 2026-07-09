@@ -27,7 +27,7 @@ services:
       - "traefik.http.services.opengist.loadbalancer.server.port=6157"
 
   gitea:
-    image: gitea/gitea:1.25.5@sha256:f846d26a4fc389c5806a580a765e00bfdd1fd181e6f2060da98ea2669d914472
+    image: gitea/gitea:1.26.4@sha256:8e25c717b8f748445e15ec46e0390f577cb628101184cb0a150d1dae126c1f39
     ports:
       - 222:22
     environment:
@@ -56,7 +56,7 @@ services:
       - "traefik.http.services.gitea.loadbalancer.server.port=3000"
 
   gitea-runner:
-    image: gitea/act_runner:0.3.1@sha256:c2a169c5e99864c25e32527cef3d82203225e09558773022bf3dc164a2e6d762
+    image: gitea/act_runner:0.6.1@sha256:b5c35d6bdbb9bb25e531230bfc7cc663cb751406cbec90a2a891b85fea54de86
     restart: unless-stopped
     volumes:
       - ./data/runner/config.yaml:/config.yaml

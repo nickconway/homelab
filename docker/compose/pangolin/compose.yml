@@ -54,7 +54,7 @@ services:
     volumes:
       - ./config/:/var/config
   pangolin:
-    image: docker.io/fosrl/pangolin:1.17.1@sha256:c8002c5acf73a6e6e85f61be38036b4eb35afeb99c4d52501c737f0257d4c673
+    image: docker.io/fosrl/pangolin:1.19.4@sha256:a9a4b0bd136ef7ccead120cf41f85bd1b751ddcd05f42392437b1792546e402f
     healthcheck:
       interval: 10s
       retries: 15
@@ -68,7 +68,7 @@ services:
     volumes:
       - ./config:/app/config
   traefik:
-    image: docker.io/traefik:v3.6.13@sha256:34d5089d0b414945342848518b383f11f5b3a645504ed87b77ffeb9d683d0e48
+    image: docker.io/traefik:v3.7.6@sha256:21a3d83696379bac6434bb32e1dde0aff0e84ef2abd053ed3db87d3f45e749b2
     command:
       - --configFile=/etc/traefik/traefik_config.yml
     environment:

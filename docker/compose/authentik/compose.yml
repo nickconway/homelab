@@ -6,7 +6,7 @@ networks:
 
 services:
   authentik-postgres:
-    image: docker.io/library/postgres:16.13-alpine3.23@sha256:4e6e670bb069649261c9c18031f0aded7bb249a5b6664ddec29c013a89310d50
+    image: docker.io/library/postgres:16.14-alpine3.23@sha256:42b8b8b29c8a4e933d88943e5b03001a78794905cf786e6e7634e9f2abd5a0d3
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
@@ -25,7 +25,7 @@ services:
       - authentik
 
   authentik-redis:
-    image: docker.io/library/redis:8.6.2-alpine@sha256:c5e375abb885e6b2021c0377879e4890bf76f9065b8922ffc113f2b226b9fc17
+    image: docker.io/library/redis:8.8.0-alpine@sha256:9d317178eceac8454a2284a9e6df2466b93c745529947f0cd42a0fa9609d7005
     command: --save 60 1 --loglevel warning
     restart: unless-stopped
     healthcheck:
@@ -40,7 +40,7 @@ services:
       - authentik
 
   authentik:
-    image: ghcr.io/goauthentik/server:2025.10.1@sha256:8f70895ad48bb7de656a2aac7c78c2bec6a4e820e009a570b0c285fe406eadac
+    image: ghcr.io/goauthentik/server:2026.5.4@sha256:a8e80071e5938cca7c8d03461a56740041f274d721100974e042b6d265001f50
     restart: unless-stopped
     command: server
     environment:
@@ -70,7 +70,7 @@ services:
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"
 
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2025.10.1@sha256:8f70895ad48bb7de656a2aac7c78c2bec6a4e820e009a570b0c285fe406eadac
+    image: ghcr.io/goauthentik/server:2026.5.4@sha256:a8e80071e5938cca7c8d03461a56740041f274d721100974e042b6d265001f50
     restart: unless-stopped
     command: worker
     environment:

@@ -29,9 +29,11 @@
       "automerge": true
     },
     {
-      "matchPackagePatterns": ["nextcloud/all-in-one"],
       "matchManagers": ["docker-compose"],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "/nextcloud/all-in-one/"
+      ]
     }
   ]
 }

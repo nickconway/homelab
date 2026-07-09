@@ -25,7 +25,7 @@ services:
         healthcheck:
             disable: true
         volumes:
-            - ${DOCKER_STACK_DIR}:/filesOnServer:ro
+            - ${DOCKER_STACK_DIR}:${DOCKER_STACK_DIR}:ro
         environment:
             - HOST_DIR=${DOCKER_STACK_DIR}
             - STACKS_FROM=dir
@@ -35,4 +35,4 @@ services:
             - API_KEY=${API_KEY}
             - API_SECRET=${API_SECRET}
             - OUTPUT_API_SYNC=true
-            - SYNC_NAME=import-"${SERVER_NAME}"
+            - SYNC_NAME="${SERVER_NAME:-Default}"

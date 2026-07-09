@@ -9,7 +9,7 @@ volumes:
 services:
   nextcloud-aio-mastercontainer:
     container_name: nextcloud-aio-mastercontainer
-    image: nextcloud/all-in-one:latest
+    image: nextcloud/all-in-one:latest@sha256:e7abd7c7f4f28ec63971e92fdcb03d361a85cd3e7d83cd50d19c375cad623614
     init: true
     networks:
       - proxy

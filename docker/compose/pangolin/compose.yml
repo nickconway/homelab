@@ -72,7 +72,7 @@ services:
     command:
       - --configFile=/etc/traefik/traefik_config.yml
     environment:
-      CLOUDFLARE_DNS_API_TOKEN: 5rVroQg_VrDrldGfh6twO_HBZ--6MT4RUGlbkL5G
+      CLOUDFLARE_DNS_API_TOKEN: ${DNS_TOKEN}
     depends_on:
       crowdsec:
         condition: service_healthy

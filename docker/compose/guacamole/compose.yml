@@ -6,7 +6,7 @@ networks:
 
 services:
   guacamole-postgres:
-    image: postgres:16.13@sha256:5d143123fdf80462d1778cd4f24b9f7ca13c87174bca19141fb194c5a1ebca59
+    image: postgres:16.14@sha256:be01cf82fc7dbba824acf0a82e150b4b360f3ff93c6631d7844af431e841a95c
     volumes:
       - ./data/db:/var/lib/postgresql/data
       - ./config/postgres-init:/docker-entrypoint-initdb.d

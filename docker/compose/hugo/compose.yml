@@ -7,7 +7,7 @@ services:
     image: busybox:1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
     command: ['sh', '-c', 'chown -R 1000:1000 /src /tmp']
     volumes:
-      - ${HOME}/Git/blog:/src
+      - ${BLOG_DIR}:/src
       - ./data/cache:/tmp/hugo_cache
   hugo:
     image: klakegg/hugo:0.111.3-ext@sha256:2d1841844d7c4017d13c6949f31a8957cc17aacaf5a3d072c64866471d2b3549
@@ -21,7 +21,7 @@ services:
     depends_on:
       - hugo-staging
     volumes:
-      - ./src/:/src
+      - ${BLOG_DIR}:/src
       - /src/public
       - ./data/cache:/tmp/hugo_cache
     labels:
@@ -42,7 +42,7 @@ services:
       PUID: 1000
       PGID: 1000
     volumes:
-      - ./src/:/src
+      - ${BLOG_DIR}:/src
       - /src/public
       - ./data/cache:/tmp/hugo_cache
     labels:

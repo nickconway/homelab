@@ -4,7 +4,7 @@ networks:
 
 services:
   socrates:
-    image: ghcr.io/dougburks/so-crates:1.1.1@sha256:ec6c018a1becca49b0326afb8f24ba552ad4b9c24470a6aa64a5eba0ada18f03
+    image: ghcr.io/dougburks/so-crates:2.0.0@sha256:ecd635c6de2b88986f3c2534c733b4cec9eeede35c34edfcd0e507fc30350039
     networks:
       - proxy
     volumes:

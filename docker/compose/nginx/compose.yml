@@ -4,7 +4,7 @@ networks:
 
 services:
   nginx:
-    image: nginx:1.31.2@sha256:ec4ed8b5299e5e90694af7750eb6dffd2627317d30544d056b0371f8082f7bce
+    image: nginx:1.31.2@sha256:f15d93384bc7066ba635474370a566c7c1e10a21fd5baf8d30f36cee6f8ae08f
     networks:
       - proxy
     environment:

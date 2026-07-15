@@ -26,9 +26,9 @@ services:
     volumes:
       - ./data/resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
       - ./data/cache:/redis-data # Cached data for background tasks
-      - /mnt/nas/home/Documents/Emulation/Games:/romm/library # Your game library
       - ./data/assets:/romm/assets # Uploaded saves, states, etc.
       - ./config:/romm/config # Path where config.yml is stored
+      - ${ROM_DIR}:/romm/library/roms # Your game library
     depends_on:
       - romm-mariadb
     labels:

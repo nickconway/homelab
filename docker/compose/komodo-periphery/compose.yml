@@ -18,21 +18,3 @@ services:
             PERIPHERY_ONBOARDING_KEY: ${PERIPHERY_ONBOARDING_KEY}
         labels:
             - "komodo.skip=true"
-
-    import:
-        image: foxxmd/komodo-import:0.2.4@sha256:ad266e6082c99f2e48b509ddcf2bdbcd225615267e99d837dba90bb1567655ce
-        restart: on-failure
-        healthcheck:
-            disable: true
-        volumes:
-            - ${DOCKER_STACK_DIR}:${DOCKER_STACK_DIR}:ro
-        environment:
-            - HOST_DIR=${DOCKER_STACK_DIR}
-            - STACKS_FROM=dir
-            - SERVER_NAME=${SERVER_NAME}
-            - DOCKER_HOST=tcp://socket-proxy:2375
-            - KOMODO_URL=https://deploy.${SERVICES_BASE_DOMAIN}
-            - API_KEY=${API_KEY}
-            - API_SECRET=${API_SECRET}
-            - OUTPUT_API_SYNC=true
-            - SYNC_NAME="${SERVER_NAME:-Default}"

@@ -32,7 +32,7 @@ services:
       - paperless
 
   paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:2.19.6@sha256:719a4e4c4314b417646b00e58bfbfbe55e4cb59017a2dec1533e96d8deb66ec1
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.0.2@sha256:fef384c955d2ec2acf1bd0882ffc195ecc170266c803dfe28b79df6deabb3569
     restart: unless-stopped
     depends_on:
       - paperless-postgres

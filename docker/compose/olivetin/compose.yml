@@ -4,7 +4,7 @@ networks:
 
 services:
   olivetin:
-    image: jamesread/olivetin:3000.17.3@sha256:66240aeb27ed4437f8ea78aeabb23011a7155b62336331d368ceaf2e3ead9e69
+    image: jamesread/olivetin:3000.17.4@sha256:5f02be3ad27b501cee0f050b109973b40fba7fe3682ad770dbe1663b8048895f
     networks:
       - proxy
     volumes:

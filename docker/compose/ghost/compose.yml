@@ -6,7 +6,7 @@ networks:
 
 services:
   ghost:
-    image: ghost:6.54.1-alpine3.23@sha256:d41c7b0ef5891d5b0a251ee0b906c2fad833aa61e67e59a6e2a37701bc4bc3c7
+    image: ghost:6.55.0-alpine3.23@sha256:de23ea18e09f1f6e94dd323c831c3821494fa054b7a55984a5bd0b817fcab918
     environment:
       PUID: 1000
       PGID: 1000

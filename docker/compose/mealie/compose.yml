@@ -50,7 +50,7 @@ services:
       - "traefik.http.services.mealie.loadbalancer.server.port=9000"
 
   mealie-postgres:
-    image: postgres:15.18@sha256:6eb0add3b77c081df18aa518ce43df58fdcc40f2e6d868a6fd08038dc7acd425
+    image: postgres:18.4@sha256:a02db8cac496f15b094798a38254f14d6e00741f709360e5e00bb6668ea31636
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

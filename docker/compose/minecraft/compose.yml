@@ -42,7 +42,7 @@ services:
         - -use-proxy-protocol
 
   mc-proxy:
-    image: itzg/mc-proxy:2026.7.1@sha256:c270dad8cba13a2d17c27e4feeb1647ca0ddbc85d40d77b559955848c2d483dd
+    image: itzg/mc-proxy:2026.8.0@sha256:ddb1a119934dd77fd28dc50b88daf8fafea4b4d2deb6102c654e78426d31f96a
     environment:
       BUNGEE_JAR_REVISION: "1"
       CFG_MOTD: Powered by Docker

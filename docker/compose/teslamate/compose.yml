@@ -48,7 +48,7 @@ services:
       - ./data/db:/var/lib/postgresql
 
   teslamate-grafana:
-    image: teslamate/grafana:4.1.1@sha256:fe24cb24d8543cb9742cbcb662aeb00ac10aeeab9a53d4c8af5cf329d20cef0b
+    image: teslamate/grafana:4.2.0@sha256:4e6fe5ded7d614bf22d0297f9565ff00d8db36d18c73395a06bc040a1ffa05af
     restart: unless-stopped
     user: 0:0
     networks:

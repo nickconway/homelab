@@ -6,7 +6,7 @@ networks:
 
 services:
   teslamate:
-    image: teslamate/teslamate:4.1.1@sha256:cc87082e7d67a91aa11ca0fb30c2e730bc2a1fccbec9578bb3f3c64f586410f1
+    image: teslamate/teslamate:4.2.0@sha256:88f4b0eb20802e4dd8518b31045d2c19ce384bd5c85ae7289a921f5221ea2562
     networks:
       - teslamate
       - proxy

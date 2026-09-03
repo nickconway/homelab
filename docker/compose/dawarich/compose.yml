@@ -40,7 +40,7 @@ services:
       timeout: 10s
 
   dawarich:
-    image: freikin/dawarich:1.14.0@sha256:f251f08d6330a9b22506c862407e53b0b4aec620a63953a446e19cd610d7d476
+    image: freikin/dawarich:1.14.1@sha256:65be16e1d261ea9a92c885eb8626e33ae46de6bfc6f6d6bce71c24eff2a6ae5f
     volumes:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched
@@ -101,7 +101,7 @@ services:
       - "traefik.http.services.dawarich.loadbalancer.server.port=3000"
 
   dawarich-sidekiq:
-    image: freikin/dawarich:1.14.0@sha256:f251f08d6330a9b22506c862407e53b0b4aec620a63953a446e19cd610d7d476
+    image: freikin/dawarich:1.14.1@sha256:65be16e1d261ea9a92c885eb8626e33ae46de6bfc6f6d6bce71c24eff2a6ae5f
     volumes:
       - ./data/public:/var/app/public
       - ./data/watched:/var/app/tmp/imports/watched

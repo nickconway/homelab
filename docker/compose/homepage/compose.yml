@@ -6,7 +6,7 @@ networks:
 
 services:
   homepage:
-    image: ghcr.io/gethomepage/homepage:v1.12.3@sha256:cc84f2f5eb3c7734353701ccbaa24ed02dacb0d119114e50e4251e2005f3990a
+    image: ghcr.io/gethomepage/homepage:v2.3.0@sha256:f820276654539cdc2cf0169f28188d135919a7984fad76d83d8d5ff1383f3705
     environment:
       - PUID=1000
       - PGID=1000

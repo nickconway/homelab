@@ -4,7 +4,7 @@ networks:
 
 services:
   radicale:
-    image: tomsquest/docker-radicale:3.8.0.0@sha256:d311a35c91acb341c509fa8c692bd280720a6c3e73aa5d9a743453eeed4341c3
+    image: tomsquest/docker-radicale:3.8.1.0@sha256:6e9f65882fe71af556b01cc1eb8e1307dba55a273db55504fa22d275dedec3ab
     init: true
     read_only: true
     security_opt:

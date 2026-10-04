@@ -7,7 +7,7 @@ networks:
 
 services:
   paperless-redis:
-    image: docker.io/library/redis:8.10.0@sha256:344e3945a0b431c8ff1eecd58c5573538126bd756f02fc7e218ddf1fc2546366
+    image: docker.io/library/redis:8.10.2@sha256:6f81e8915c60b065a524e6967e0ad1c639ba6efa84d669f823683ea04d9150ee
     restart: unless-stopped
     environment:
       PUID: 1000

@@ -30,7 +30,7 @@ services:
       - "traefik.http.services.atuin.loadbalancer.server.port=8888"
 
   atuin-postgres:
-    image: postgres:14.23@sha256:2f439458ab6a57a925825ae14f9d06910e4fe4a41c8d4a0ae06397e65b707e1b
+    image: postgres:14.24@sha256:c2427de38f998489d36de7ca3553db2134872c400f2b08be4b824e5c50e4d619
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data/

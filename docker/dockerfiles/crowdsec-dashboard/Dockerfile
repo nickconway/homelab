@@ -1,3 +1,3 @@
-FROM metabase/metabase:v0.63.5.2@sha256:57adae701ff3ae88a4dde14c8dc4011eb0c2120a941e5031e7d30bb027edb77c
+FROM metabase/metabase:v0.63.19.1@sha256:b7c6250d7fd28663d2812978a7f5b29c87d4bf58806113f7db10f462baf15320
 
 RUN mkdir /data/ && wget https://crowdsec-statics-assets.s3-eu-west-1.amazonaws.com/metabase_sqlite.zip && unzip metabase_sqlite.zip -d /data/

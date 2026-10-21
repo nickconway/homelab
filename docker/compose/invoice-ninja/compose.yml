@@ -6,7 +6,7 @@ networks:
 
 services:
   invoice-ninja:
-    image: invoiceninja/invoiceninja-debian:5.13.49@sha256:2a20a8a526bdf9be602c1f5f1a66206ad80914972a62bd9d683f7cecfd4f34db
+    image: invoiceninja/invoiceninja-debian:5.13.49@sha256:05efd0913eb0d72d0246ec96d6cb6adf5ac3d3e59b9b91514b9f64b892f21c92
     env_file: .env
     restart: unless-stopped
     volumes:

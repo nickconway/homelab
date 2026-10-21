@@ -72,7 +72,7 @@ services:
       - USER_GID=1000
 
   gitea-postgres:
-    image: postgres:14.24@sha256:14bfab572eec6abf65892e1db7c3ba8d41b2a2855c1b143664907d6e146eb6e1
+    image: postgres:14.24@sha256:d1bfce2479496ff4060a56031364495cbd60acde3aa6d385cb6be8c49aa2e270
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

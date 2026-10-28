@@ -11,7 +11,7 @@ services:
       - ./data/files:/files
 
   n8n:
-    image: ghcr.io/n8n-io/n8n:2.16.0@sha256:c9932d755356f6879ac4aab2efcb334e1e4f2248fc516ab7b115f0def9c69873
+    image: ghcr.io/n8n-io/n8n:3.0.1@sha256:4ebd866ae91d222ffa6dd3731eade80ba71b4d13f7470172a7e66a81fe31faa0
     networks:
       - proxy
     user: 1000:1000

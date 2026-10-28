@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
 
   shlink-postgres:
-    image: postgres:15.19@sha256:baa22e6286bf832cb147b8bb5aa9d8bc999846d69c21d11bf63f58fbeed1fa48
+    image: postgres:15.19@sha256:9628832aa69a153f2ef500a556e74a08ab6c891395b1f7e16a6ccab2fc11ce33
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

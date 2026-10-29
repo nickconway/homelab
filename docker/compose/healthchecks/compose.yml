@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: healthchecks/healthchecks:v5.0.1@sha256:206b3c6fd8e1562505bc10bc6f1e2c838e67614bd7e1ea762058338fe3f7f5bb
+    image: healthchecks/healthchecks:v5.0.2@sha256:2785de4d59a0bcad8bef05e72cf31f20f871cc0b917bfe7441cbc5932f043239
     env_file: .env
     networks:
       - proxy

@@ -6,7 +6,7 @@ networks:
 
 services:
   authentik-postgres:
-    image: docker.io/library/postgres:16.15-alpine3.23@sha256:2a51d530f46adc240810a9f0befb6e8d3b5a09dba1624c05990ec5101c5a3d58
+    image: docker.io/library/postgres:16.15-alpine3.23@sha256:300791ad19a076c34f3b732c147cb74385f31f7183c94831e35e66187153558a
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]

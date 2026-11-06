@@ -6,7 +6,7 @@ networks:
 
 services:
   linkwarden-postgres:
-    image: postgres:16.15-alpine3.23@sha256:2a96bfbbaa8ba661510e9076431ee49d551c118a586099cb733b1214c4e4ff00
+    image: postgres:16.15-alpine3.23@sha256:dd13b38648acf4290f7a51b025ad7dc1f6964d3afe0c723a5f836e1484d1a486
     env_file: .env
     networks:
       - linkwarden

@@ -23,7 +23,7 @@ services:
         ipv4_address: 10.0.250.2
 
   mc-router:
-    image: itzg/mc-router:1.53.1@sha256:da897254b4eac51d51515716081740ee87b17637e698386ec67a5add430c8e1b
+    image: itzg/mc-router:1.54.1@sha256:d8a62fe3c5c7f0611c39677825ca055ff2aefa404149a334bc48cc430ed24aa7
     restart: unless-stopped
     ports:
         - "25565:25565"

@@ -4,7 +4,7 @@ networks:
 
 services:
   maloja:
-    image: krateng/maloja:3.2.9@sha256:313b58d282934b2e7dc27f794462eb2ceb1567db23806b49f78b706dd86afe09
+    image: krateng/maloja:3.2.10@sha256:4c39b5daa893451a379802f267a1d83f2b5d15d8b369e73349e530133cc8fdb6
     networks:
       - proxy
     environment:

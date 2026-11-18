@@ -4,7 +4,7 @@ networks:
 
 services:
   app:
-    image: learnedmachine/speakr:0.10.22-alpha@sha256:31be1bca7563ee034c16d5afea4632589d88e3636cffef663c1d435f1bf70d15
+    image: learnedmachine/speakr:0.10.23-alpha@sha256:304f3cb67dc2dda6119c909b6cdcaf37d09f4afa4a3b0eae09551c3b099f3ca3
     restart: unless-stopped
     env_file:
       - .env

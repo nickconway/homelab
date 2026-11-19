@@ -4,7 +4,7 @@ networks:
 
 services:
   lidarr:
-    image: linuxserver/lidarr:3.1.6-nightly@sha256:eaf7e01538984e8486e8248b5f305117b348fe34f171af3b32275e96e4ecabe6
+    image: linuxserver/lidarr:4.0.0-nightly@sha256:969a82b8374db468eb9f68ce3cec88c747b5a9cda28f00fa617ee45c9e8e76c0
     restart: unless-stopped
     ports:
       - 8686:8686

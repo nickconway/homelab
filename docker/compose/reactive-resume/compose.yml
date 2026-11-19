@@ -6,7 +6,7 @@ networks:
 
 services:
   reactive-resume-postgres:
-    image: postgres:15.19-alpine3.23@sha256:c0513f5c014f5c58f9df6f0b31e851b497a52d2f9dd2a122bfef477ed2aeea0f
+    image: postgres:18.7-alpine3.23@sha256:f3ee138d5fce80ffaeb315b8bea7610f0c4f2304fb2aceb4ec8e457b92fc41a0
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data

@@ -4,7 +4,7 @@ networks:
 
 services:
   headscale:
-    image: headscale/headscale:v0.29.4@sha256:8833f828b414c0907b7e5c71da76473216fe17cce0818a166b536ec552c0903f
+    image: headscale/headscale:v0.29.7@sha256:11f81665e842809db9fe3006a38c56a66e968baa5abd4bac498e86445572b970
     restart: unless-stopped
     environment:
       - PUID=1000 # User ID to run as

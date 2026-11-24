@@ -6,7 +6,7 @@ networks:
 
 services:
     tranga-api:
-      image: glax/tranga-api:latest@sha256:6cfa6393f4d78de23f7156850ce869d1501bb73c41c646a996e5776fc900d27d
+      image: glax/tranga-api:latest@sha256:91aa391a4edfda77f1d5c2d0bf5102d860884d3eb63265c4edf2b6281c214ff3
       volumes:
         - /mnt/nas/content/media/manga:/Manga
         - ./data:/usr/share/tranga-api

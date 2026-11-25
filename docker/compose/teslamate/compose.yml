@@ -21,6 +21,9 @@ services:
       - MQTT_HOST=${MQTT_HOST}
       - MQTT_USERNAME=mqtt
       - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_HOME_ASSISTANT_DISCOVERY=true
+      - MQTT_HOME_ASSISTANT_DISCOVERY_URL="https://${SERVICE_SUBDOMAIN:-car}.${SERVICES_BASE_DOMAIN}"
+      - MQTT_HOME_ASSISTANT_DISCOVERY_PREFIX=homeassistant
     volumes:
       - ./data/import:/opt/app/import
     cap_drop:

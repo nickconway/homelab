@@ -6,7 +6,7 @@ networks:
 
 services:
   ryot-postgres:
-    image: postgres:16.15-alpine3.23@sha256:8dc5ce2495b2aeafbf033e4be590764f611248e9eb8495b5202170a6afcb64a4
+    image: postgres:19.0-alpine3.23@sha256:40ad7e457013448b5522c6c5d30dccb8248959c41adc0e56c1785be4293bbd67
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data
